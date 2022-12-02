@@ -1,6 +1,6 @@
 export interface BankAccountI {
 	id: string;
 	title: string;
-	ammount: number;
+	ammount: string;
 	currency: string;
 }

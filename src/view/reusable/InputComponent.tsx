@@ -10,7 +10,7 @@ interface PropsI {
 
 export default function InputComponent({value, title, changeValueFunc, keyboardType}: PropsI) {
 	return (
-		<View style={styles.inputArea}>
+		<View>
 			<Text style={styles.title}>{title}</Text>
 			<TextInput
 				value={value}
@@ -33,7 +33,4 @@ const styles = StyleSheet.create({
 		borderColor: 'gray',
 		borderBottomWidth: 1,
 	},
-	inputArea: {
-		marginTop: 10,
-	}
 });

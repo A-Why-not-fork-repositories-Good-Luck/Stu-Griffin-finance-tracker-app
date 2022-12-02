@@ -1,28 +1,42 @@
-import { types } from '../model/record';
-import { TypeI } from '../types/recordTypes';
-import { recordFormState } from '../model/record';
-import React, { useReducer, ReactNode } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import { useDispatch } from 'react-redux';
+import { addRecord } from '../redux/records';
+import RecordTypesList from './RecordTypesList';
+import BankAccountList from './BankAccountList';
 import { recordReducer } from '../controller/record';
 import InputComponent from './reusable/InputComponent';
-import { FlatList } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
+import { recordFormState, recordTypes } from '../model/record';
 import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
-
-interface ItemI {
-	item: TypeI
-}
+import React, { useReducer, ReactNode, useEffect, useState } from 'react';
 
 export default function CreateRecord() {
+	const dispatchStore = useDispatch();
+	const navigation: any = useNavigation();
 	const [state, dispatch] = useReducer(recordReducer, recordFormState);
+	const [recordTypeModalStatus, setRecordTypeModalStatus] = useState(false);
+	const [bankAccountModalStatus, setBankAccountModalStatus] = useState(false);
+	
+	useEffect(() => {
+		dispatch({
+			type: 'add',
+			payload: {
+				key: 'id',
+				value: uuidv4(),
+			}
+		});
+		dispatch({
+			type: 'add',
+			payload: {
+				key: 'date',
+				value: JSON.parse(JSON.stringify(new Date())).split('T')[0],
+			}
+		});
+	}, []);
 
-	const renderItem = ({ item }: ItemI) => {
-		return (
-			<TouchableOpacity style={styles.typeCard}>
-				<View style={styles.typeIcon}>
-					{item.icon}
-				</View>
-				<Text style={styles.typeTitle}>{item.title}</Text>
-			</TouchableOpacity>
-		);
+	const createRecordFunc = (): void => {
+		dispatchStore(addRecord(state));
+		navigation.navigate('main-page');
 	};
 
 	const constructStyleObjForButton = (el: string): object => {
@@ -37,7 +51,7 @@ export default function CreateRecord() {
 		<View style={styles.container}>
 			<View style={styles.recordTypeList}>
 				{
-					['Income', 'Outcome'].map((el: string, index: number): ReactNode => {
+					recordTypes.map((el: string, index: number): ReactNode => {
 						return(
 							<TouchableOpacity
 								key={index}
@@ -86,12 +100,17 @@ export default function CreateRecord() {
 					});
 				}}
 			/>
-			<View style={{height: '50%', marginTop: 10}}>
-				<FlatList
-					data={types}
-					renderItem={renderItem}
-					keyExtractor={(item: TypeI, index: number) => index.toString()}
-				/>
+			<View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
+				<TouchableOpacity style={[styles.button, {width: 150}]} onPress={() => {
+					setRecordTypeModalStatus(true);
+				}}>
+					<Text style={styles.buttonText}>Record type</Text>
+				</TouchableOpacity>
+				<TouchableOpacity style={[styles.button, {width: 150}]} onPress={() => {
+					setBankAccountModalStatus(true);
+				}}>
+					<Text style={styles.buttonText}>Bank account</Text>
+				</TouchableOpacity>
 			</View>
 			<InputComponent
 				title='Date'
@@ -107,9 +126,38 @@ export default function CreateRecord() {
 					});
 				}}
 			/>
-			<TouchableOpacity style={styles.button}>
+			<TouchableOpacity style={styles.button} onPress={createRecordFunc}>
 				<Text style={styles.buttonText}>Save record</Text>
 			</TouchableOpacity>
+			<RecordTypesList
+				closeModal={() => {
+					setRecordTypeModalStatus(false);
+				}}
+				modalStatus={recordTypeModalStatus}
+				saveChanges={(key: string, value: string) => {
+					dispatch({
+						type: 'add',
+						payload: {
+							key, value,
+						}
+					});
+				}}
+			/>
+			<BankAccountList
+				closeModal={() => {
+					setBankAccountModalStatus(false);
+				}}
+				saveChanges={(item: string) => {
+					dispatch({
+						type: 'add',
+						payload: {
+							value: item,
+							key: 'bankAccountId',
+						}
+					});
+				}}
+				modalStatus={bankAccountModalStatus}
+			/>
 		</View>
 	);
 }
@@ -122,7 +170,6 @@ const styles = StyleSheet.create({
 		backgroundColor: '#236F57',
 	},
 	typeCard: {
-		marginVertical: 10,
 		flexDirection: 'row',
 		alignItems: 'center',
 		marginHorizontal: 10,
@@ -142,9 +189,8 @@ const styles = StyleSheet.create({
 	},
 	container: {
 		flex: 1,
-		paddingHorizontal: 15,
-		paddingVertical: 15,
-		justifyContent: 'center'
+		padding: 30,
+		justifyContent: 'space-around'
 	},
 	recordType: {
 		width: 125,

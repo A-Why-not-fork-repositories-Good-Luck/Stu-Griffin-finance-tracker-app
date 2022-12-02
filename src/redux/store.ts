@@ -1,8 +1,10 @@
-import bankAccountReducer from './reducer';
+import recordsReducer from './records';
+import bankAccountReducer from './bankAccount';
 import { configureStore } from '@reduxjs/toolkit';
 
 export const store = configureStore({
 	reducer: {
-		bankAccounts: bankAccountReducer
-	},
+		records: recordsReducer,
+		bankAccounts: bankAccountReducer,
+	} 
 });

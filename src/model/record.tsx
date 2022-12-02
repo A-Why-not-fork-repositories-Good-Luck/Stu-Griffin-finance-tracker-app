@@ -75,3 +75,7 @@ export const recordFormState: RecordI = {
 	bankAccountId: '',
 	recordType: 'income',
 };
+
+export const recordStore: Array<RecordI> = [];
+
+export const recordTypes = ['Income', 'Outcome'];

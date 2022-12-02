@@ -5,11 +5,8 @@ export const bankAccountsSlice = createSlice({
 	name: 'bank-accounts',
 	initialState: bankAccountsStore,
 	reducers: {
-		// addBankAccount: (state, action) => {
-		// 	return state;
-		// },
-		addBankAccount: (state) => {
-			return state;
+		addBankAccount: (state, action) => {
+			return [...state, action.payload];
 		},
 	},
 });

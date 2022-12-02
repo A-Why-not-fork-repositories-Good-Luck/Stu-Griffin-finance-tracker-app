@@ -1,10 +1,11 @@
-import { v4 as uuidv4 } from 'uuid';
 import { BankAccountI } from '../types/bankAccount';
 
+export const currency = ['USD', 'EUR', 'UAH'];
+
 export const bankAccountFormState: BankAccountI = {
+	id: '',
 	title: '',
-	ammount: 0,
-	id: uuidv4(),
+	ammount: '',
 	currency: '',
 };
 
@@ -12,25 +13,25 @@ export const bankAccountsStore: Array<BankAccountI> = [
 	{
 		id: '1',
 		title: 'Cash',
-		ammount: 500,
+		ammount: '1234',
 		currency: 'UAH',
 	},
 	{
 		id: '2',
-		title: 'My card',
-		ammount: 2000,
-		currency: 'UAH',
+		title: 'Card debit',
+		ammount: '3432',
+		currency: 'USD',
 	},
 	{
 		id: '3',
-		title: 'Stipendia',
-		ammount: 20000,
+		title: 'Card credit',
+		ammount: '566',
 		currency: 'UAH',
 	},
 	{
 		id: '4',
-		title: 'Investing',
-		ammount: 250,
-		currency: 'USD',
-	}
+		title: 'Bank account',
+		ammount: '6765',
+		currency: 'EUR',
+	},
 ];

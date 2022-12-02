@@ -12,6 +12,11 @@ function Navigation() {
 			<Stack.Navigator>
 				<Stack.Screen
 					name="main-page"
+					options={
+						{
+							headerShown:false
+						}
+					}
 					component={MainPage}
 				/>
 				<Stack.Screen

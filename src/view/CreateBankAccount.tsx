@@ -1,11 +1,14 @@
+import { v4 as uuidv4 } from 'uuid';
 import Modal from 'react-native-modal';
 import 'react-native-get-random-values';
+import { useDispatch } from 'react-redux';
 import { Picker } from '@react-native-picker/picker';
 import CrossIcon from '../../assets/icons/CrossIcon';
-import React, { useReducer, ReactNode } from 'react';
+import { addBankAccount } from '../redux/bankAccount';
 import InputComponent from './reusable/InputComponent';
-import { bankAccountFormState } from '../model/bankAccount';
 import { bankAccountReducer } from '../controller/bankAccount';
+import React, { useReducer, ReactNode, useEffect } from 'react';
+import { currency, bankAccountFormState } from '../model/bankAccount';
 import { StyleSheet, TouchableOpacity, View, Dimensions, Text } from 'react-native';
 
 interface PropsI {
@@ -14,10 +17,58 @@ interface PropsI {
 }
 
 export default function CreateBankAccount({modalStatus, closeModal}: PropsI) {
+	const storeDispatch = useDispatch();
 	const [state, dispatch] = useReducer(bankAccountReducer, bankAccountFormState);
 
+	useEffect(() => {
+		dispatch({
+			type: 'add',
+			payload: {
+				key: 'id',
+				value: uuidv4(),
+			}
+		});
+		dispatch({
+			type: 'add',
+			payload: {
+				key: 'currency',
+				value: currency[0],
+			}
+		});
+	}, [modalStatus]);
+
+	const clearState = () => {
+		dispatch({
+			type: 'add',
+			payload: {
+				value: '',
+				key: 'ammount',
+			}
+		});
+		dispatch({
+			type: 'add',
+			payload: {
+				value: '',
+				key: 'title',
+			}
+		});
+		dispatch({
+			type: 'add',
+			payload: {
+				value: '',
+				key: 'currency',
+			}
+		});
+	};
+
+	const createBankAccountFunc = () => {
+		storeDispatch(addBankAccount(state));
+		clearState();
+		closeModal();
+	};
+
 	return(
-		<Modal isVisible={modalStatus} style={styles.modalArea}>
+		<Modal isVisible={modalStatus} style={styles.modalArea} onBackdropPress={closeModal}>
 			<View style={styles.modal}>
 				<TouchableOpacity style={styles.crossIcon} onPress={closeModal}>
 					<CrossIcon/>
@@ -30,8 +81,8 @@ export default function CreateBankAccount({modalStatus, closeModal}: PropsI) {
 						dispatch({
 							type: 'add',
 							payload: {
-								key: 'title',
 								value: value,
+								key: 'title',
 							}
 						});
 					}}
@@ -63,14 +114,14 @@ export default function CreateBankAccount({modalStatus, closeModal}: PropsI) {
 					}}
 				>
 					{
-						['USD', 'EUR', 'UAH'].map((el: string, index: number): ReactNode => {
+						currency.map((el: string, index: number): ReactNode => {
 							return(
 								<Picker.Item label={el} value={el} key={index}/>
 							);
 						})
 					}
 				</Picker>
-				<TouchableOpacity style={styles.button}>
+				<TouchableOpacity style={styles.button} onPress={createBankAccountFunc}>
 					<Text style={styles.buttonText}>Add bank account</Text>
 				</TouchableOpacity>
 			</View>
