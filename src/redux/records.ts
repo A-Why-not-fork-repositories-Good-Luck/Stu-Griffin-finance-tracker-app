@@ -8,8 +8,11 @@ export const recordsSlice = createSlice({
 		addRecord: (state, action) => {
 			return [...state, action.payload];
 		},
+		setRecords: (state, action) => {
+			return [...state, ...action.payload];
+		},
 	},
 });
 
 export default recordsSlice.reducer;
-export const { addRecord } = recordsSlice.actions;
+export const { addRecord, setRecords } = recordsSlice.actions;

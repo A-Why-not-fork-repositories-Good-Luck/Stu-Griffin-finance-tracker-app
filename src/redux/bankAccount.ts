@@ -8,8 +8,11 @@ export const bankAccountsSlice = createSlice({
 		addBankAccount: (state, action) => {
 			return [...state, action.payload];
 		},
+		setBankAccounts: (state, action) => {
+			return [...state, ...action.payload];
+		},
 	},
 });
 
 export default bankAccountsSlice.reducer;
-export const { addBankAccount } = bankAccountsSlice.actions;
+export const { addBankAccount, setBankAccounts } = bankAccountsSlice.actions;

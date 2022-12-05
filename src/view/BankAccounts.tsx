@@ -25,10 +25,10 @@ export default function BankAccounts() {
 
 	const renderItem = ({ item }: ItemI) => {
 		return(
-			<View style={styles.card}>
+			<TouchableOpacity style={styles.card}>
 				<Text style={styles.cardTitle}>{item.title}</Text>
 				<Text style={styles.cardText}>{item.ammount} {item.currency}</Text>
-			</View>
+			</TouchableOpacity>
 		);
 	};
 
@@ -90,7 +90,6 @@ const styles = StyleSheet.create({
 	},
 	container: {
 		paddingVertical: 10,
-		backgroundColor: 'gray',
 		justifyContent: 'center',
 		width: Dimensions.get('window').width,
 	},
