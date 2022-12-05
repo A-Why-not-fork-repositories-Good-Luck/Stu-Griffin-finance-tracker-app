@@ -6,6 +6,7 @@ import BankAccountList from './BankAccountList';
 import { recordReducer } from '../controller/record';
 import InputComponent from './reusable/InputComponent';
 import { useNavigation } from '@react-navigation/native';
+import { changeBankAccount } from '../redux/bankAccount';
 import { recordFormState, recordTypes } from '../model/record';
 import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 import React, { useReducer, ReactNode, useEffect, useState } from 'react';
@@ -36,6 +37,11 @@ export default function CreateRecord() {
 
 	const createRecordFunc = (): void => {
 		dispatchStore(addRecord(state));
+		dispatchStore(changeBankAccount({
+			recordType: state.recordType,
+			recordAmmount: state.ammount,
+			bankAccountId: state.bankAccountId,
+		}));
 		navigation.navigate('main-page');
 	};
 

@@ -9,4 +9,17 @@ export const bankAccountFormState: BankAccountI = {
 	currency: '',
 };
 
-export const bankAccountsStore: Array<BankAccountI> = [];
+export const bankAccountsStore: Array<BankAccountI> = [
+	{
+		id: '1',
+		title: 'Cash',
+		ammount: '134',
+		currency: 'UAH',
+	},
+	{
+		id: '2',
+		title: 'Card',
+		ammount: '356',
+		currency: 'EUR',
+	}
+];
