@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { StyleSheet, View, Text, TextInput, KeyboardType } from 'react-native';
 
 interface PropsI {
@@ -8,7 +8,7 @@ interface PropsI {
 	changeValueFunc: (value: string) => void;
 }
 
-export default function InputComponent({value, title, changeValueFunc, keyboardType}: PropsI) {
+export default function InputComponent({value, title, changeValueFunc, keyboardType}: PropsI): ReactElement {
 	return (
 		<View>
 			<Text style={styles.title}>{title}</Text>

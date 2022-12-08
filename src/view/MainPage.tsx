@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
-import BankAccounts from './BankAccounts';
+import { RecordI } from '../types/record';
 import { RootState } from '../types/redux';
 import { StatusBar } from 'expo-status-bar';
 import { setRecords } from '../redux/records';
-import RecordsHistory from './RecordsHistory';
 import AddIcon from '../../assets/icons/AddIcon';
+import { BankAccountI } from '../types/bankAccount';
+import RecordsHistory from './Record/RecordsHistory';
+import React, { ReactElement, useEffect } from 'react';
+import BankAccounts from './Bank-account/BankAccounts';
 import { setBankAccounts } from '../redux/bankAccount';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
@@ -14,11 +16,11 @@ import { ScrollView, StyleSheet, TouchableOpacity, View, Dimensions, AppState } 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-export default function MainPage() {
+export default function MainPage(): ReactElement {
 	const dispatch = useDispatch();
 	const navigation: any = useNavigation();
-	const records = useSelector((state: RootState) => state.records);
-	const bankAccounts = useSelector((state: RootState) => state.bankAccounts);
+	const records: Array<RecordI> = useSelector((state: RootState) => state.records);
+	const bankAccounts: Array<BankAccountI> = useSelector((state: RootState) => state.bankAccounts);
 
 	// AsyncStorage.removeItem('records');
 	// AsyncStorage.removeItem('bank-accounts');
@@ -37,6 +39,7 @@ export default function MainPage() {
 			default:
 			}
 		});
+		
 		return () => {
 			subscription.remove();
 		};
@@ -44,7 +47,7 @@ export default function MainPage() {
 
 	const getDataFromAsyncStorage = async(key: string): Promise<void> => {
 		try {
-			let result: any = await AsyncStorage.getItem(key);
+			let result: string|null|[] = await AsyncStorage.getItem(key);
 			(typeof result === 'string') ? result = JSON.parse(result) : result = [];
 			switch(key) {
 			case 'records':
@@ -60,7 +63,7 @@ export default function MainPage() {
 		}
 	};
 
-	const setDataFromAsyncStorage = async(key: string, value: any): Promise<void> => {
+	const setDataFromAsyncStorage = async(key: string, value: string): Promise<void> => {
 		try {
 			await AsyncStorage.setItem(key, value);
 			console.log('saved');

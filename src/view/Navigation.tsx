@@ -1,6 +1,6 @@
 import React from 'react';
-import MainPage from './view/MainPage';
-import CreateRecord from './view/CreateRecord';
+import MainPage from './MainPage';
+import CreateRecord from './Record/CreateRecord';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 

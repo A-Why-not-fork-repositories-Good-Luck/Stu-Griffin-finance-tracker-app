@@ -1,3 +1,4 @@
+import { RecordI } from '../types/record';
 import { recordStore } from '../model/record';
 import { createSlice } from '@reduxjs/toolkit';
 
@@ -5,10 +6,10 @@ export const recordsSlice = createSlice({
 	name: 'records',
 	initialState: recordStore,
 	reducers: {
-		addRecord: (state, action) => {
+		addRecord: (state: Array<RecordI>, action): Array<RecordI> => {
 			return [...state, action.payload];
 		},
-		setRecords: (state, action) => {
+		setRecords: (state: Array<RecordI>, action): Array<RecordI> => {
 			return [...state, ...action.payload];
 		},
 	},

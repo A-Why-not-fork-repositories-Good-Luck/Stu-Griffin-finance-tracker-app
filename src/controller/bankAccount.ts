@@ -1,7 +1,7 @@
 import { BankAccountI } from '../types/bankAccount';
 import { ActionI } from '../types/componentReducer';
 
-export function bankAccountReducer(state: BankAccountI, {type, payload}: ActionI) {
+export function bankAccountReducer(state: BankAccountI, {type, payload}: ActionI): BankAccountI {
 	switch (type) {
 	case 'add':
 		return {...state, [payload.key]: payload.value};

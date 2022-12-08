@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import Modal from 'react-native-modal';
-import { types } from '../model/record';
 import 'react-native-get-random-values';
-import { TypeI } from '../types/recordTypes';
-import CrossIcon from '../../assets/icons/CrossIcon';
+import { types } from '../../model/record';
+import { TypeI } from '../../types/recordTypes';
+import CrossIcon from '../../../assets/icons/CrossIcon';
 import { FlatList } from 'react-native-gesture-handler';
 import { StyleSheet, TouchableOpacity, View, Dimensions, Text } from 'react-native';
 
@@ -17,8 +17,8 @@ interface CardItemI {
 	item: TypeI
 }
 
-export default function RecordTypesList({modalStatus, closeModal, saveChanges}: PropsI) {
-	const renderCardItem = ({ item }: CardItemI) => {
+export default function RecordTypesList({modalStatus, closeModal, saveChanges}: PropsI): ReactElement {
+	const renderCardItem = ({ item }: CardItemI): ReactElement => {
 		return (
 			<TouchableOpacity style={styles.typeCard} onPress={() => {
 				saveChanges('type', item.title);

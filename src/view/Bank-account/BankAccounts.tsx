@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import 'react-native-get-random-values';
 import { useSelector } from 'react-redux';
-import { RootState } from '../types/redux';
-import AddIcon from '../../assets/icons/AddIcon';
+import { RootState } from '../../types/redux';
+import AddIcon from '../../../assets/icons/AddIcon';
 import CreateBankAccount from './CreateBankAccount';
-import { BankAccountI } from '../types/bankAccount';
+import { BankAccountI } from '../../types/bankAccount';
 import { FlatList, StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 
 interface ItemI {
 	item: BankAccountI;
 }
 
-export default function BankAccounts() {
+export default function BankAccounts(): ReactElement {
 	const [modalStatus, setModalStatus] = useState<boolean>(false);
 	const bankAccounts: Array<BankAccountI> = useSelector((state: RootState) => state.bankAccounts);
 
@@ -23,7 +23,7 @@ export default function BankAccounts() {
 		setModalStatus(false);
 	};
 
-	const renderItem = ({ item }: ItemI) => {
+	const renderItem = ({ item }: ItemI): ReactElement => {
 		return(
 			<TouchableOpacity style={styles.card}>
 				<Text style={styles.cardTitle}>{item.title}</Text>

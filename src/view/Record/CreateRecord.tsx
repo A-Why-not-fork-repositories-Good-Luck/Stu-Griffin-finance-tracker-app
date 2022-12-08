@@ -1,19 +1,19 @@
 import { v4 as uuidv4 } from 'uuid';
 import { useDispatch } from 'react-redux';
-import { addRecord } from '../redux/records';
+import { addRecord } from '../../redux/records';
 import RecordTypesList from './RecordTypesList';
-import BankAccountList from './BankAccountList';
-import { DateTimePickerEvent } from '@react-native-community/datetimepicker';
-import { recordReducer } from '../controller/record';
-import InputComponent from './reusable/InputComponent';
+import { recordReducer } from '../../controller/record';
+import InputComponent from '../reusable/InputComponent';
 import { useNavigation } from '@react-navigation/native';
-import { changeBankAccount } from '../redux/bankAccount';
-import { recordFormState, recordTypes } from '../model/record';
+import { changeBankAccount } from '../../redux/bankAccount';
+import BankAccountList from '../Bank-account/BankAccountList';
+import { recordFormState, recordTypes } from '../../model/record';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
-import React, { useReducer, ReactNode, useEffect, useState } from 'react';
+import { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import React, { useReducer, ReactNode, useEffect, useState, ReactElement } from 'react';
 
-export default function CreateRecord() {
+export default function CreateRecord(): ReactElement {
 	const dispatchStore = useDispatch();
 	const navigation: any = useNavigation();
 	const [date, setDate] = useState<Date>(new Date());
@@ -57,7 +57,7 @@ export default function CreateRecord() {
 		return (el.toLowerCase() === state.recordType) ? {color: 'white'} : {color: '#236F57',};
 	};
 
-	const setDateFunc = (event: DateTimePickerEvent, date: Date|undefined) => {
+	const setDateFunc = (event: DateTimePickerEvent, date: Date|undefined): void => {
 		if(date) {
 			switch(event.type) {
 			case 'set':

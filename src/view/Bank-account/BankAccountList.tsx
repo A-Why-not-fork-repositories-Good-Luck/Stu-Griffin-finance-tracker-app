@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import Modal from 'react-native-modal';
 import 'react-native-get-random-values';
 import { useSelector } from 'react-redux';
-import { RootState } from '../types/redux';
-import { BankAccountI } from '../types/bankAccount';
-import CrossIcon from '../../assets/icons/CrossIcon';
+import { RootState } from '../../types/redux';
+import { BankAccountI } from '../../types/bankAccount';
+import CrossIcon from '../../../assets/icons/CrossIcon';
 import { FlatList } from 'react-native-gesture-handler';
 import { StyleSheet, View, Dimensions, Text, TouchableOpacity, Pressable } from 'react-native';
 
@@ -18,10 +18,10 @@ interface PropsI {
 	saveChanges: (item: string) => void;
 }
 
-export default function BankAccountList({modalStatus, closeModal, saveChanges}: PropsI) {
+export default function BankAccountList({modalStatus, closeModal, saveChanges}: PropsI): ReactElement {
 	const bankAccounts: Array<BankAccountI> = useSelector((state: RootState) => state.bankAccounts);
 	
-	const renderItem = ({ item }: ItemI) => {
+	const renderItem = ({ item }: ItemI): ReactElement => {
 		return(
 			<TouchableOpacity style={styles.card} onPress={() => {
 				saveChanges(item.id);

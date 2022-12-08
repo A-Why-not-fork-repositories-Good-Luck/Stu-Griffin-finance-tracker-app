@@ -1,7 +1,5 @@
 import { BankAccountI } from '../types/bankAccount';
 
-export const currency = ['USD', 'EUR', 'UAH'];
-
 export const bankAccountFormState: BankAccountI = {
 	id: '',
 	title: '',
@@ -10,3 +8,5 @@ export const bankAccountFormState: BankAccountI = {
 };
 
 export const bankAccountsStore: Array<BankAccountI> = [];
+
+export const currency: Array<string> = ['USD', 'EUR', 'UAH'];

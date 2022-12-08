@@ -78,4 +78,4 @@ export const recordFormState: RecordI = {
 
 export const recordStore: Array<RecordI> = [];
 
-export const recordTypes = ['Income', 'Outcome'];
+export const recordTypes: Array<string> = ['Income', 'Outcome'];

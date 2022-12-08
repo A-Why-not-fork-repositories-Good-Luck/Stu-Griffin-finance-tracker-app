@@ -1,19 +1,19 @@
-import { types } from '../model/record';
 import 'react-native-get-random-values';
-import React, { ReactNode } from 'react';
-import { RecordI } from '../types/record';
+import React, { ReactElement, ReactNode } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../types/redux';
-import { TypeI } from '../types/recordTypes';
-import { BankAccountI } from '../types/bankAccount';
-import GrayCircleIcon from '../../assets/icons/GrayCircleIcon';
+import { types } from '../../model/record';
+import { RecordI } from '../../types/record';
+import { RootState } from '../../types/redux';
+import { TypeI } from '../../types/recordTypes';
+import { BankAccountI } from '../../types/bankAccount';
+import GrayCircleIcon from '../../../assets/icons/GrayCircleIcon';
 import { ScrollView, StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 
-export default function RecordsHistory() {
+export default function RecordsHistory(): ReactElement {
 	const records: Array<RecordI> = useSelector((state: RootState) => state.records);
 	const bankAccounts: Array<BankAccountI> = useSelector((state: RootState) => state.bankAccounts);
 
-	const renderItem = (item: RecordI) => {
+	const renderItem = (item: RecordI): ReactElement => {
 		const typeIcon = types.filter((el: TypeI) => el.title === item.type);
 		const res = bankAccounts.filter((el: BankAccountI) => el.id === item.bankAccountId);
 		return(
