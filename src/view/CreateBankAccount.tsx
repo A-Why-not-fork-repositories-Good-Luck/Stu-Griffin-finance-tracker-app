@@ -131,11 +131,13 @@ export default function CreateBankAccount({modalStatus, closeModal}: PropsI) {
 
 const styles = StyleSheet.create({
 	modal: {
+		height: 350,
 		paddingTop: 30,
 		borderRadius: 15,
 		paddingVertical: 15,
 		paddingHorizontal: 15,
 		backgroundColor: 'white',
+		justifyContent: 'space-between',
 		width: Dimensions.get('window').width - 50,
 	},
 	button: {

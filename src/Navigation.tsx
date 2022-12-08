@@ -11,15 +11,20 @@ function Navigation() {
 		<NavigationContainer>
 			<Stack.Navigator>
 				<Stack.Screen
-					name="main-page"
 					options={
 						{
 							headerShown:false
 						}
 					}
+					name="main-page"
 					component={MainPage}
 				/>
 				<Stack.Screen
+					options={
+						{
+							title: 'Add record',
+						}
+					}
 					component={CreateRecord}
 					name="create-record-page"
 				/>

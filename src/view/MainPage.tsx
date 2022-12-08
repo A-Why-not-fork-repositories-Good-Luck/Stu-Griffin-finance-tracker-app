@@ -23,24 +23,24 @@ export default function MainPage() {
 	// AsyncStorage.removeItem('records');
 	// AsyncStorage.removeItem('bank-accounts');
 
-	// useEffect(() => {
-	// 	const subscription = AppState.addEventListener('change', nextAppState => {
-	// 		switch(nextAppState) {
-	// 		case 'active':
-	// 			getDataFromAsyncStorage('records');
-	// 			getDataFromAsyncStorage('bank-accounts');
-	// 			break;
-	// 		case 'background':
-	// 			setDataFromAsyncStorage('records', JSON.stringify(records));
-	// 			setDataFromAsyncStorage('bank-accounts', JSON.stringify(bankAccounts));
-	// 			break;
-	// 		default:
-	// 		}
-	// 	});
-	// 	return () => {
-	// 		subscription.remove();
-	// 	};
-	// }, [bankAccounts, records]);
+	useEffect(() => {
+		const subscription = AppState.addEventListener('change', nextAppState => {
+			switch(nextAppState) {
+			case 'active':
+				getDataFromAsyncStorage('records');
+				getDataFromAsyncStorage('bank-accounts');
+				break;
+			case 'background':
+				setDataFromAsyncStorage('records', JSON.stringify(records));
+				setDataFromAsyncStorage('bank-accounts', JSON.stringify(bankAccounts));
+				break;
+			default:
+			}
+		});
+		return () => {
+			subscription.remove();
+		};
+	}, [bankAccounts, records]);
 
 	const getDataFromAsyncStorage = async(key: string): Promise<void> => {
 		try {

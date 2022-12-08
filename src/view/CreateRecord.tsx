@@ -3,20 +3,24 @@ import { useDispatch } from 'react-redux';
 import { addRecord } from '../redux/records';
 import RecordTypesList from './RecordTypesList';
 import BankAccountList from './BankAccountList';
+import { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { recordReducer } from '../controller/record';
 import InputComponent from './reusable/InputComponent';
 import { useNavigation } from '@react-navigation/native';
 import { changeBankAccount } from '../redux/bankAccount';
 import { recordFormState, recordTypes } from '../model/record';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 import React, { useReducer, ReactNode, useEffect, useState } from 'react';
 
 export default function CreateRecord() {
 	const dispatchStore = useDispatch();
 	const navigation: any = useNavigation();
+	const [date, setDate] = useState<Date>(new Date());
 	const [state, dispatch] = useReducer(recordReducer, recordFormState);
-	const [recordTypeModalStatus, setRecordTypeModalStatus] = useState(false);
-	const [bankAccountModalStatus, setBankAccountModalStatus] = useState(false);
+	const [datePickerShowStatus, setDatePickerShowStatus] = useState<boolean>(false);
+	const [recordTypeModalStatus, setRecordTypeModalStatus] = useState<boolean>(false);
+	const [bankAccountModalStatus, setBankAccountModalStatus] = useState<boolean>(false);
 	
 	useEffect(() => {
 		dispatch({
@@ -51,6 +55,27 @@ export default function CreateRecord() {
 
 	const constructStyleObjForTextButton = (el: string): object => {
 		return (el.toLowerCase() === state.recordType) ? {color: 'white'} : {color: '#236F57',};
+	};
+
+	const setDateFunc = (event: DateTimePickerEvent, date: Date|undefined) => {
+		if(date) {
+			switch(event.type) {
+			case 'set':
+				setDate(date);
+				dispatch({
+					type: 'add',
+					payload: {
+						key: 'date',
+						value: JSON.parse(JSON.stringify(date)).split('T')[0],
+					}
+				});
+				break;
+			case 'dismissed':
+				break;
+			default:
+			}
+		}
+		setDatePickerShowStatus(false);
 	};
 
 	return(
@@ -118,20 +143,10 @@ export default function CreateRecord() {
 					<Text style={styles.buttonText}>Bank account</Text>
 				</TouchableOpacity>
 			</View>
-			<InputComponent
-				title='Date'
-				value={state?.date}
-				keyboardType='default'
-				changeValueFunc={(value: string) => {
-					dispatch({
-						type: 'add',
-						payload: {
-							key: 'date',
-							value: value,
-						}
-					});
-				}}
-			/>
+			<TouchableOpacity onPress={() => setDatePickerShowStatus(true)}>
+				<Text style={styles.title}>Date</Text>
+				<Text style={styles.input}>{state?.date}</Text>
+			</TouchableOpacity>
 			<TouchableOpacity style={styles.button} onPress={createRecordFunc}>
 				<Text style={styles.buttonText}>Save record</Text>
 			</TouchableOpacity>
@@ -164,11 +179,30 @@ export default function CreateRecord() {
 				}}
 				modalStatus={bankAccountModalStatus}
 			/>
+			{
+				(datePickerShowStatus) &&
+				<RNDateTimePicker
+					value={date}
+					display="default"
+					onChange={setDateFunc}
+					maximumDate={new Date()}
+				/>
+			}
 		</View>
 	);
 }
 
 const styles = StyleSheet.create({
+	title: {
+		fontSize: 15,
+		color: 'gray',
+	},
+	input: {
+		fontSize: 18,
+		color: 'black',
+		borderColor: 'gray',
+		borderBottomWidth: 1,
+	},
 	button: {
 		padding: 10,
 		marginTop: 10,
