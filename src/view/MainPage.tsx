@@ -1,7 +1,8 @@
-import { RecordI } from '../types/record';
 import { RootState } from '../types/redux';
 import { StatusBar } from 'expo-status-bar';
 import { setRecords } from '../redux/records';
+import { RecordStoreI } from '../types/record';
+import RecordsChart from './Charts/RecordsChart';
 import AddIcon from '../../assets/icons/AddIcon';
 import { BankAccountI } from '../types/bankAccount';
 import RecordsHistory from './Record/RecordsHistory';
@@ -19,31 +20,31 @@ const windowHeight = Dimensions.get('window').height;
 export default function MainPage(): ReactElement {
 	const dispatch = useDispatch();
 	const navigation: any = useNavigation();
-	const records: Array<RecordI> = useSelector((state: RootState) => state.records);
+	const records: RecordStoreI = useSelector((state: RootState) => state.records);
 	const bankAccounts: Array<BankAccountI> = useSelector((state: RootState) => state.bankAccounts);
 
 	// AsyncStorage.removeItem('records');
 	// AsyncStorage.removeItem('bank-accounts');
 
-	useEffect(() => {
-		const subscription = AppState.addEventListener('change', nextAppState => {
-			switch(nextAppState) {
-			case 'active':
-				getDataFromAsyncStorage('records');
-				getDataFromAsyncStorage('bank-accounts');
-				break;
-			case 'background':
-				setDataFromAsyncStorage('records', JSON.stringify(records));
-				setDataFromAsyncStorage('bank-accounts', JSON.stringify(bankAccounts));
-				break;
-			default:
-			}
-		});
+	// useEffect(() => {
+	// 	const subscription = AppState.addEventListener('change', nextAppState => {
+	// 		switch(nextAppState) {
+	// 		case 'active':
+	// 			getDataFromAsyncStorage('records');
+	// 			getDataFromAsyncStorage('bank-accounts');
+	// 			break;
+	// 		case 'background':
+	// 			setDataFromAsyncStorage('records', JSON.stringify(records));
+	// 			setDataFromAsyncStorage('bank-accounts', JSON.stringify(bankAccounts));
+	// 			break;
+	// 		default:
+	// 		}
+	// 	});
 		
-		return () => {
-			subscription.remove();
-		};
-	}, [bankAccounts, records]);
+	// 	return () => {
+	// 		subscription.remove();
+	// 	};
+	// }, [bankAccounts, records]);
 
 	const getDataFromAsyncStorage = async(key: string): Promise<void> => {
 		try {
@@ -79,6 +80,7 @@ export default function MainPage(): ReactElement {
 				height: windowHeight,
 			}}>
 				<BankAccounts/>
+				<RecordsChart/>
 				<RecordsHistory/>
 			</ScrollView>
 			<TouchableOpacity

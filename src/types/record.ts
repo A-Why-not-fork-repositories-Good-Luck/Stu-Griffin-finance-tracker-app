@@ -5,5 +5,10 @@ export interface RecordI {
 	comment: string;
 	ammount: string;
 	recordType: string;
+	color: Array<number>;
 	bankAccountId: string;
+}
+
+export interface RecordStoreI {
+	[key: string]: Array<RecordI>;
 }

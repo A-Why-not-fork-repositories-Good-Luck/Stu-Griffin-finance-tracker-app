@@ -16,6 +16,7 @@ import React, { useReducer, ReactNode, useEffect, useState, ReactElement } from 
 export default function CreateRecord(): ReactElement {
 	const dispatchStore = useDispatch();
 	const navigation: any = useNavigation();
+	const [key, setKey] = useState<string>('');
 	const [date, setDate] = useState<Date>(new Date());
 	const [state, dispatch] = useReducer(recordReducer, recordFormState);
 	const [datePickerShowStatus, setDatePickerShowStatus] = useState<boolean>(false);
@@ -40,7 +41,7 @@ export default function CreateRecord(): ReactElement {
 	}, []);
 
 	const createRecordFunc = (): void => {
-		dispatchStore(addRecord(state));
+		dispatchStore(addRecord({state, key}));
 		dispatchStore(changeBankAccount({
 			recordType: state.recordType,
 			recordAmmount: state.ammount,
@@ -155,7 +156,7 @@ export default function CreateRecord(): ReactElement {
 					setRecordTypeModalStatus(false);
 				}}
 				modalStatus={recordTypeModalStatus}
-				saveChanges={(key: string, value: string) => {
+				saveChanges={(key: string, value: string|Array<number>) => {
 					dispatch({
 						type: 'add',
 						payload: {
@@ -163,6 +164,7 @@ export default function CreateRecord(): ReactElement {
 						}
 					});
 				}}
+				saveKey={(el: string) => setKey(el)}
 			/>
 			<BankAccountList
 				closeModal={() => {

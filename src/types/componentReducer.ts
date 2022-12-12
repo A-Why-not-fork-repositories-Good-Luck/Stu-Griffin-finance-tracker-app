@@ -5,5 +5,5 @@ export interface ActionI {
 
 export interface PayloadI {
 	key: string;
-	value: string;
+	value: string|Array<number>;
 }

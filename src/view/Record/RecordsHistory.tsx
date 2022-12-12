@@ -1,21 +1,32 @@
 import 'react-native-get-random-values';
-import React, { ReactElement, ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 import { types } from '../../model/record';
-import { RecordI } from '../../types/record';
 import { RootState } from '../../types/redux';
 import { TypeI } from '../../types/recordTypes';
 import { BankAccountI } from '../../types/bankAccount';
+import { RecordStoreI, RecordI } from '../../types/record';
 import GrayCircleIcon from '../../../assets/icons/GrayCircleIcon';
+import React, { ReactElement, ReactNode, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 
 export default function RecordsHistory(): ReactElement {
-	const records: Array<RecordI> = useSelector((state: RootState) => state.records);
+	const [listData, setListData] = useState<Array<RecordI>>([]);
+	const records: RecordStoreI = useSelector((state: RootState) => state.records);
 	const bankAccounts: Array<BankAccountI> = useSelector((state: RootState) => state.bankAccounts);
+	
+	useEffect(() => {
+		const arr: Array<RecordI> = [];
+		const objectKeys = Object.keys(records);
+		objectKeys.map((el: string) => {
+			arr.push(...records[el]);
+		});
+		setListData(arr);
+	}, [records]);
 
-	const renderItem = (item: RecordI): ReactElement => {
+	const renderItem = (item: RecordI): ReactNode => {
 		const typeIcon = types.filter((el: TypeI) => el.title === item.type);
 		const res = bankAccounts.filter((el: BankAccountI) => el.id === item.bankAccountId);
+
 		return(
 			<TouchableOpacity style={styles.card} key={item.id}>
 				{getRecordTypeIcon(typeIcon[0]?.icon)}
@@ -64,9 +75,9 @@ export default function RecordsHistory(): ReactElement {
 			<Text style={styles.title}>History</Text>
 			<ScrollView>
 				{
-					(records.length === 0) ?
+					(listData.length === 0) ?
 						<Text>There is no records</Text>:
-						records.map((el: RecordI) => {
+						listData.map((el: RecordI) => {
 							return(
 								renderItem(el)
 							);
