@@ -1,7 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
-import { useDispatch } from 'react-redux';
+import { RootState } from '../../types/redux';
 import { addRecord } from '../../redux/records';
 import RecordTypesList from './RecordTypesList';
+import { changeBalance } from '../../redux/balance';
+import { BankAccountI } from '../../types/bankAccount';
+import { useDispatch, useSelector } from 'react-redux';
 import { recordReducer } from '../../controller/record';
 import InputComponent from '../reusable/InputComponent';
 import { useNavigation } from '@react-navigation/native';
@@ -19,6 +22,7 @@ export default function CreateRecord(): ReactElement {
 	const [key, setKey] = useState<string>('');
 	const [date, setDate] = useState<Date>(new Date());
 	const [state, dispatch] = useReducer(recordReducer, recordFormState);
+	const bankAccounts = useSelector((state: RootState) => state.bankAccounts);
 	const [datePickerShowStatus, setDatePickerShowStatus] = useState<boolean>(false);
 	const [recordTypeModalStatus, setRecordTypeModalStatus] = useState<boolean>(false);
 	const [bankAccountModalStatus, setBankAccountModalStatus] = useState<boolean>(false);
@@ -42,11 +46,22 @@ export default function CreateRecord(): ReactElement {
 
 	const createRecordFunc = (): void => {
 		dispatchStore(addRecord({state, key}));
+
 		dispatchStore(changeBankAccount({
 			recordType: state.recordType,
 			recordAmmount: state.ammount,
 			bankAccountId: state.bankAccountId,
 		}));
+		
+		const balance: number = (state.recordType === 'outcome') ?
+			bankAccounts.reduce((res: number, el: BankAccountI) => res + +el.ammount, 0) - +state.ammount :
+			bankAccounts.reduce((res: number, el: BankAccountI) => res + +el.ammount, 0) + +state.ammount;
+
+		dispatchStore(changeBalance({
+			date: JSON.parse(JSON.stringify(new Date())).split('T')[0],
+			balance: balance,
+		}));
+
 		navigation.navigate('main-page');
 	};
 

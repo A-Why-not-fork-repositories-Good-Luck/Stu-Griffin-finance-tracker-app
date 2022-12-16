@@ -2,6 +2,9 @@ import { RootState } from '../types/redux';
 import { StatusBar } from 'expo-status-bar';
 import { setRecords } from '../redux/records';
 import { RecordStoreI } from '../types/record';
+import { setBalances } from '../redux/balance';
+import { changeBalance } from '../redux/balance';
+import BalanceChart from './Charts/BalanceChart';
 import RecordsChart from './Charts/RecordsChart';
 import AddIcon from '../../assets/icons/AddIcon';
 import { BankAccountI } from '../types/bankAccount';
@@ -13,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView, StyleSheet, TouchableOpacity, View, Dimensions, AppState } from 'react-native';
+import { BalanceI } from '../types/balance';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -21,30 +25,34 @@ export default function MainPage(): ReactElement {
 	const dispatch = useDispatch();
 	const navigation: any = useNavigation();
 	const records: RecordStoreI = useSelector((state: RootState) => state.records);
+	const balances: Array<BalanceI> = useSelector((state: RootState) => state.balances);
 	const bankAccounts: Array<BankAccountI> = useSelector((state: RootState) => state.bankAccounts);
 
 	// AsyncStorage.removeItem('records');
+	// AsyncStorage.removeItem('balances');
 	// AsyncStorage.removeItem('bank-accounts');
 
-	// useEffect(() => {
-	// 	const subscription = AppState.addEventListener('change', nextAppState => {
-	// 		switch(nextAppState) {
-	// 		case 'active':
-	// 			getDataFromAsyncStorage('records');
-	// 			getDataFromAsyncStorage('bank-accounts');
-	// 			break;
-	// 		case 'background':
-	// 			setDataFromAsyncStorage('records', JSON.stringify(records));
-	// 			setDataFromAsyncStorage('bank-accounts', JSON.stringify(bankAccounts));
-	// 			break;
-	// 		default:
-	// 		}
-	// 	});
+	useEffect(() => {
+		const subscription = AppState.addEventListener('change', nextAppState => {
+			switch(nextAppState) {
+			case 'active':
+				getDataFromAsyncStorage('records');
+				getDataFromAsyncStorage('balances');
+				getDataFromAsyncStorage('bank-accounts');
+				break;
+			case 'background':
+				setDataFromAsyncStorage('records', JSON.stringify(records));
+				setDataFromAsyncStorage('balances', JSON.stringify(balances));
+				setDataFromAsyncStorage('bank-accounts', JSON.stringify(bankAccounts));
+				break;
+			default:
+			}
+		});
 		
-	// 	return () => {
-	// 		subscription.remove();
-	// 	};
-	// }, [bankAccounts, records]);
+		return () => {
+			subscription.remove();
+		};
+	}, [bankAccounts, records]);
 
 	const getDataFromAsyncStorage = async(key: string): Promise<void> => {
 		try {
@@ -53,6 +61,9 @@ export default function MainPage(): ReactElement {
 			switch(key) {
 			case 'records':
 				dispatch(setRecords(result));
+				break;
+			case 'balances':
+				dispatch(setBalances(result));
 				break;
 			case 'bank-accounts':
 				dispatch(setBankAccounts(result));
@@ -80,6 +91,7 @@ export default function MainPage(): ReactElement {
 				height: windowHeight,
 			}}>
 				<BankAccounts/>
+				<BalanceChart/>
 				<RecordsChart/>
 				<RecordsHistory/>
 			</ScrollView>

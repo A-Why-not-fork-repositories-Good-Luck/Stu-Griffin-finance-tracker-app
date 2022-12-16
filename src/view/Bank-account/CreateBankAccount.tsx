@@ -1,7 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
+import { changeBalance } from '../../redux/balance';
 import Modal from 'react-native-modal';
 import 'react-native-get-random-values';
-import { useDispatch } from 'react-redux';
+import { BankAccountI } from '../../types/bankAccount';
+import { useDispatch, useSelector } from 'react-redux';
 import { Picker } from '@react-native-picker/picker';
 import CrossIcon from '../../../assets/icons/CrossIcon';
 import { addBankAccount } from '../../redux/bankAccount';
@@ -10,6 +12,7 @@ import { bankAccountReducer } from '../../controller/bankAccount';
 import React, { useReducer, ReactNode, useEffect, ReactElement } from 'react';
 import { currency, bankAccountFormState } from '../../model/bankAccount';
 import { StyleSheet, TouchableOpacity, View, Dimensions, Text } from 'react-native';
+import { RootState } from '../../types/redux';
 
 interface PropsI {
 	modalStatus: boolean;
@@ -18,6 +21,7 @@ interface PropsI {
 
 export default function CreateBankAccount({modalStatus, closeModal}: PropsI): ReactElement {
 	const storeDispatch = useDispatch();
+	const bankAccounts = useSelector((state: RootState) => state.bankAccounts);
 	const [state, dispatch] = useReducer(bankAccountReducer, bankAccountFormState);
 
 	useEffect(() => {
@@ -63,6 +67,10 @@ export default function CreateBankAccount({modalStatus, closeModal}: PropsI): Re
 
 	const createBankAccountFunc = (): void => {
 		storeDispatch(addBankAccount(state));
+		storeDispatch(changeBalance({
+			date: JSON.parse(JSON.stringify(new Date())).split('T')[0],
+			balance: bankAccounts.reduce((res: number, el: BankAccountI): number => res + +el.ammount, 0) + +state.ammount,
+		}));
 		clearState();
 		closeModal();
 	};

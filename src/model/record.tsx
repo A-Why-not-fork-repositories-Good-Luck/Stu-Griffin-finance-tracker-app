@@ -147,51 +147,9 @@ export const recordFormState: RecordI = {
 };
 
 export const recordStore: RecordStoreI = {
-	'Food and drinks': [
-		{
-			'color': [211, 0, 0],
-			'ammount': '232', 
-			'bankAccountId': '1', 
-			'comment': '', 
-			'date': '2022-12-10', 
-			'id': '9ef17e8d-950d-4d9a-9c94-81f65904e7ea', 
-			'recordType': 'outcome', 
-			'type': 'Restaurant, fast-food',
-		},
-		{
-			'color': [211, 0, 0],
-			'ammount': '12', 
-			'bankAccountId': '1', 
-			'comment': '', 
-			'date': '2022-12-10', 
-			'id': 'faae2d42-9a8a-4155-ac44-7f67b55c0bdd', 
-			'recordType': 'outcome', 
-			'type': 'Bar, cafe'
-		}
-	],
-	'Purchases': [
-		// {
-		// 	'color': [0, 145, 200],
-		// 	'ammount': '324', 
-		// 	'bankAccountId': '2', 
-		// 	'comment': '', 
-		// 	'date': '2022-12-10', 
-		// 	'id': '9126275a-8a72-4ecc-bb3e-71053ac6c364', 
-		// 	'recordType': 'outcome', 
-		// 	'type': 'Children'
-		// },
-		// {
-		// 	'color': [0, 145, 200],
-		// 	'ammount': '242', 
-		// 	'bankAccountId': '1', 
-		// 	'comment': '', 
-		// 	'date': '2022-12-10', 
-		// 	'id': '2c2fc7a5-90d4-47ac-a4cf-390b19f4c910', 
-		// 	'recordType': 'outcome', 
-		// 	'type': 'Pets'
-		// }
-	],
-	'Accommodation': []
+	'Purchases': [],
+	'Accommodation': [],
+	'Food and drinks': [],
 };
 
 export const recordTypes: Array<string> = ['Income', 'Outcome'];
