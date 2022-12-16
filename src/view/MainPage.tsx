@@ -1,9 +1,9 @@
 import { RootState } from '../types/redux';
+import { BalanceI } from '../types/balance';
 import { StatusBar } from 'expo-status-bar';
 import { setRecords } from '../redux/records';
 import { RecordStoreI } from '../types/record';
 import { setBalances } from '../redux/balance';
-import { changeBalance } from '../redux/balance';
 import BalanceChart from './Charts/BalanceChart';
 import RecordsChart from './Charts/RecordsChart';
 import AddIcon from '../../assets/icons/AddIcon';
@@ -16,7 +16,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView, StyleSheet, TouchableOpacity, View, Dimensions, AppState } from 'react-native';
-import { BalanceI } from '../types/balance';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;

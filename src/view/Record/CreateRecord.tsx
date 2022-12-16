@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { recordReducer } from '../../controller/record';
 import InputComponent from '../reusable/InputComponent';
 import { useNavigation } from '@react-navigation/native';
+import { showMessage } from 'react-native-flash-message';
 import { changeBankAccount } from '../../redux/bankAccount';
 import BankAccountList from '../Bank-account/BankAccountList';
 import { recordFormState, recordTypes } from '../../model/record';
@@ -21,12 +22,13 @@ export default function CreateRecord(): ReactElement {
 	const navigation: any = useNavigation();
 	const [key, setKey] = useState<string>('');
 	const [date, setDate] = useState<Date>(new Date());
+	const [buttonStatus, setButtonStatus] = useState(false);
 	const [state, dispatch] = useReducer(recordReducer, recordFormState);
 	const bankAccounts = useSelector((state: RootState) => state.bankAccounts);
 	const [datePickerShowStatus, setDatePickerShowStatus] = useState<boolean>(false);
 	const [recordTypeModalStatus, setRecordTypeModalStatus] = useState<boolean>(false);
 	const [bankAccountModalStatus, setBankAccountModalStatus] = useState<boolean>(false);
-	
+
 	useEffect(() => {
 		dispatch({
 			type: 'add',
@@ -43,6 +45,10 @@ export default function CreateRecord(): ReactElement {
 			}
 		});
 	}, []);
+
+	useEffect(() => {
+		setButtonStatus(Object.values(state).every((el: string|[]) => !!el === true));
+	}, [state]);
 
 	const createRecordFunc = (): void => {
 		dispatchStore(addRecord({state, key}));
@@ -61,6 +67,11 @@ export default function CreateRecord(): ReactElement {
 			date: JSON.parse(JSON.stringify(new Date())).split('T')[0],
 			balance: balance,
 		}));
+
+		showMessage({
+			type: 'success',
+			message: 'New bank record has been created',
+		});
 
 		navigation.navigate('main-page');
 	};
@@ -163,7 +174,7 @@ export default function CreateRecord(): ReactElement {
 				<Text style={styles.title}>Date</Text>
 				<Text style={styles.input}>{state?.date}</Text>
 			</TouchableOpacity>
-			<TouchableOpacity style={styles.button} onPress={createRecordFunc}>
+			<TouchableOpacity disabled={!buttonStatus} style={[styles.button, (!buttonStatus) ? {opacity: 0.5} : {opacity: 1}]} onPress={createRecordFunc}>
 				<Text style={styles.buttonText}>Save record</Text>
 			</TouchableOpacity>
 			<RecordTypesList

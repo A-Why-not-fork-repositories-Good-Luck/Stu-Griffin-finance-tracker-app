@@ -1,7 +1,7 @@
-import React, { ReactElement } from 'react';
 import Modal from 'react-native-modal';
 import 'react-native-get-random-values';
 import { useSelector } from 'react-redux';
+import React, { ReactElement } from 'react';
 import { RootState } from '../../types/redux';
 import { BankAccountI } from '../../types/bankAccount';
 import CrossIcon from '../../../assets/icons/CrossIcon';

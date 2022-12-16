@@ -1,18 +1,20 @@
 import { v4 as uuidv4 } from 'uuid';
-import { changeBalance } from '../../redux/balance';
 import Modal from 'react-native-modal';
 import 'react-native-get-random-values';
+import { RootState } from '../../types/redux';
+import { changeBalance } from '../../redux/balance';
+import { Picker } from '@react-native-picker/picker';
+import FlashMessage from 'react-native-flash-message';
 import { BankAccountI } from '../../types/bankAccount';
 import { useDispatch, useSelector } from 'react-redux';
-import { Picker } from '@react-native-picker/picker';
 import CrossIcon from '../../../assets/icons/CrossIcon';
-import { addBankAccount } from '../../redux/bankAccount';
 import InputComponent from '../reusable/InputComponent';
+import { addBankAccount } from '../../redux/bankAccount';
+import { showMessage } from 'react-native-flash-message';
 import { bankAccountReducer } from '../../controller/bankAccount';
-import React, { useReducer, ReactNode, useEffect, ReactElement } from 'react';
 import { currency, bankAccountFormState } from '../../model/bankAccount';
 import { StyleSheet, TouchableOpacity, View, Dimensions, Text } from 'react-native';
-import { RootState } from '../../types/redux';
+import React, { useReducer, ReactNode, useEffect, ReactElement, useState } from 'react';
 
 interface PropsI {
 	modalStatus: boolean;
@@ -21,8 +23,13 @@ interface PropsI {
 
 export default function CreateBankAccount({modalStatus, closeModal}: PropsI): ReactElement {
 	const storeDispatch = useDispatch();
+	const [buttonStatus, setButtonStatus] = useState<boolean>(false);
 	const bankAccounts = useSelector((state: RootState) => state.bankAccounts);
 	const [state, dispatch] = useReducer(bankAccountReducer, bankAccountFormState);
+	
+	useEffect(() => {
+		(state.ammount !== '' && state.title !== '') ? setButtonStatus(true) : setButtonStatus(false);
+	}, [state]);
 
 	useEffect(() => {
 		dispatch({
@@ -73,6 +80,10 @@ export default function CreateBankAccount({modalStatus, closeModal}: PropsI): Re
 		}));
 		clearState();
 		closeModal();
+		showMessage({
+			type: 'success',
+			message: 'New bank account has been created',
+		});
 	};
 
 	return(
@@ -129,10 +140,11 @@ export default function CreateBankAccount({modalStatus, closeModal}: PropsI): Re
 						})
 					}
 				</Picker>
-				<TouchableOpacity style={styles.button} onPress={createBankAccountFunc}>
+				<TouchableOpacity disabled={!buttonStatus} style={[styles.button, (!buttonStatus) ? {opacity: 0.5} : {opacity: 1}]} onPress={createBankAccountFunc}>
 					<Text style={styles.buttonText}>Add bank account</Text>
 				</TouchableOpacity>
 			</View>
+			<FlashMessage position="top" /> 
 		</Modal>
 	);
 }

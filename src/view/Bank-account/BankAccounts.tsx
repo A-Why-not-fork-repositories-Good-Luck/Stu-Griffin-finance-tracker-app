@@ -1,9 +1,9 @@
-import React, { ReactElement, useState } from 'react';
 import 'react-native-get-random-values';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../types/redux';
 import AddIcon from '../../../assets/icons/AddIcon';
 import CreateBankAccount from './CreateBankAccount';
+import React, { ReactElement, useState } from 'react';
 import { BankAccountI } from '../../types/bankAccount';
 import { FlatList, StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 

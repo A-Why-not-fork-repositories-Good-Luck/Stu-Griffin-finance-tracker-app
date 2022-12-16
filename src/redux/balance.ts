@@ -7,7 +7,6 @@ export const balanceSlice = createSlice({
 	initialState: balanceStore,
 	reducers: {
 		setBalances: (state:Array<BalanceI>, action): Array<BalanceI> => {
-			console.log([...state, ...action.payload]);
 			return [...state, ...action.payload];
 		},
 		changeBalance: (state:Array<BalanceI>, action): Array<BalanceI> => {

@@ -1,12 +1,13 @@
-import React from 'react';
 import MainPage from './MainPage';
+import React, { ReactElement } from 'react';
 import CreateRecord from './Record/CreateRecord';
+import FlashMessage from 'react-native-flash-message';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator();
 
-function Navigation() {
+function Navigation(): ReactElement {
 	return (
 		<NavigationContainer>
 			<Stack.Navigator>
@@ -29,6 +30,7 @@ function Navigation() {
 					name="create-record-page"
 				/>
 			</Stack.Navigator>
+			<FlashMessage position="top" />
 		</NavigationContainer>
 	);
 }
