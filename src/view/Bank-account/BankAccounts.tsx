@@ -1,10 +1,12 @@
 import 'react-native-get-random-values';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../types/redux';
+import BankAccountList from './BankAccountList';
 import AddIcon from '../../../assets/icons/AddIcon';
-import CreateBankAccount from './CreateBankAccount';
+import CreateBankAccount from './CreateEditBankAccount';
 import React, { ReactElement, useState } from 'react';
 import { BankAccountI } from '../../types/bankAccount';
+import SettingIcon from '../../../assets/icons/SettingIcon';
 import { FlatList, StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 
 interface ItemI {
@@ -12,16 +14,10 @@ interface ItemI {
 }
 
 export default function BankAccounts(): ReactElement {
-	const [modalStatus, setModalStatus] = useState<boolean>(false);
+	const [cardId, setCardId] = useState('');
+	const [modalBankAccountListStatus, setModalBankAccountListStatus] = useState<boolean>(false);
+	const [modalCreateBankAccountStatus, setModalCreateBankAccountStatus] = useState<boolean>(false);
 	const bankAccounts: Array<BankAccountI> = useSelector((state: RootState) => state.bankAccounts);
-
-	const openModal = (): void => {
-		setModalStatus(true);
-	};
-
-	const closeModal = (): void => {
-		setModalStatus(false);
-	};
 
 	const renderItem = ({ item }: ItemI): ReactElement => {
 		return(
@@ -34,14 +30,19 @@ export default function BankAccounts(): ReactElement {
 
 	return (
 		<View style={styles.container}>
-			<Text style={styles.title}>Bank accounts</Text>
+			<View style={styles.containerTitle}>
+				<Text style={styles.title}>Bank accounts</Text>
+				<TouchableOpacity onPress={() => setModalBankAccountListStatus(true)} style={styles.settingBox}>
+					<SettingIcon width={20} height={20} fill={'black'}/>
+				</TouchableOpacity>
+			</View>
 			<FlatList
 				horizontal={true}
 				data={bankAccounts}
 				renderItem={renderItem}
 				keyExtractor={item => item.id}
 				ListFooterComponent={
-					<TouchableOpacity onPress={openModal}>
+					<TouchableOpacity onPress={() => setModalCreateBankAccountStatus(true)}>
 						<View style={[styles.card, styles.createCard]}>
 							<Text style={[styles.cardTitle, styles.createCardTitle]}>Add bank account</Text>
 							<AddIcon
@@ -55,8 +56,18 @@ export default function BankAccounts(): ReactElement {
 				}
 			/>
 			<CreateBankAccount
-				closeModal={closeModal}
-				modalStatus={modalStatus}
+				cardId={cardId}
+				modalStatus={modalCreateBankAccountStatus}
+				closeModal={() => setModalCreateBankAccountStatus(false)}
+			/>
+			<BankAccountList
+				modalStatus={modalBankAccountListStatus}
+				closeModal={() => setModalBankAccountListStatus(false)}
+				saveChanges={(item: string) => {
+					setCardId(item);
+					setModalBankAccountListStatus(false);
+					setModalCreateBankAccountStatus(true);
+				}}
 			/>
 		</View>
 	);
@@ -68,6 +79,7 @@ const styles = StyleSheet.create({
 		height: 80,
 		padding: 10,
 		borderRadius: 10,
+		borderWidth: 1.5,
 		marginVertical: 10,
 		marginHorizontal: 10,
 		backgroundColor: 'white',
@@ -77,7 +89,6 @@ const styles = StyleSheet.create({
 		fontSize: 30,
 		color: 'black',
 		marginVertical: 10,
-		textAlign: 'center',
 	},
 	cardText: {
 		fontSize: 20,
@@ -89,13 +100,28 @@ const styles = StyleSheet.create({
 		color: 'black',
 	},
 	container: {
+		marginTop: 30,
+		borderRadius: 10,
 		paddingVertical: 10,
+		backgroundColor: 'white',
+		width: Dimensions.get('window').width-25,
+	},
+	settingBox: {
+		padding: 5,
+		borderWidth: 1,
+		borderRadius: 10,
+		alignItems: 'center',
 		justifyContent: 'center',
-		width: Dimensions.get('window').width,
 	},
 	createCard: {
 		alignItems: 'center',
 		flexDirection: 'row',
+	},
+	containerTitle: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		paddingHorizontal: 10,
+		justifyContent: 'space-between',
 	},
 	createCardTitle: {
 		width: '55%',

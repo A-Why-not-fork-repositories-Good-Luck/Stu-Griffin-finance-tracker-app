@@ -88,6 +88,9 @@ export default function MainPage(): ReactElement {
 				zIndex: 1,
 				paddingTop: 10,
 				height: windowHeight,
+			}} contentContainerStyle={{
+				alignItems: 'center',
+				justifyContent: 'center',
 			}}>
 				<BankAccounts/>
 				<BalanceChart/>

@@ -9,19 +9,20 @@ import { BankAccountI } from '../../types/bankAccount';
 import { useDispatch, useSelector } from 'react-redux';
 import CrossIcon from '../../../assets/icons/CrossIcon';
 import InputComponent from '../reusable/InputComponent';
-import { addBankAccount } from '../../redux/bankAccount';
 import { showMessage } from 'react-native-flash-message';
 import { bankAccountReducer } from '../../controller/bankAccount';
 import { currency, bankAccountFormState } from '../../model/bankAccount';
+import { addBankAccount, rewriteBankAccounts } from '../../redux/bankAccount';
 import { StyleSheet, TouchableOpacity, View, Dimensions, Text } from 'react-native';
 import React, { useReducer, ReactNode, useEffect, ReactElement, useState } from 'react';
 
 interface PropsI {
+	cardId: string;
 	modalStatus: boolean;
 	closeModal: () => void;
 }
 
-export default function CreateBankAccount({modalStatus, closeModal}: PropsI): ReactElement {
+export default function CreateEditBankAccount({modalStatus, closeModal, cardId}: PropsI): ReactElement {
 	const storeDispatch = useDispatch();
 	const [buttonStatus, setButtonStatus] = useState<boolean>(false);
 	const bankAccounts = useSelector((state: RootState) => state.bankAccounts);
@@ -32,21 +33,40 @@ export default function CreateBankAccount({modalStatus, closeModal}: PropsI): Re
 	}, [state]);
 
 	useEffect(() => {
+		getInitialData();
+	}, [modalStatus]);
+
+	const getInitialData = () => {
+		const foundBankAccount: BankAccountI|undefined = bankAccounts.find((el: BankAccountI) => el.id === cardId);
+		dispatch({
+			type: 'add',
+			payload: {
+				key: 'title',
+				value: foundBankAccount?.title || '',
+			}
+		});
+		dispatch({
+			type: 'add',
+			payload: {
+				key: 'ammount',
+				value: foundBankAccount?.ammount || '',
+			}
+		});
 		dispatch({
 			type: 'add',
 			payload: {
 				key: 'id',
-				value: uuidv4(),
+				value: foundBankAccount?.id || uuidv4(),
 			}
 		});
 		dispatch({
 			type: 'add',
 			payload: {
 				key: 'currency',
-				value: currency[0],
+				value: foundBankAccount?.currency || currency[0],
 			}
 		});
-	}, [modalStatus]);
+	};
 
 	const clearState = (): void => {
 		dispatch({
@@ -73,7 +93,7 @@ export default function CreateBankAccount({modalStatus, closeModal}: PropsI): Re
 	};
 
 	const createBankAccountFunc = (): void => {
-		storeDispatch(addBankAccount(state));
+		(cardId === '') ? storeDispatch(addBankAccount(state)) : storeDispatch(rewriteBankAccounts(state));
 		storeDispatch(changeBalance({
 			date: JSON.parse(JSON.stringify(new Date())).split('T')[0],
 			balance: bankAccounts.reduce((res: number, el: BankAccountI): number => res + +el.ammount, 0) + +state.ammount,
@@ -82,7 +102,7 @@ export default function CreateBankAccount({modalStatus, closeModal}: PropsI): Re
 		closeModal();
 		showMessage({
 			type: 'success',
-			message: 'New bank account has been created',
+			message: (cardId === '') ? 'New bank account has been created' : 'Changes were saved',
 		});
 	};
 
@@ -141,7 +161,7 @@ export default function CreateBankAccount({modalStatus, closeModal}: PropsI): Re
 					}
 				</Picker>
 				<TouchableOpacity disabled={!buttonStatus} style={[styles.button, (!buttonStatus) ? {opacity: 0.5} : {opacity: 1}]} onPress={createBankAccountFunc}>
-					<Text style={styles.buttonText}>Add bank account</Text>
+					<Text style={styles.buttonText}>{(cardId === '') ? 'Add bank account' : 'Save changes'}</Text>
 				</TouchableOpacity>
 			</View>
 			<FlashMessage position="top" /> 
