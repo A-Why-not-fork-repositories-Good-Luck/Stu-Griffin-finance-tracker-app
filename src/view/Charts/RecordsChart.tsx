@@ -26,7 +26,7 @@ export default function RecordsChart(): ReactElement {
 		setChartData(createData(records));
 		calculateFullAmmount(records);
 	}, [records]);
-	
+
 	const getPercentageColor = (value: string) => {
 		switch(value) {
 		case '-':
@@ -61,7 +61,7 @@ export default function RecordsChart(): ReactElement {
 		(chartData.length !== 0) ?
 			<View style={styles.card}>
 				<View style={styles.area}>
-					<Text style={styles.title}>Records structure</Text>
+					<Text style={styles.title}>Expenses structure</Text>
 					<TouchableOpacity onPress={() => console.log('sdvsd')} style={styles.settingBox}>
 						<SettingIcon width={20} height={20} fill={'black'}/>
 					</TouchableOpacity>
