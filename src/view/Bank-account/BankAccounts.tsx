@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../types/redux';
 import BankAccountList from './BankAccountList';
 import AddIcon from '../../../assets/icons/AddIcon';
-import CreateBankAccount from './CreateEditBankAccount';
 import React, { ReactElement, useState } from 'react';
 import { BankAccountI } from '../../types/bankAccount';
+import CreateBankAccount from './CreateEditBankAccount';
 import SettingIcon from '../../../assets/icons/SettingIcon';
 import { FlatList, StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 
@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 30,
 		color: 'black',
+		fontWeight: 'bold',
 		marginVertical: 10,
 	},
 	cardText: {
