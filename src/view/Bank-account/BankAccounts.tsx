@@ -15,7 +15,7 @@ interface ItemI {
 
 export default function BankAccounts(): ReactElement {
 	const [cardId, setCardId] = useState('');
-	const [modalBankAccountListStatus, setModalBankAccountListStatus] = useState<boolean>(false);
+	const [modalStatus, setModalStatus] = useState<boolean>(false);
 	const [modalCreateBankAccountStatus, setModalCreateBankAccountStatus] = useState<boolean>(false);
 	const bankAccounts: Array<BankAccountI> = useSelector((state: RootState) => state.bankAccounts);
 
@@ -32,7 +32,7 @@ export default function BankAccounts(): ReactElement {
 		<View style={styles.container}>
 			<View style={styles.containerTitle}>
 				<Text style={styles.title}>Bank accounts</Text>
-				<TouchableOpacity onPress={() => setModalBankAccountListStatus(true)} style={styles.settingBox}>
+				<TouchableOpacity onPress={() => setModalStatus(true)} style={styles.settingBox}>
 					<SettingIcon width={20} height={20} fill={'black'}/>
 				</TouchableOpacity>
 			</View>
@@ -61,11 +61,11 @@ export default function BankAccounts(): ReactElement {
 				closeModal={() => setModalCreateBankAccountStatus(false)}
 			/>
 			<BankAccountList
-				modalStatus={modalBankAccountListStatus}
-				closeModal={() => setModalBankAccountListStatus(false)}
+				modalStatus={modalStatus}
+				closeModal={() => setModalStatus(false)}
 				saveChanges={(item: string) => {
 					setCardId(item);
-					setModalBankAccountListStatus(false);
+					setModalStatus(false);
 					setModalCreateBankAccountStatus(true);
 				}}
 			/>

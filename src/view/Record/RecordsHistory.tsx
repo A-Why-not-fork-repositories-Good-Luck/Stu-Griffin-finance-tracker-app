@@ -93,6 +93,7 @@ const styles = StyleSheet.create({
 		width: 325,
 		height: 80,
 		padding: 10,
+		borderWidth: 1,
 		borderRadius: 10,
 		marginVertical: 10,
 		flexDirection: 'row',
@@ -115,11 +116,14 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold'
 	},
 	container: {
-		height: 450,
+		marginTop: 10,
+		borderRadius: 10,
+		marginBottom: 100,
 		paddingVertical: 10,
 		alignItems: 'center',
+		backgroundColor: 'white',
 		justifyContent: 'center',
-		width: Dimensions.get('window').width,
+		width: Dimensions.get('window').width-25,
 	},
 	iconCircle: {
 		padding: 10,
