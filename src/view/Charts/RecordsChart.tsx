@@ -1,13 +1,13 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../../types/redux';
-import { StyleSheet, Dimensions, View, Text, TouchableOpacity } from 'react-native';
-import SettingIcon from '../../../assets/icons/SettingIcon';
-import { RecordI, RecordStoreI } from '../../types/record';
 import { PieChart } from 'react-native-chart-kit';
 import { RecordDataI } from '../../types/recordChart';
+import { RecordI, RecordStoreI } from '../../types/record';
 import { createData } from '../../controller/recordsChart';
+import SettingIcon from '../../../assets/icons/SettingIcon';
 import React, { ReactElement, useEffect, useState } from 'react';
-import { BalanceI } from '../../types/balance';
+import PeriodChoosingComponent from '../reusable/PeriodChoosingComponent';
+import { StyleSheet, Dimensions, View, Text, TouchableOpacity } from 'react-native';
 
 const width = Dimensions.get('window').width;
 
@@ -15,18 +15,34 @@ const chartConfig = {
 	color: () => 'black',
 };
 
+export interface DateI {
+	end: string;
+	start: string;
+}
+
 export default function RecordsChart(): ReactElement {
+	const [date, setDate] = useState<DateI>({
+		end: '',
+		start: '',
+	});
 	const [percentage, setPercentage] = useState<number>(0);
 	const [fullAmmount, setFullAmmount] = useState<number>(0);
+	const [modalStatus, setModalStatus] = useState<boolean>(false);
 	const [chartData, setChartData] = useState<Array<RecordDataI>>([]);
 	const [percentageSymbol, setPercentageSymbol] = useState<string>('');
 	const records: RecordStoreI = useSelector((state: RootState) => state.records);
 
 	useEffect(() => {
-		setChartData(createData(records));
-		calculateFullAmmount(records);
-	}, [records]);
+		const startDate: Date = new Date();
+		startDate.setDate((new Date()).getDate()-7);
+		setDate({end: JSON.parse(JSON.stringify(new Date())).split('T')[0], start: JSON.parse(JSON.stringify(startDate)).split('T')[0]});
+	}, []);
 
+	useEffect(() => {
+		setChartData(createData(records, date));
+		calculateFullAmmount(records, date);
+	}, [records, date]);
+	
 	const getPercentageColor = (value: string) => {
 		switch(value) {
 		case '-':
@@ -38,19 +54,21 @@ export default function RecordsChart(): ReactElement {
 		}
 	};
 
-	const calculateFullAmmount = (arr: RecordStoreI) => {
+	const calculateFullAmmount = (arr: RecordStoreI, date: DateI) => {
 		let ammount = 0;
 		Object.keys(arr).map((el: string) => {
 			arr[el].map((el: RecordI) => {
-				switch(el.recordType) {
-				case 'income':
-					ammount -= +el.ammount;
-					break;
-				case 'outcome': 
-					ammount += +el.ammount;
-					break;
-				default: 
-					break;
+				if(el.date > date.start || el.date < date.end) {
+					switch(el.recordType) {
+					case 'income':
+						ammount -= +el.ammount;
+						break;
+					case 'outcome': 
+						ammount += +el.ammount;
+						break;
+					default: 
+						break;
+					}
 				}
 			});
 		});
@@ -62,7 +80,7 @@ export default function RecordsChart(): ReactElement {
 			<View style={styles.card}>
 				<View style={styles.area}>
 					<Text style={styles.title}>Expenses structure</Text>
-					<TouchableOpacity onPress={() => console.log('sdvsd')} style={styles.settingBox}>
+					<TouchableOpacity onPress={() => setModalStatus(true)} style={styles.settingBox}>
 						<SettingIcon width={20} height={20} fill={'black'}/>
 					</TouchableOpacity>
 				</View>
@@ -84,6 +102,18 @@ export default function RecordsChart(): ReactElement {
 					accessor={'ammount'}
 					chartConfig={chartConfig}
 					backgroundColor={'transparent'}
+				/>
+				<PeriodChoosingComponent
+					closeModal={() => {
+						setModalStatus(false);
+					}}
+					modalStatus={modalStatus}
+					saveChanges={(startDate: string, endDate: string) => {
+						setDate({
+							end: endDate,
+							start: startDate,
+						});
+					}}
 				/>
 			</View>
 			:

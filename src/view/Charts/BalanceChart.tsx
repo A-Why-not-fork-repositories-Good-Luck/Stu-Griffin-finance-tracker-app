@@ -5,23 +5,40 @@ import { LineChart } from 'react-native-chart-kit';
 import SettingIcon from '../../../assets/icons/SettingIcon';
 import React, { useState, useEffect, ReactElement } from 'react';
 import { createDataAndLabel } from '../../controller/balanceChart';
+import PeriodChoosingComponent from '../reusable/PeriodChoosingComponent';
 import { StyleSheet, Dimensions, View, Text, TouchableOpacity } from 'react-native';
 
 const width = Dimensions.get('window').width;
 
+export interface DateI {
+	end: string;
+	start: string;
+}
+
 export default function BalanceChart(): ReactElement {
+	const [date, setDate] = useState<DateI>({
+		end: '',
+		start: '',
+	});
 	const [percentage, setPercentage] = useState<number>(0);
 	const [label, setLabel] = useState<Array<string>>(['']);
 	const [dataset, setDataset] = useState<Array<number>>([0]);
+	const [modalStatus, setModalStatus] = useState<boolean>(false);
 	const [percentageSymbol, setPercentageSymbol] = useState<string>('');
 	const balance: Array<BalanceI> = useSelector((state: RootState) => state.balances);
 
 	useEffect(() => {
-		const { labels, datasets } = createDataAndLabel(balance);
+		const startDate: Date = new Date();
+		startDate.setDate((new Date()).getDate()-7);
+		setDate({end: JSON.parse(JSON.stringify(new Date())).split('T')[0], start: JSON.parse(JSON.stringify(startDate)).split('T')[0]});
+	}, []);
+
+	useEffect(() => {
+		const { labels, datasets } = createDataAndLabel(balance, date);
 		setLabel(labels);
 		setDataset(datasets);
 		calculatePercentage(balance[balance.length-1]?.balance, balance[balance.length-2]?.balance);
-	}, [balance]);
+	}, [balance, date]);
 	
 	const getPercentageColor = (value: string) => {
 		switch(value) {
@@ -48,7 +65,7 @@ export default function BalanceChart(): ReactElement {
 			<View style={styles.card}>
 				<View style={styles.area}>
 					<Text style={styles.title}>Balance trend</Text>
-					<TouchableOpacity onPress={() => console.log('sdvsd')} style={styles.settingBox}>
+					<TouchableOpacity onPress={() => setModalStatus(true)} style={styles.settingBox}>
 						<SettingIcon width={20} height={20} fill={'black'}/>
 					</TouchableOpacity>
 				</View>
@@ -93,40 +110,19 @@ export default function BalanceChart(): ReactElement {
 					withVerticalLines={false}
 					verticalLabelRotation={30}
 				/>
+				<PeriodChoosingComponent
+					closeModal={() => {
+						setModalStatus(false);
+					}}
+					modalStatus={modalStatus}
+					saveChanges={(startDate: string, endDate: string) => {
+						setDate({
+							end: endDate,
+							start: startDate,
+						});
+					}}
+				/>
 			</View>
-			// <View style={{justifyContent: 'center', alignItems: 'center', marginVertical: 10}}>
-			// 	<LineChart
-			// 		fromZero={true}
-			// 		bezier
-			// 		data={{
-			// 			labels: label,
-			// 			datasets: [
-			// 				{
-			// 					data: dataset,
-			// 					color:() => '#0090E7',
-			// 				}
-			// 			],
-			// 		}}
-			// 		style={{
-			// 			padding: 10,
-			// 			borderRadius: 10,
-			// 			backgroundColor: 'white',
-			// 		}}
-			// 		height={256}
-			// 		chartConfig={{
-			// 			strokeWidth: 2,
-			// 			barPercentage: 0.5,
-			// 			color: () => 'black',
-			// 			backgroundGradientTo: 'white',
-			// 			backgroundGradientFrom: 'white',
-			// 			useShadowColorFromDataset: true,
-					
-			// 		}}
-			// 		width={width-45}
-			// 		withVerticalLines={false}
-			// 		verticalLabelRotation={30}
-			// 	/>
-			// </View>
 			:
 			<></>
 	);
