@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CrossIcon from '../../../assets/icons/CrossIcon';
 import InputComponent from '../reusable/InputComponent';
 import { showMessage } from 'react-native-flash-message';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import { bankAccountReducer } from '../../controller/bankAccount';
 import { currency, bankAccountFormState } from '../../model/bankAccount';
 import { addBankAccount, rewriteBankAccounts } from '../../redux/bankAccount';
@@ -68,37 +69,12 @@ export default function CreateEditBankAccount({modalStatus, closeModal, cardId}:
 		});
 	};
 
-	const clearState = (): void => {
-		dispatch({
-			type: 'add',
-			payload: {
-				value: '',
-				key: 'ammount',
-			}
-		});
-		dispatch({
-			type: 'add',
-			payload: {
-				value: '',
-				key: 'title',
-			}
-		});
-		dispatch({
-			type: 'add',
-			payload: {
-				value: '',
-				key: 'currency',
-			}
-		});
-	};
-
 	const createBankAccountFunc = (): void => {
 		(cardId === '') ? storeDispatch(addBankAccount(state)) : storeDispatch(rewriteBankAccounts(state));
 		storeDispatch(changeBalance({
 			date: JSON.parse(JSON.stringify(new Date())).split('T')[0],
 			balance: bankAccounts.reduce((res: number, el: BankAccountI): number => res + +el.ammount, 0) + +state.ammount,
 		}));
-		clearState();
 		closeModal();
 		showMessage({
 			type: 'success',
@@ -197,8 +173,8 @@ const styles = StyleSheet.create({
 		position: 'relative',
 	},
 	buttonText: {
-		fontSize: 20,
 		color: 'white',
 		textAlign: 'center',
+		fontSize: RFPercentage(2.2),
 	},
 });

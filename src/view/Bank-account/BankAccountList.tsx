@@ -6,6 +6,7 @@ import { RootState } from '../../types/redux';
 import { BankAccountI } from '../../types/bankAccount';
 import CrossIcon from '../../../assets/icons/CrossIcon';
 import { FlatList } from 'react-native-gesture-handler';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import { StyleSheet, View, Dimensions, Text, TouchableOpacity, Pressable } from 'react-native';
 
 interface ItemI {
@@ -97,13 +98,13 @@ const styles = StyleSheet.create({
 		marginHorizontal: 10,
 	},
 	cardText: {
-		fontSize: 20,
 		color: 'black',
 		fontWeight: 'bold',
+		fontSize: RFPercentage(2.5),
 	},
 	cardTitle: {
-		fontSize: 17,
 		color: 'black',
+		fontSize: RFPercentage(2),
 	},
 	modalArea: {
 		flex: 1,
@@ -111,8 +112,8 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	typeTitle: {
-		fontSize: 17,
 		marginLeft: 10,
+		fontSize: RFPercentage(2),
 	},
 	crossIcon: {
 		top: '-2.5%',

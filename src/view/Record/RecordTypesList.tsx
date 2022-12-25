@@ -4,6 +4,7 @@ import { types } from '../../model/record';
 import { TypeItem } from '../../types/recordTypes';
 import React, { ReactElement, ReactNode } from 'react';
 import CrossIcon from '../../../assets/icons/CrossIcon';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import { StyleSheet, TouchableOpacity, View, Dimensions, Text, SectionList } from 'react-native';
 
 interface ItemI {
@@ -102,7 +103,6 @@ const styles = StyleSheet.create({
 	typeIcon: {
 		width: 50,
 		height: 50,
-		// borderWidth: 2,
 		borderRadius: 100,
 		alignItems: 'center',
 		justifyContent: 'center',
@@ -113,9 +113,9 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	typeTitle: {
-		fontSize: 20,
 		marginLeft: 10,
 		fontWeight: 'bold',
+		fontSize: RFPercentage(2),
 	},
 	crossIcon: {
 		left: '92.5%',
@@ -132,13 +132,12 @@ const styles = StyleSheet.create({
 	elTypeIcon: {
 		width: 40,
 		height: 40,
-		// borderWidth: 2,
 		borderRadius: 100,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	elTypeTitle: {
-		fontSize: 17,
 		marginLeft: 10,
+		fontSize: RFPercentage(2),
 	},
 });

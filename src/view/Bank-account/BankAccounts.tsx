@@ -5,8 +5,9 @@ import BankAccountList from './BankAccountList';
 import AddIcon from '../../../assets/icons/AddIcon';
 import React, { ReactElement, useState } from 'react';
 import { BankAccountI } from '../../types/bankAccount';
-import CreateBankAccount from './CreateEditBankAccount';
+import CreateEditBankAccount from './CreateEditBankAccount';
 import SettingIcon from '../../../assets/icons/SettingIcon';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import { FlatList, StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 
 interface ItemI {
@@ -55,10 +56,13 @@ export default function BankAccounts(): ReactElement {
 					</TouchableOpacity>
 				}
 			/>
-			<CreateBankAccount
+			<CreateEditBankAccount
 				cardId={cardId}
 				modalStatus={modalCreateBankAccountStatus}
-				closeModal={() => setModalCreateBankAccountStatus(false)}
+				closeModal={() => {
+					setCardId('');
+					setModalCreateBankAccountStatus(false);
+				}}
 			/>
 			<BankAccountList
 				modalStatus={modalStatus}
@@ -86,18 +90,18 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-around',
 	},
 	title: {
-		fontSize: 30,
+		fontSize: RFPercentage(4),
 		color: 'black',
 		fontWeight: 'bold',
 		marginVertical: 10,
 	},
 	cardText: {
-		fontSize: 20,
+		fontSize: RFPercentage(3),
 		color: 'black',
 		fontWeight: 'bold',
 	},
 	cardTitle: {
-		fontSize: 17,
+		fontSize: RFPercentage(2.5),
 		color: 'black',
 	},
 	container: {
@@ -126,7 +130,7 @@ const styles = StyleSheet.create({
 	},
 	createCardTitle: {
 		width: '55%',
-		fontSize: 22.5,
+		fontSize: RFPercentage(2.7),
 		fontWeight: 'bold',
 	}
 });

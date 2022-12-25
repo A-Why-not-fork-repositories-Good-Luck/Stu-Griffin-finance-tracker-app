@@ -14,5 +14,6 @@ export const createDataAndLabel = (arr: Array<BalanceI>, date: DateI) => {
 		labels.push('');
 		datasets.push(0);
 	}
+	console.log(labels, datasets);
 	return { labels, datasets };
 };

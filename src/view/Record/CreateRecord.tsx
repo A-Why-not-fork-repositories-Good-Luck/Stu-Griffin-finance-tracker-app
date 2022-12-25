@@ -11,6 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 import { showMessage } from 'react-native-flash-message';
 import { changeBankAccount } from '../../redux/bankAccount';
 import BankAccountList from '../Bank-account/BankAccountList';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import { recordFormState, recordTypes } from '../../model/record';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
@@ -222,14 +223,14 @@ export default function CreateRecord(): ReactElement {
 
 const styles = StyleSheet.create({
 	title: {
-		fontSize: 15,
 		color: 'gray',
+		fontSize: RFPercentage(2),
 	},
 	input: {
-		fontSize: 18,
 		color: 'black',
 		borderColor: 'gray',
 		borderBottomWidth: 1,
+		fontSize: RFPercentage(2.2),
 	},
 	button: {
 		padding: 10,
@@ -252,8 +253,8 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	typeTitle: {
-		fontSize: 17,
 		marginLeft: 10,
+		fontSize: RFPercentage(2.5),
 	},
 	container: {
 		flex: 1,
@@ -266,13 +267,13 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 	},
 	buttonText: {
-		fontSize: 20,
 		color: 'white',
 		textAlign: 'center',
+		fontSize: RFPercentage(2.2),
 	},
 	recordTypeText: {
-		fontSize: 18,
 		textAlign: 'center',
+		fontSize: RFPercentage(2),
 	},
 	recordTypeList: {
 		flexDirection: 'row',

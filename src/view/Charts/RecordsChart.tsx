@@ -5,6 +5,7 @@ import { RecordDataI } from '../../types/recordChart';
 import { RecordI, RecordStoreI } from '../../types/record';
 import { createData } from '../../controller/recordsChart';
 import SettingIcon from '../../../assets/icons/SettingIcon';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import React, { ReactElement, useEffect, useState } from 'react';
 import PeriodChoosingComponent from '../reusable/PeriodChoosingComponent';
 import { StyleSheet, Dimensions, View, Text, TouchableOpacity } from 'react-native';
@@ -139,16 +140,16 @@ const styles = StyleSheet.create({
 		backgroundColor: 'white',	
 	},
 	title: {
-		fontSize: 30,
 		fontWeight: 'bold',
+		fontSize: RFPercentage(3.5),
 	},
 	infoTitle: {
-		fontSize: 15,
 		color: 'gray',
+		fontSize: RFPercentage(2),
 	},
 	infoValue: {
-		fontSize: 20,
 		fontWeight: 'bold',
+		fontSize: RFPercentage(2.5),
 	},
 	settingBox: {
 		padding: 5,

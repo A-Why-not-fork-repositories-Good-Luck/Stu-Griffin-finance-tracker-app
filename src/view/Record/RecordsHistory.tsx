@@ -5,6 +5,7 @@ import { RootState } from '../../types/redux';
 import { TypeI } from '../../types/recordTypes';
 import { BankAccountI } from '../../types/bankAccount';
 import { RecordStoreI, RecordI } from '../../types/record';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import GrayCircleIcon from '../../../assets/icons/GrayCircleIcon';
 import React, { ReactElement, ReactNode, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
@@ -103,17 +104,17 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 	},
 	type: {
-		fontSize: 17,
+		fontSize: RFPercentage(2),
 	},
 	title: {
-		fontSize: 30,
 		color: 'black',
 		marginVertical: 10,
 		textAlign: 'center',
+		fontSize: RFPercentage(3.5),
 	},
 	ammount: {
-		fontSize: 18,
-		fontWeight: 'bold'
+		fontWeight: 'bold',
+		fontSize: RFPercentage(2),
 	},
 	container: {
 		marginTop: 10,

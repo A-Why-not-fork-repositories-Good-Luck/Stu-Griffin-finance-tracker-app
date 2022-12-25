@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import { StyleSheet, View, Text, TextInput, KeyboardType } from 'react-native';
 
 interface PropsI {
@@ -24,13 +25,13 @@ export default function InputComponent({value, title, changeValueFunc, keyboardT
 
 const styles = StyleSheet.create({
 	title: {
-		fontSize: 15,
 		color: 'gray',
+		fontSize: RFPercentage(2),
 	},
 	input: {
-		fontSize: 18,
 		color: 'black',
 		borderColor: 'gray',
 		borderBottomWidth: 1,
+		fontSize: RFPercentage(2),
 	},
 });

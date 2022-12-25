@@ -1,5 +1,6 @@
 import Modal from 'react-native-modal';
 import 'react-native-get-random-values';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import React, { useState, ReactElement, useEffect } from 'react';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { DateTimePickerEvent } from '@react-native-community/datetimepicker';
@@ -103,17 +104,17 @@ const styles = StyleSheet.create({
 		backgroundColor: 'white',
 		justifyContent: 'space-between',
 		width: Dimensions.get('window').width - 80,
-		height: Dimensions.get('window').height - 550,
+		height: Dimensions.get('window').height - 525,
 	},
 	title: {
-		fontSize: 15,
 		color: 'gray',
+		fontSize: RFPercentage(2),
 	},
 	input: {
-		fontSize: 18,
 		color: 'black',
 		borderColor: 'gray',
 		borderBottomWidth: 1,
+		fontSize: RFPercentage(2),
 	},
 	button: {
 		padding: 10,
@@ -127,8 +128,8 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	buttonText: {
-		fontSize: 20,
 		color: 'white',
 		textAlign: 'center',
+		fontSize: RFPercentage(2.5),
 	},
 });

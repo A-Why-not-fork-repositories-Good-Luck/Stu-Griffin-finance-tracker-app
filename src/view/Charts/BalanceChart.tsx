@@ -3,6 +3,7 @@ import { RootState } from '../../types/redux';
 import { BalanceI } from '../../types/balance';
 import { LineChart } from 'react-native-chart-kit';
 import SettingIcon from '../../../assets/icons/SettingIcon';
+import { RFPercentage } from 'react-native-responsive-fontsize';
 import React, { useState, useEffect, ReactElement } from 'react';
 import { createDataAndLabel } from '../../controller/balanceChart';
 import PeriodChoosingComponent from '../reusable/PeriodChoosingComponent';
@@ -146,16 +147,16 @@ const styles = StyleSheet.create({
 		backgroundColor: 'white',	
 	},
 	title: {
-		fontSize: 30,
 		fontWeight: 'bold',
+		fontSize: RFPercentage(3.5),
 	},
 	infoTitle: {
-		fontSize: 15,
 		color: 'gray',
+		fontSize: RFPercentage(2),
 	},
 	infoValue: {
-		fontSize: 20,
 		fontWeight: 'bold',
+		fontSize: RFPercentage(2.5),
 	},
 	settingBox: {
 		padding: 5,
