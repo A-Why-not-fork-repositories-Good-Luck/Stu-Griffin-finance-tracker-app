@@ -1,4 +1,4 @@
-import { BankAccountI } from '../types/bankAccount';
+import { BankAccountI } from '../types/BankAccount';
 
 export const bankAccountFormState: BankAccountI = {
 	id: '',

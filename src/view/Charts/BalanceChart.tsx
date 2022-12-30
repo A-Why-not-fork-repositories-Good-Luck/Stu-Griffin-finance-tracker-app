@@ -1,20 +1,16 @@
 import { useSelector } from 'react-redux';
+import { DateI } from '../../types/Chart';
 import { RootState } from '../../types/redux';
-import { BalanceI } from '../../types/balance';
+import { BalanceI } from '../../types/Balance';
 import { LineChart } from 'react-native-chart-kit';
+import { createBalanceData } from '../../controller/Chart';
 import SettingIcon from '../../../assets/icons/SettingIcon';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import React, { useState, useEffect, ReactElement } from 'react';
-import { createDataAndLabel } from '../../controller/balanceChart';
 import PeriodChoosingComponent from '../reusable/PeriodChoosingComponent';
 import { StyleSheet, Dimensions, View, Text, TouchableOpacity } from 'react-native';
 
 const width = Dimensions.get('window').width;
-
-export interface DateI {
-	end: string;
-	start: string;
-}
 
 export default function BalanceChart(): ReactElement {
 	const [date, setDate] = useState<DateI>({
@@ -35,7 +31,7 @@ export default function BalanceChart(): ReactElement {
 	}, []);
 
 	useEffect(() => {
-		const { labels, datasets } = createDataAndLabel(balance, date);
+		const { labels, datasets } = createBalanceData(balance, date);
 		setLabel(labels);
 		setDataset(datasets);
 		calculatePercentage(balance[balance.length-1]?.balance, balance[balance.length-2]?.balance);

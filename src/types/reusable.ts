@@ -1,3 +1,8 @@
+export interface PropsI {
+	modalStatus: boolean;
+	closeModal: () => void;
+}
+
 export interface ActionI {
 	type: string;
 	payload: PayloadI;

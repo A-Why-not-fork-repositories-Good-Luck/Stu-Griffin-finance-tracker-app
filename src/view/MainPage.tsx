@@ -1,19 +1,21 @@
 import { RootState } from '../types/redux';
-import { BalanceI } from '../types/balance';
+import { BalanceI } from '../types/Balance';
 import { StatusBar } from 'expo-status-bar';
 import { setRecords } from '../redux/records';
-import { RecordStoreI } from '../types/record';
+import { RecordStoreI } from '../types/Record';
 import { setBalances } from '../redux/balance';
 import BalanceChart from './Charts/BalanceChart';
 import RecordsChart from './Charts/RecordsChart';
 import AddIcon from '../../assets/icons/AddIcon';
-import { BankAccountI } from '../types/bankAccount';
+import { BankAccountI } from '../types/BankAccount';
+import { navigationType } from '../types/Navigation';
 import RecordsHistory from './Record/RecordsHistory';
 import React, { ReactElement, useEffect } from 'react';
 import BankAccounts from './Bank-account/BankAccounts';
 import { setBankAccounts } from '../redux/bankAccount';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
+import { showMessage } from 'react-native-flash-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView, StyleSheet, TouchableOpacity, View, Dimensions, AppState } from 'react-native';
 
@@ -22,7 +24,7 @@ const windowHeight = Dimensions.get('window').height;
 
 export default function MainPage(): ReactElement {
 	const dispatch = useDispatch();
-	const navigation: any = useNavigation();
+	const navigation: navigationType = useNavigation();
 	const records: RecordStoreI = useSelector((state: RootState) => state.records);
 	const balances: Array<BalanceI> = useSelector((state: RootState) => state.balances);
 	const bankAccounts: Array<BankAccountI> = useSelector((state: RootState) => state.bankAccounts);
@@ -70,16 +72,21 @@ export default function MainPage(): ReactElement {
 			default:
 			}
 		} catch(e) {
-			console.log(e);
+			showMessage({
+				type: 'danger',
+				message: 'Something went wrong',
+			});
 		}
 	};
 
 	const setDataFromAsyncStorage = async(key: string, value: string): Promise<void> => {
 		try {
 			await AsyncStorage.setItem(key, value);
-			console.log('saved');
 		} catch(e) {
-			console.log(e);
+			showMessage({
+				type: 'danger',
+				message: 'Something went wrong',
+			});
 		}
 	};
 	return (

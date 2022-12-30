@@ -1,9 +1,9 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../../types/redux';
 import { PieChart } from 'react-native-chart-kit';
-import { RecordDataI } from '../../types/recordChart';
-import { RecordI, RecordStoreI } from '../../types/record';
-import { createData } from '../../controller/recordsChart';
+import { RecordDataI, DateI } from '../../types/Chart';
+import { createRecordData } from '../../controller/Chart';
+import { RecordI, RecordStoreI } from '../../types/Record';
 import SettingIcon from '../../../assets/icons/SettingIcon';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import React, { ReactElement, useEffect, useState } from 'react';
@@ -11,15 +11,6 @@ import PeriodChoosingComponent from '../reusable/PeriodChoosingComponent';
 import { StyleSheet, Dimensions, View, Text, TouchableOpacity } from 'react-native';
 
 const width = Dimensions.get('window').width;
-
-const chartConfig = {
-	color: () => 'black',
-};
-
-export interface DateI {
-	end: string;
-	start: string;
-}
 
 export default function RecordsChart(): ReactElement {
 	const [date, setDate] = useState<DateI>({
@@ -40,7 +31,7 @@ export default function RecordsChart(): ReactElement {
 	}, []);
 
 	useEffect(() => {
-		setChartData(createData(records, date));
+		setChartData(createRecordData(records, date));
 		calculateFullAmmount(records, date);
 	}, [records, date]);
 	
@@ -101,7 +92,9 @@ export default function RecordsChart(): ReactElement {
 					data={chartData}
 					paddingLeft={'0'}
 					accessor={'ammount'}
-					chartConfig={chartConfig}
+					chartConfig={{
+						color: () => 'black',
+					}}
 					backgroundColor={'transparent'}
 				/>
 				<PeriodChoosingComponent

@@ -1,5 +1,5 @@
-import { RecordI } from '../types/record';
-import { ActionI } from '../types/componentReducer';
+import { RecordI } from '../types/Record';
+import { ActionI } from '../types/reusable';
 
 export function recordReducer(state: RecordI, {type, payload}: ActionI): RecordI {
 	switch (type) {

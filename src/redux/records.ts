@@ -1,6 +1,6 @@
 import { recordStore } from '../model/record';
 import { createSlice } from '@reduxjs/toolkit';
-import { RecordStoreI } from '../types/record';
+import { RecordStoreI } from '../types/Record';
 
 export const recordsSlice = createSlice({
 	name: 'records',

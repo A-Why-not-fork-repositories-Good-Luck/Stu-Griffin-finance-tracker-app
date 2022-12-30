@@ -1,30 +1,24 @@
 import { v4 as uuidv4 } from 'uuid';
 import Modal from 'react-native-modal';
 import 'react-native-get-random-values';
-import { RootState } from '../../types/redux';
 import { changeBalance } from '../../redux/balance';
 import { Picker } from '@react-native-picker/picker';
 import FlashMessage from 'react-native-flash-message';
-import { BankAccountI } from '../../types/bankAccount';
 import { useDispatch, useSelector } from 'react-redux';
 import CrossIcon from '../../../assets/icons/CrossIcon';
 import InputComponent from '../reusable/InputComponent';
 import { showMessage } from 'react-native-flash-message';
+import { AppDispatch, RootState } from '../../types/redux';
 import { RFPercentage } from 'react-native-responsive-fontsize';
-import { bankAccountReducer } from '../../controller/bankAccount';
+import { bankAccountReducer } from '../../controller/BankAccount';
 import { currency, bankAccountFormState } from '../../model/bankAccount';
 import { addBankAccount, rewriteBankAccounts } from '../../redux/bankAccount';
+import { CreateEditBankAccountPropsI, BankAccountI } from '../../types/BankAccount';
 import { StyleSheet, TouchableOpacity, View, Dimensions, Text } from 'react-native';
 import React, { useReducer, ReactNode, useEffect, ReactElement, useState } from 'react';
 
-interface PropsI {
-	cardId: string;
-	modalStatus: boolean;
-	closeModal: () => void;
-}
-
-export default function CreateEditBankAccount({modalStatus, closeModal, cardId}: PropsI): ReactElement {
-	const storeDispatch = useDispatch();
+export default function CreateEditBankAccount({modalStatus, closeModal, cardId}: CreateEditBankAccountPropsI): ReactElement {
+	const storeDispatch: AppDispatch = useDispatch();
 	const [buttonStatus, setButtonStatus] = useState<boolean>(false);
 	const bankAccounts = useSelector((state: RootState) => state.bankAccounts);
 	const [state, dispatch] = useReducer(bankAccountReducer, bankAccountFormState);

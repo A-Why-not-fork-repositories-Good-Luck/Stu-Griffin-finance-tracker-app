@@ -1,39 +1,14 @@
 import Modal from 'react-native-modal';
 import 'react-native-get-random-values';
 import { types } from '../../model/record';
-import { TypeItem } from '../../types/recordTypes';
-import React, { ReactElement, ReactNode } from 'react';
+import React, { ReactElement } from 'react';
 import CrossIcon from '../../../assets/icons/CrossIcon';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { StyleSheet, TouchableOpacity, View, Dimensions, Text, SectionList } from 'react-native';
+import { RecordTypeItemI, RecordTypeSectionHeaderI, RecordTypesListPropsI } from '../../types/Record';
 
-interface ItemI {
-	title: {
-		title: string;
-		parent: string;
-		icon: ReactNode;
-		color: Array<number>;
-	}
-}
-
-interface PropsI {
-	modalStatus: boolean;
-	closeModal: () => void;
-	saveKey: (el: string) => void;
-	saveChanges: (key: string, value: string|Array<number>) => void;
-}
-
-interface SectionHeaderI {
-	section: {
-		title: string;
-		icon: ReactNode;
-		color: Array<number>;
-		data: Array<TypeItem>;
-	}
-}
-
-export default function RecordTypesList({modalStatus, closeModal, saveChanges, saveKey}: PropsI): ReactElement {
-	const Item = (el: ItemI) => {
+export default function RecordTypesList({modalStatus, closeModal, saveChanges, saveKey}: RecordTypesListPropsI): ReactElement {
+	const Item = (el: RecordTypeItemI): ReactElement => {
 		return(
 			<TouchableOpacity style={styles.elTypeCard} onPress={() => {
 				saveKey(el.title.parent);
@@ -49,7 +24,7 @@ export default function RecordTypesList({modalStatus, closeModal, saveChanges, s
 		);
 	};
 
-	const sectionHeader = (el: SectionHeaderI) => {
+	const sectionHeader = (el: RecordTypeSectionHeaderI): ReactElement => {
 		return(
 			<View style={styles.typeCard}>
 				<View style={[styles.typeIcon, {backgroundColor: `rgb(${el.section.color[0]}, ${el.section.color[1]}, ${el.section.color[2]})`}]}>

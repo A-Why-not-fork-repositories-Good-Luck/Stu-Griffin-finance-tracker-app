@@ -1,6 +1,6 @@
 import React from 'react';
-import { TypeI } from '../types/recordTypes';
-import { RecordI, RecordStoreI } from '../types/record';
+import { TypeI } from '../types/Chart';
+import { RecordI, RecordStoreI } from '../types/Record';
 import RestaurantIcon from '../../assets/icons/RestaurantIcon';
 
 export const types: Array<TypeI> = [

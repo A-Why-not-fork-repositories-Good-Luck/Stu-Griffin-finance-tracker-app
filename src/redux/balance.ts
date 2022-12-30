@@ -1,4 +1,4 @@
-import { BalanceI } from '../types/balance';
+import { BalanceI } from '../types/Balance';
 import { createSlice } from '@reduxjs/toolkit';
 import { balanceStore } from '../model/balance';
 

@@ -2,22 +2,17 @@ import Modal from 'react-native-modal';
 import 'react-native-get-random-values';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import React, { useState, ReactElement, useEffect } from 'react';
+import { PeriodChoosingComponentPropsI } from '../../types/Times';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { StyleSheet, TouchableOpacity, View, Dimensions, Text } from 'react-native';
 
-interface PropsI {
-	modalStatus: boolean;
-	closeModal: () => void;
-	saveChanges: (startDate: string, endDate: string) => void;
-}
-
-export default function PeriodChoosingComponent({modalStatus, closeModal, saveChanges}: PropsI): ReactElement {
+export default function PeriodChoosingComponent({modalStatus, closeModal, saveChanges}: PeriodChoosingComponentPropsI): ReactElement {
 	const [type, setType] = useState<string>('');
 	const [endDate, setEndDate] = useState<string>('');
 	const [date, setDate] = useState<Date>(new Date());
 	const [startDate, setStartDate] = useState<string>('');
-	const [buttonStatus, setButtonStatus] = useState(false);
+	const [buttonStatus, setButtonStatus] = useState<boolean>(false);
 	const [datePickerShowStatus, setDatePickerShowStatus] = useState<boolean>(false);
 
 	useEffect(() => {

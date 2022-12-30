@@ -1,5 +1,5 @@
-import { BankAccountI } from '../types/bankAccount';
-import { ActionI } from '../types/componentReducer';
+import { ActionI } from '../types/reusable';
+import { BankAccountI } from '../types/BankAccount';
 
 export function bankAccountReducer(state: BankAccountI, {type, payload}: ActionI): BankAccountI {
 	switch (type) {

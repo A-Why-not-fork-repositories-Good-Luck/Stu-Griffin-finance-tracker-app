@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { BankAccountI } from '../types/bankAccount';
+import { BankAccountI } from '../types/BankAccount';
 import { bankAccountsStore } from '../model/bankAccount';
 
 export const bankAccountsSlice = createSlice({

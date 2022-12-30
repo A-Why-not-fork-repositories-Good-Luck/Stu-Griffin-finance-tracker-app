@@ -1,14 +1,15 @@
 import { v4 as uuidv4 } from 'uuid';
-import { RootState } from '../../types/redux';
 import { addRecord } from '../../redux/records';
 import RecordTypesList from './RecordTypesList';
 import { changeBalance } from '../../redux/balance';
-import { BankAccountI } from '../../types/bankAccount';
+import { BankAccountI } from '../../types/BankAccount';
 import { useDispatch, useSelector } from 'react-redux';
-import { recordReducer } from '../../controller/record';
+import { recordReducer } from '../../controller/Record';
 import InputComponent from '../reusable/InputComponent';
+import { navigationType } from '../../types/Navigation';
 import { useNavigation } from '@react-navigation/native';
 import { showMessage } from 'react-native-flash-message';
+import { RootState, AppDispatch } from '../../types/redux';
 import { changeBankAccount } from '../../redux/bankAccount';
 import BankAccountList from '../Bank-account/BankAccountList';
 import { RFPercentage } from 'react-native-responsive-fontsize';
@@ -19,16 +20,16 @@ import { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import React, { useReducer, ReactNode, useEffect, useState, ReactElement } from 'react';
 
 export default function CreateRecord(): ReactElement {
-	const dispatchStore = useDispatch();
-	const navigation: any = useNavigation();
 	const [key, setKey] = useState<string>('');
+	const dispatchStore: AppDispatch = useDispatch();
 	const [date, setDate] = useState<Date>(new Date());
-	const [buttonStatus, setButtonStatus] = useState(false);
+	const navigation: navigationType = useNavigation();
+	const [buttonStatus, setButtonStatus] = useState<boolean>(false);
 	const [state, dispatch] = useReducer(recordReducer, recordFormState);
-	const bankAccounts = useSelector((state: RootState) => state.bankAccounts);
 	const [datePickerShowStatus, setDatePickerShowStatus] = useState<boolean>(false);
 	const [recordTypeModalStatus, setRecordTypeModalStatus] = useState<boolean>(false);
 	const [bankAccountModalStatus, setBankAccountModalStatus] = useState<boolean>(false);
+	const bankAccounts: Array<BankAccountI> = useSelector((state: RootState) => state.bankAccounts);
 
 	useEffect(() => {
 		dispatch({
@@ -48,7 +49,7 @@ export default function CreateRecord(): ReactElement {
 	}, []);
 
 	useEffect(() => {
-		setButtonStatus(Object.values(state).every((el: string|[]) => !!el === true));
+		setButtonStatus(Object.values(state).every((el: unknown) => !!el === true));
 	}, [state]);
 
 	const createRecordFunc = (): void => {

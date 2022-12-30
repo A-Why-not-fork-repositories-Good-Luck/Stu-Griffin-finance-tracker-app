@@ -1,3 +1,3 @@
-import { BalanceI } from '../types/balance';
+import { BalanceI } from '../types/Balance';
 
 export const balanceStore: Array<BalanceI> = [];

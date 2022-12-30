@@ -1,10 +1,10 @@
 import 'react-native-get-random-values';
 import { useSelector } from 'react-redux';
+import { TypeI } from '../../types/Chart';
 import { types } from '../../model/record';
 import { RootState } from '../../types/redux';
-import { TypeI } from '../../types/recordTypes';
-import { BankAccountI } from '../../types/bankAccount';
-import { RecordStoreI, RecordI } from '../../types/record';
+import { BankAccountI } from '../../types/BankAccount';
+import { RecordStoreI, RecordI } from '../../types/Record';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import GrayCircleIcon from '../../../assets/icons/GrayCircleIcon';
 import React, { ReactElement, ReactNode, useEffect, useState } from 'react';
@@ -24,7 +24,7 @@ export default function RecordsHistory(): ReactElement {
 		setListData(arr);
 	}, [records]);
 
-	const renderItem = (item: RecordI): ReactNode => {
+	const renderItem = (item: RecordI): ReactElement => {
 		const typeIcon = types.filter((el: TypeI) => el.title === item.type);
 		const res = bankAccounts.filter((el: BankAccountI) => el.id === item.bankAccountId);
 
@@ -60,7 +60,7 @@ export default function RecordsHistory(): ReactElement {
 		);
 	};
 
-	const getRecordTypeIcon = (icon: ReactNode|undefined): ReactNode => {
+	const getRecordTypeIcon = (icon: ReactNode|undefined): ReactElement => {
 		return(
 			(icon !== undefined) ?
 				<View style={styles.iconCircle}>
@@ -78,7 +78,7 @@ export default function RecordsHistory(): ReactElement {
 				{
 					(listData.length === 0) ?
 						<Text>There is no records</Text>:
-						listData.map((el: RecordI) => {
+						listData.map((el: RecordI): ReactElement => {
 							return(
 								renderItem(el)
 							);

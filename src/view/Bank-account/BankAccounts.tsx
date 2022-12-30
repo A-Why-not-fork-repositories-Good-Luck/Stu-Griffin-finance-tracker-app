@@ -4,23 +4,19 @@ import { RootState } from '../../types/redux';
 import BankAccountList from './BankAccountList';
 import AddIcon from '../../../assets/icons/AddIcon';
 import React, { ReactElement, useState } from 'react';
-import { BankAccountI } from '../../types/bankAccount';
 import CreateEditBankAccount from './CreateEditBankAccount';
 import SettingIcon from '../../../assets/icons/SettingIcon';
 import { RFPercentage } from 'react-native-responsive-fontsize';
+import { CardItemI, BankAccountI } from '../../types/BankAccount';
 import { FlatList, StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 
-interface ItemI {
-	item: BankAccountI;
-}
-
 export default function BankAccounts(): ReactElement {
-	const [cardId, setCardId] = useState('');
+	const [cardId, setCardId] = useState<string>('');
 	const [modalStatus, setModalStatus] = useState<boolean>(false);
 	const [modalCreateBankAccountStatus, setModalCreateBankAccountStatus] = useState<boolean>(false);
 	const bankAccounts: Array<BankAccountI> = useSelector((state: RootState) => state.bankAccounts);
 
-	const renderItem = ({ item }: ItemI): ReactElement => {
+	const renderItem = ({ item }: CardItemI): ReactElement => {
 		return(
 			<TouchableOpacity style={styles.card}>
 				<Text style={styles.cardTitle}>{item.title}</Text>
