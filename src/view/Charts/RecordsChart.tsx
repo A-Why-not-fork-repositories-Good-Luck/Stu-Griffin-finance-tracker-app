@@ -34,50 +34,51 @@ export default function RecordsChart(): ReactElement {
 	}, [records, date]);
 
 	return (
-		(chartData.length !== 0) ?
-			<View style={styles.card}>
-				<View style={styles.area}>
-					<Text style={styles.title}>Expenses structure</Text>
-					<TouchableOpacity onPress={() => setModalStatus(true)} style={styles.settingBox}>
-						<SettingIcon width={20} height={20} fill={'black'}/>
-					</TouchableOpacity>
-				</View>
-				<View style={styles.area}>
-					<View>
-						<Text style={styles.infoTitle}>Last 30 days</Text>
-						<Text style={styles.infoValue}>{fullAmmount} UAH</Text>
-					</View>
-					<View>
-						<Text style={styles.infoTitle}>vs past period</Text>
-						<Text style={[styles.infoValue, getPercentageColor(percentageSymbol)]}>{percentageSymbol}{percentage}%</Text>
-					</View>
-				</View>
-				<PieChart
-					height={220}
-					width={width-25}
-					data={chartData}
-					paddingLeft={'0'}
-					accessor={'ammount'}
-					chartConfig={{
-						color: () => 'black',
-					}}
-					backgroundColor={'transparent'}
-				/>
-				<PeriodChoosingComponent
-					closeModal={() => {
-						setModalStatus(false);
-					}}
-					modalStatus={modalStatus}
-					saveChanges={(startDate: string, endDate: string) => {
-						setDate({
-							end: endDate,
-							start: startDate,
-						});
-					}}
-				/>
+		<View style={styles.card}>
+			<View style={styles.area}>
+				<Text style={styles.title}>Expenses structure</Text>
+				<TouchableOpacity onPress={() => setModalStatus(true)} style={styles.settingBox}>
+					<SettingIcon width={20} height={20} fill={'black'}/>
+				</TouchableOpacity>
 			</View>
-			:
-			<></>
+			<View style={styles.area}>
+				<View>
+					<Text style={styles.infoTitle}>Last 30 days</Text>
+					<Text style={styles.infoValue}>{fullAmmount} UAH</Text>
+				</View>
+				<View>
+					<Text style={styles.infoTitle}>vs past period</Text>
+					<Text style={[styles.infoValue, getPercentageColor(percentageSymbol)]}>{percentageSymbol}{percentage}%</Text>
+				</View>
+			</View>
+			{
+				(chartData.length !== 0) ?
+					<PieChart
+						height={220}
+						width={width-25}
+						data={chartData}
+						paddingLeft={'0'}
+						accessor={'ammount'}
+						chartConfig={{
+							color: () => 'black',
+						}}
+						backgroundColor={'transparent'}
+					/> :
+					<Text style={{fontSize: 22.5, color: 'red', fontWeight: 'bold', textAlign: 'center', marginVertical: 10}}>You have no records in this period of time or actually</Text>
+			}
+			<PeriodChoosingComponent
+				closeModal={() => {
+					setModalStatus(false);
+				}}
+				modalStatus={modalStatus}
+				saveChanges={(startDate: string, endDate: string) => {
+					setDate({
+						end: endDate,
+						start: startDate,
+					});
+				}}
+			/>
+		</View>
 	);
 }
 

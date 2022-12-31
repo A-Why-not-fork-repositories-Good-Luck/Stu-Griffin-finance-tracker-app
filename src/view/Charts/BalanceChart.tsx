@@ -37,73 +37,72 @@ export default function BalanceChart(): ReactElement {
 		setPercentage(percantage);
 		setPercentageSymbol(symbol);
 	}, [balance, date]);
-	
 	return(
-		(balance.length !== 0) 
-			?
-			<View style={styles.card}>
-				<View style={styles.area}>
-					<Text style={styles.title}>Balance trend</Text>
-					<TouchableOpacity onPress={() => setModalStatus(true)} style={styles.settingBox}>
-						<SettingIcon width={20} height={20} fill={'black'}/>
-					</TouchableOpacity>
-				</View>
-				<View style={styles.area}>
-					<View>
-						<Text style={styles.infoTitle}>Today</Text>
-						<Text style={styles.infoValue}>{balance[balance.length-1]?.balance} UAH</Text>
-					</View>
-					<View>
-						<Text style={styles.infoTitle}>vs past period</Text>
-						<Text style={[styles.infoValue, getPercentageColor(percentageSymbol)]}>{percentageSymbol}{percentage}%</Text>
-					</View>
-				</View>
-				<LineChart
-					fromZero={true}
-					bezier
-					data={{
-						labels: label,
-						datasets: [
-							{
-								data: dataset,
-								color:() => '#0090E7',
-							}
-						],
-					}}
-					style={{
-						padding: 10,
-						borderRadius: 10,
-						backgroundColor: 'white',
-					}}
-					height={256}
-					chartConfig={{
-						strokeWidth: 2,
-						barPercentage: 0.5,
-						color: () => 'black',
-						backgroundGradientTo: 'white',
-						backgroundGradientFrom: 'white',
-						useShadowColorFromDataset: true,
-					
-					}}
-					width={width-45}
-					withVerticalLines={false}
-					verticalLabelRotation={30}
-				/>
-				<PeriodChoosingComponent
-					closeModal={() => {
-						setModalStatus(false);
-					}}
-					modalStatus={modalStatus}
-					saveChanges={(startDate: string, endDate: string) => {
-						setDate({
-							end: endDate,
-							start: startDate,
-						});
-					}}
-				/>
+		<View style={styles.card}>
+			<View style={styles.area}>
+				<Text style={styles.title}>Balance trend</Text>
+				<TouchableOpacity onPress={() => setModalStatus(true)} style={styles.settingBox}>
+					<SettingIcon width={20} height={20} fill={'black'}/>
+				</TouchableOpacity>
 			</View>
-			:
-			<></>
+			<View style={styles.area}>
+				<View>
+					<Text style={styles.infoTitle}>Today</Text>
+					<Text style={styles.infoValue}>{balance[balance.length-1]?.balance} UAH</Text>
+				</View>
+				<View>
+					<Text style={styles.infoTitle}>vs past period</Text>
+					<Text style={[styles.infoValue, getPercentageColor(percentageSymbol)]}>{percentageSymbol}{percentage}%</Text>
+				</View>
+			</View>
+			{
+				(dataset.length !== 0 && label.length !== 0) ?
+					<LineChart
+						fromZero={true}
+						bezier
+						data={{
+							labels: label,
+							datasets: [
+								{
+									data: dataset,
+									color:() => '#0090E7',
+								}
+							],
+						}}
+						style={{
+							padding: 10,
+							borderRadius: 10,
+							backgroundColor: 'white',
+						}}
+						height={256}
+						chartConfig={{
+							strokeWidth: 2,
+							barPercentage: 0.5,
+							color: () => 'black',
+							backgroundGradientTo: 'white',
+							backgroundGradientFrom: 'white',
+							useShadowColorFromDataset: true,
+					
+						}}
+						width={width-45}
+						withVerticalLines={false}
+						verticalLabelRotation={30}
+					/> :
+					<Text style={{fontSize: 22.5, color: 'red', fontWeight: 'bold', textAlign: 'center', marginVertical: 10}}>You have no data in balances</Text>
+			}
+			<PeriodChoosingComponent
+				closeModal={() => {
+					setModalStatus(false);
+				}}
+				modalStatus={modalStatus}
+				saveChanges={(startDate: string, endDate: string) => {
+					setDate({
+						end: endDate,
+						start: startDate,
+					});
+				}}
+			/>
+		</View>
 	);
 }
 

@@ -17,6 +17,10 @@ export const bankAccountsSlice = createSlice({
 			state[index].ammount = (action.payload.recordType === 'income') ? (+state[index].ammount + +action.payload.recordAmmount).toString() : (+state[index].ammount - +action.payload.recordAmmount).toString();
 			return state;
 		},
+		deleteBankAccounts: (state:Array<BankAccountI>, action): Array<BankAccountI> => {
+			state = state.filter((el: BankAccountI) => el.id !== action.payload);
+			return state;
+		},
 		rewriteBankAccounts: (state:Array<BankAccountI>, action): Array<BankAccountI> => {
 			const index: number = state.findIndex((el: BankAccountI) => el.id === action.payload.id);
 			state[index] = action.payload;
@@ -26,4 +30,4 @@ export const bankAccountsSlice = createSlice({
 });
 
 export default bankAccountsSlice.reducer;
-export const { addBankAccount, setBankAccounts, changeBankAccount, rewriteBankAccounts } = bankAccountsSlice.actions;
+export const { deleteBankAccounts, addBankAccount, setBankAccounts, changeBankAccount, rewriteBankAccounts } = bankAccountsSlice.actions;

@@ -31,6 +31,7 @@ export default function PeriodChoosingComponent({modalStatus, closeModal, saveCh
 	};
 
 	const setDateFunc = (event: DateTimePickerEvent, date: Date|undefined): void => {
+		setDatePickerShowStatus(false);
 		if(date) {
 			switch(event.type) {
 			case 'set':
@@ -50,7 +51,6 @@ export default function PeriodChoosingComponent({modalStatus, closeModal, saveCh
 				break;
 			}
 		}
-		setDatePickerShowStatus(false);
 	};
 
 	return(

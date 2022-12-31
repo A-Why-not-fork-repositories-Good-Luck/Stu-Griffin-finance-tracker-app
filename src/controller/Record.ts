@@ -1,8 +1,6 @@
 import { ActionI } from '../types/reusable';
 import { addRecord } from '../redux/records';
 import { AppDispatch } from '../types/redux';
-import { changeBalance } from '../redux/balance';
-import { BankAccountI } from '../types/BankAccount';
 import { RecordI, RecordStoreI } from '../types/Record';
 import { changeBankAccount } from '../redux/bankAccount';
 
@@ -44,21 +42,12 @@ export const constructStyleObjForTextButton = (el: string, state: RecordI): obje
 	return (el.toLowerCase() === state.recordType) ? {color: 'white'} : {color: '#236F57',};
 };
 
-export const createRecord = (dispatch: AppDispatch, state: RecordI, key: string, bankAccounts: Array<BankAccountI>): void => {
+export const createRecord = (dispatch: AppDispatch, state: RecordI, key: string): void => {
 	dispatch(addRecord({state, key}));
 
 	dispatch(changeBankAccount({
 		recordType: state.recordType,
 		recordAmmount: state.ammount,
 		bankAccountId: state.bankAccountId,
-	}));
-		
-	const balance: number = (state.recordType === 'outcome') ?
-		bankAccounts.reduce((res: number, el: BankAccountI) => res + +el.ammount, 0) - +state.ammount :
-		bankAccounts.reduce((res: number, el: BankAccountI) => res + +el.ammount, 0) + +state.ammount;
-
-	dispatch(changeBalance({
-		date: JSON.parse(JSON.stringify(new Date())).split('T')[0],
-		balance: balance,
 	}));
 };

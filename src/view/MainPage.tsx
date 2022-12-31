@@ -4,6 +4,7 @@ import { RecordStoreI } from '../types/Record';
 import BalanceChart from './Charts/BalanceChart';
 import RecordsChart from './Charts/RecordsChart';
 import AddIcon from '../../assets/icons/AddIcon';
+import { changeBalance } from '../redux/balance';
 import { BankAccountI } from '../types/BankAccount';
 import { getSaveData } from '../controller/MainPage';
 import { navigationType } from '../types/Navigation';
@@ -30,6 +31,10 @@ export default function MainPage(): ReactElement {
 	// AsyncStorage.removeItem('bank-accounts');
 
 	useEffect(() => {
+		dispatch(changeBalance({
+			date: JSON.parse(JSON.stringify(new Date())).split('T')[0],
+			balance: bankAccounts.reduce((res: number, el: BankAccountI): number => res + +el.ammount, 0),
+		}));
 		const subscription = AppState.addEventListener('change', nextAppState => {
 			getSaveData(nextAppState, dispatch, {records, balances, bankAccounts});
 		});

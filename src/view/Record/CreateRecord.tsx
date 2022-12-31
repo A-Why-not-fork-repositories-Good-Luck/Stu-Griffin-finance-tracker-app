@@ -1,11 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
+import { useDispatch } from 'react-redux';
 import RecordTypesList from './RecordTypesList';
-import { BankAccountI } from '../../types/BankAccount';
-import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../types/redux';
 import InputComponent from '../reusable/InputComponent';
 import { navigationType } from '../../types/Navigation';
 import { useNavigation } from '@react-navigation/native';
-import { RootState, AppDispatch } from '../../types/redux';
 import BankAccountList from '../Bank-account/BankAccountList';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { recordFormState, recordTypes } from '../../model/record';
@@ -25,7 +24,6 @@ export default function CreateRecord(): ReactElement {
 	const [datePickerShowStatus, setDatePickerShowStatus] = useState<boolean>(false);
 	const [recordTypeModalStatus, setRecordTypeModalStatus] = useState<boolean>(false);
 	const [bankAccountModalStatus, setBankAccountModalStatus] = useState<boolean>(false);
-	const bankAccounts: Array<BankAccountI> = useSelector((state: RootState) => state.bankAccounts);
 
 	useEffect(() => {
 		stateAction(dispatchState, 'add', 'id', uuidv4());
@@ -37,7 +35,7 @@ export default function CreateRecord(): ReactElement {
 	}, [state]);
 
 	const createRecordFunc = (): void => {
-		createRecord(dispatch, state, key, bankAccounts);
+		createRecord(dispatch, state, key);
 		notification('success', 'New bank record has been created');
 		navigation.navigate('main-page');
 	};
