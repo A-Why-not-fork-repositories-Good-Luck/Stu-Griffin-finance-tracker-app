@@ -12,3 +12,5 @@ export interface PayloadI {
 	key: string;
 	value: string|Array<number>;
 }
+
+export type DispatchStateI = (arg: ActionI) => void;

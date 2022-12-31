@@ -2,6 +2,38 @@ import { BalanceI } from '../types/Balance';
 import { DateI, RecordDataI } from '../types/Chart';
 import { RecordStoreI, RecordI } from '../types/Record';
 
+export const constructDate = () => {
+	const startDate: Date = new Date();
+	startDate.setDate((new Date()).getDate()-7);
+	return({
+		end: JSON.parse(JSON.stringify(new Date())).split('T')[0],
+		start: JSON.parse(JSON.stringify(startDate)).split('T')[0]
+	});
+};
+
+export const getPercentageColor = (value: string) => {
+	switch(value) {
+	case '-':
+		return {color: 'red'};
+	case '+':
+		return {color: 'green'};
+	default:
+		return {color: 'black'};
+	}
+};
+
+export 	const calculatePercentage = (last: number, current: number) => {
+	const result = {
+		symbol: '',
+		percantage: 0,
+	};
+	if(last && current) {
+		result.symbol = (last > current) ? '-' : '+';
+		result.percantage = +(((last-current)*100)/last).toFixed(2);
+	}
+	return (result);
+};
+
 export const createBalanceData = (arr: Array<BalanceI>, date: DateI) => {
 	const labels: Array<string> = [], datasets: Array<number> = [];
 	if(arr.length !== 0) {
@@ -35,4 +67,25 @@ export const createRecordData = (records: RecordStoreI, date: DateI) => {
 		}
 	});
 	return(arr);
+};
+
+export const calculateFullAmmount = (arr: RecordStoreI, date: DateI): number => {
+	let ammount = 0;
+	Object.keys(arr).map((el: string) => {
+		arr[el].map((el: RecordI) => {
+			if(el.date > date.start || el.date < date.end) {
+				switch(el.recordType) {
+				case 'income':
+					ammount -= +el.ammount;
+					break;
+				case 'outcome': 
+					ammount += +el.ammount;
+					break;
+				default: 
+					break;
+				}
+			}
+		});
+	});
+	return(ammount);
 };

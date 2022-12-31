@@ -1,29 +1,25 @@
-import { RootState } from '../types/redux';
 import { BalanceI } from '../types/Balance';
 import { StatusBar } from 'expo-status-bar';
-import { setRecords } from '../redux/records';
 import { RecordStoreI } from '../types/Record';
-import { setBalances } from '../redux/balance';
 import BalanceChart from './Charts/BalanceChart';
 import RecordsChart from './Charts/RecordsChart';
 import AddIcon from '../../assets/icons/AddIcon';
 import { BankAccountI } from '../types/BankAccount';
+import { getSaveData } from '../controller/MainPage';
 import { navigationType } from '../types/Navigation';
 import RecordsHistory from './Record/RecordsHistory';
 import React, { ReactElement, useEffect } from 'react';
 import BankAccounts from './Bank-account/BankAccounts';
-import { setBankAccounts } from '../redux/bankAccount';
 import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../types/redux';
 import { useNavigation } from '@react-navigation/native';
-import { showMessage } from 'react-native-flash-message';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView, StyleSheet, TouchableOpacity, View, Dimensions, AppState } from 'react-native';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+const { width, height } = Dimensions.get('window');
 
 export default function MainPage(): ReactElement {
-	const dispatch = useDispatch();
+	const dispatch: AppDispatch = useDispatch();
 	const navigation: navigationType = useNavigation();
 	const records: RecordStoreI = useSelector((state: RootState) => state.records);
 	const balances: Array<BalanceI> = useSelector((state: RootState) => state.balances);
@@ -35,19 +31,7 @@ export default function MainPage(): ReactElement {
 
 	useEffect(() => {
 		const subscription = AppState.addEventListener('change', nextAppState => {
-			switch(nextAppState) {
-			case 'active':
-				getDataFromAsyncStorage('records');
-				getDataFromAsyncStorage('balances');
-				getDataFromAsyncStorage('bank-accounts');
-				break;
-			case 'background':
-				setDataFromAsyncStorage('records', JSON.stringify(records));
-				setDataFromAsyncStorage('balances', JSON.stringify(balances));
-				setDataFromAsyncStorage('bank-accounts', JSON.stringify(bankAccounts));
-				break;
-			default:
-			}
+			getSaveData(nextAppState, dispatch, {records, balances, bankAccounts});
 		});
 		
 		return () => {
@@ -55,46 +39,12 @@ export default function MainPage(): ReactElement {
 		};
 	}, [bankAccounts, records]);
 
-	const getDataFromAsyncStorage = async(key: string): Promise<void> => {
-		try {
-			let result: string|null|[] = await AsyncStorage.getItem(key);
-			(typeof result === 'string') ? result = JSON.parse(result) : result = [];
-			switch(key) {
-			case 'records':
-				dispatch(setRecords(result));
-				break;
-			case 'balances':
-				dispatch(setBalances(result));
-				break;
-			case 'bank-accounts':
-				dispatch(setBankAccounts(result));
-				break;
-			default:
-			}
-		} catch(e) {
-			showMessage({
-				type: 'danger',
-				message: 'Something went wrong',
-			});
-		}
-	};
-
-	const setDataFromAsyncStorage = async(key: string, value: string): Promise<void> => {
-		try {
-			await AsyncStorage.setItem(key, value);
-		} catch(e) {
-			showMessage({
-				type: 'danger',
-				message: 'Something went wrong',
-			});
-		}
-	};
 	return (
 		<View style={styles.container}>
 			<ScrollView style={{
 				zIndex: 1,
 				paddingTop: 10,
-				height: windowHeight,
+				height: height,
 			}} contentContainerStyle={{
 				alignItems: 'center',
 				justifyContent: 'center',
@@ -123,9 +73,9 @@ export default function MainPage(): ReactElement {
 const styles = StyleSheet.create({
 	addIcon: {
 		zIndex: 100,
+		top: height - 75,
+		left: width - 75,
 		position: 'absolute',
-		top: windowHeight - 75,
-		left: windowWidth - 75,
 	},
 	container: {
 		flex: 1,

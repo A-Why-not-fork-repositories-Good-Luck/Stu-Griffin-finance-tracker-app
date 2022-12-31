@@ -1,14 +1,14 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../../types/redux';
+import { RecordStoreI } from '../../types/Record';
 import { PieChart } from 'react-native-chart-kit';
 import { RecordDataI, DateI } from '../../types/Chart';
-import { createRecordData } from '../../controller/Chart';
-import { RecordI, RecordStoreI } from '../../types/Record';
 import SettingIcon from '../../../assets/icons/SettingIcon';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import React, { ReactElement, useEffect, useState } from 'react';
 import PeriodChoosingComponent from '../reusable/PeriodChoosingComponent';
 import { StyleSheet, Dimensions, View, Text, TouchableOpacity } from 'react-native';
+import { constructDate, createRecordData, getPercentageColor, calculateFullAmmount } from '../../controller/Chart';
 
 const width = Dimensions.get('window').width;
 
@@ -25,47 +25,13 @@ export default function RecordsChart(): ReactElement {
 	const records: RecordStoreI = useSelector((state: RootState) => state.records);
 
 	useEffect(() => {
-		const startDate: Date = new Date();
-		startDate.setDate((new Date()).getDate()-7);
-		setDate({end: JSON.parse(JSON.stringify(new Date())).split('T')[0], start: JSON.parse(JSON.stringify(startDate)).split('T')[0]});
+		setDate(constructDate());
 	}, []);
 
 	useEffect(() => {
 		setChartData(createRecordData(records, date));
-		calculateFullAmmount(records, date);
+		setFullAmmount(calculateFullAmmount(records, date));
 	}, [records, date]);
-	
-	const getPercentageColor = (value: string) => {
-		switch(value) {
-		case '-':
-			return {color: 'red'};
-		case '+':
-			return {color: 'green'};
-		default:
-			return {color: 'black'};
-		}
-	};
-
-	const calculateFullAmmount = (arr: RecordStoreI, date: DateI) => {
-		let ammount = 0;
-		Object.keys(arr).map((el: string) => {
-			arr[el].map((el: RecordI) => {
-				if(el.date > date.start || el.date < date.end) {
-					switch(el.recordType) {
-					case 'income':
-						ammount -= +el.ammount;
-						break;
-					case 'outcome': 
-						ammount += +el.ammount;
-						break;
-					default: 
-						break;
-					}
-				}
-			});
-		});
-		setFullAmmount(ammount);
-	};
 
 	return (
 		(chartData.length !== 0) ?

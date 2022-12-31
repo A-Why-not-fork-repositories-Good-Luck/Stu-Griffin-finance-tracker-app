@@ -9,6 +9,7 @@ import { RFPercentage } from 'react-native-responsive-fontsize';
 import React, { useState, useEffect, ReactElement } from 'react';
 import PeriodChoosingComponent from '../reusable/PeriodChoosingComponent';
 import { StyleSheet, Dimensions, View, Text, TouchableOpacity } from 'react-native';
+import { getPercentageColor, constructDate, calculatePercentage } from '../../controller/Chart';
 
 const width = Dimensions.get('window').width;
 
@@ -25,36 +26,17 @@ export default function BalanceChart(): ReactElement {
 	const balance: Array<BalanceI> = useSelector((state: RootState) => state.balances);
 
 	useEffect(() => {
-		const startDate: Date = new Date();
-		startDate.setDate((new Date()).getDate()-7);
-		setDate({end: JSON.parse(JSON.stringify(new Date())).split('T')[0], start: JSON.parse(JSON.stringify(startDate)).split('T')[0]});
+		setDate(constructDate());
 	}, []);
 
 	useEffect(() => {
 		const { labels, datasets } = createBalanceData(balance, date);
 		setLabel(labels);
 		setDataset(datasets);
-		calculatePercentage(balance[balance.length-1]?.balance, balance[balance.length-2]?.balance);
+		const {symbol, percantage } = calculatePercentage(balance[balance.length-1]?.balance, balance[balance.length-2]?.balance);
+		setPercentage(percantage);
+		setPercentageSymbol(symbol);
 	}, [balance, date]);
-	
-	const getPercentageColor = (value: string) => {
-		switch(value) {
-		case '-':
-			return {color: 'red'};
-		case '+':
-			return {color: 'green'};
-		default:
-			return {color: 'black'};
-		}
-	};
-
-	const calculatePercentage = (last: number, current: number) => {
-		last = 8595, current = 764;
-		if(last && current) {
-			setPercentage(+(((last-current)*100)/last).toFixed(2));
-			(last > current) ? setPercentageSymbol('-') : setPercentageSymbol('+');
-		}
-	};
 	
 	return(
 		(balance.length !== 0) 

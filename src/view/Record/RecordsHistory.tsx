@@ -9,6 +9,7 @@ import { RFPercentage } from 'react-native-responsive-fontsize';
 import GrayCircleIcon from '../../../assets/icons/GrayCircleIcon';
 import React, { ReactElement, ReactNode, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
+import { constructListData, getRecordAmmountStyle, getRecordAmmountSymbol } from '../../controller/Record';
 
 export default function RecordsHistory(): ReactElement {
 	const [listData, setListData] = useState<Array<RecordI>>([]);
@@ -16,12 +17,7 @@ export default function RecordsHistory(): ReactElement {
 	const bankAccounts: Array<BankAccountI> = useSelector((state: RootState) => state.bankAccounts);
 	
 	useEffect(() => {
-		const arr: Array<RecordI> = [];
-		const objectKeys = Object.keys(records);
-		objectKeys.map((el: string) => {
-			arr.push(...records[el]);
-		});
-		setListData(arr);
+		setListData(constructListData(records));
 	}, [records]);
 
 	const renderItem = (item: RecordI): ReactElement => {
@@ -45,18 +41,6 @@ export default function RecordsHistory(): ReactElement {
 	const getRecordComment = (comment: string): ReactNode => {
 		return(
 			(comment !== '') && <Text>{comment}</Text>
-		);
-	};
-
-	const getRecordAmmountStyle = (recordType: string): object => {
-		return(
-			(recordType === 'income') ? {color: 'green'} : {color: 'red'}
-		);
-	};
-
-	const getRecordAmmountSymbol = (recordType: string): string => {
-		return(
-			(recordType === 'income') ? '+' : '-'
 		);
 	};
 

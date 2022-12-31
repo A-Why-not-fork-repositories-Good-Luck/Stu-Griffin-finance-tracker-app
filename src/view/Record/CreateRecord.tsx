@@ -1,51 +1,35 @@
 import { v4 as uuidv4 } from 'uuid';
-import { addRecord } from '../../redux/records';
 import RecordTypesList from './RecordTypesList';
-import { changeBalance } from '../../redux/balance';
 import { BankAccountI } from '../../types/BankAccount';
 import { useDispatch, useSelector } from 'react-redux';
-import { recordReducer } from '../../controller/Record';
 import InputComponent from '../reusable/InputComponent';
 import { navigationType } from '../../types/Navigation';
 import { useNavigation } from '@react-navigation/native';
-import { showMessage } from 'react-native-flash-message';
 import { RootState, AppDispatch } from '../../types/redux';
-import { changeBankAccount } from '../../redux/bankAccount';
 import BankAccountList from '../Bank-account/BankAccountList';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { recordFormState, recordTypes } from '../../model/record';
-import RNDateTimePicker from '@react-native-community/datetimepicker';
+import { stateAction, notification } from '../../controller/reusable';
 import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
-import { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import React, { useReducer, ReactNode, useEffect, useState, ReactElement } from 'react';
+import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import { createRecord, constructStyleObjForTextButton, constructStyleObjForButton, recordReducer } from '../../controller/Record';
 
 export default function CreateRecord(): ReactElement {
 	const [key, setKey] = useState<string>('');
-	const dispatchStore: AppDispatch = useDispatch();
+	const dispatch: AppDispatch = useDispatch();
 	const [date, setDate] = useState<Date>(new Date());
 	const navigation: navigationType = useNavigation();
 	const [buttonStatus, setButtonStatus] = useState<boolean>(false);
-	const [state, dispatch] = useReducer(recordReducer, recordFormState);
+	const [state, dispatchState] = useReducer(recordReducer, recordFormState);
 	const [datePickerShowStatus, setDatePickerShowStatus] = useState<boolean>(false);
 	const [recordTypeModalStatus, setRecordTypeModalStatus] = useState<boolean>(false);
 	const [bankAccountModalStatus, setBankAccountModalStatus] = useState<boolean>(false);
 	const bankAccounts: Array<BankAccountI> = useSelector((state: RootState) => state.bankAccounts);
 
 	useEffect(() => {
-		dispatch({
-			type: 'add',
-			payload: {
-				key: 'id',
-				value: uuidv4(),
-			}
-		});
-		dispatch({
-			type: 'add',
-			payload: {
-				key: 'date',
-				value: JSON.parse(JSON.stringify(new Date())).split('T')[0],
-			}
-		});
+		stateAction(dispatchState, 'add', 'id', uuidv4());
+		stateAction(dispatchState, 'add', 'date', JSON.parse(JSON.stringify(new Date())).split('T')[0]);
 	}, []);
 
 	useEffect(() => {
@@ -53,37 +37,9 @@ export default function CreateRecord(): ReactElement {
 	}, [state]);
 
 	const createRecordFunc = (): void => {
-		dispatchStore(addRecord({state, key}));
-
-		dispatchStore(changeBankAccount({
-			recordType: state.recordType,
-			recordAmmount: state.ammount,
-			bankAccountId: state.bankAccountId,
-		}));
-		
-		const balance: number = (state.recordType === 'outcome') ?
-			bankAccounts.reduce((res: number, el: BankAccountI) => res + +el.ammount, 0) - +state.ammount :
-			bankAccounts.reduce((res: number, el: BankAccountI) => res + +el.ammount, 0) + +state.ammount;
-
-		dispatchStore(changeBalance({
-			date: JSON.parse(JSON.stringify(new Date())).split('T')[0],
-			balance: balance,
-		}));
-
-		showMessage({
-			type: 'success',
-			message: 'New bank record has been created',
-		});
-
+		createRecord(dispatch, state, key, bankAccounts);
+		notification('success', 'New bank record has been created');
 		navigation.navigate('main-page');
-	};
-
-	const constructStyleObjForButton = (el: string): object => {
-		return (el.toLowerCase() === state.recordType) ? {backgroundColor: '#236F57'} : {borderColor: '#236F57', borderWidth: 2};
-	};
-
-	const constructStyleObjForTextButton = (el: string): object => {
-		return (el.toLowerCase() === state.recordType) ? {color: 'white'} : {color: '#236F57',};
 	};
 
 	const setDateFunc = (event: DateTimePickerEvent, date: Date|undefined): void => {
@@ -91,13 +47,7 @@ export default function CreateRecord(): ReactElement {
 			switch(event.type) {
 			case 'set':
 				setDate(date);
-				dispatch({
-					type: 'add',
-					payload: {
-						key: 'date',
-						value: JSON.parse(JSON.stringify(date)).split('T')[0],
-					}
-				});
+				stateAction(dispatchState, 'add', 'date', JSON.parse(JSON.stringify(date)).split('T')[0]);
 				break;
 			case 'dismissed':
 				break;
@@ -115,18 +65,12 @@ export default function CreateRecord(): ReactElement {
 						return(
 							<TouchableOpacity
 								key={index}
-								style={[styles.recordType, constructStyleObjForButton(el)]}
+								style={[styles.recordType, constructStyleObjForButton(el, state)]}
 								onPress={() => {
-									dispatch({
-										type: 'add',
-										payload: {
-											key: 'recordType',
-											value: el.toLowerCase(),
-										}
-									});
+									stateAction(dispatchState, 'add', 'recordType', el.toLowerCase());
 								}} 
 							>
-								<Text style={[styles.recordTypeText, constructStyleObjForTextButton(el)]}>{el}</Text>
+								<Text style={[styles.recordTypeText, constructStyleObjForTextButton(el, state)]}>{el}</Text>
 							</TouchableOpacity>
 						);
 					})
@@ -137,13 +81,7 @@ export default function CreateRecord(): ReactElement {
 				value={state?.ammount}
 				keyboardType='numeric'
 				changeValueFunc={(value: string) => {
-					dispatch({
-						type: 'add',
-						payload: {
-							value: value,
-							key: 'ammount',
-						}
-					});
+					stateAction(dispatchState, 'add', 'ammount', value);
 				}}
 			/>
 			<InputComponent
@@ -151,13 +89,7 @@ export default function CreateRecord(): ReactElement {
 				value={state?.comment}
 				keyboardType='default'
 				changeValueFunc={(value: string) => {
-					dispatch({
-						type: 'add',
-						payload: {
-							value: value,
-							key: 'comment',
-						}
-					});
+					stateAction(dispatchState, 'add', 'comment', value);
 				}}
 			/>
 			<View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
@@ -185,12 +117,7 @@ export default function CreateRecord(): ReactElement {
 				}}
 				modalStatus={recordTypeModalStatus}
 				saveChanges={(key: string, value: string|Array<number>) => {
-					dispatch({
-						type: 'add',
-						payload: {
-							key, value,
-						}
-					});
+					stateAction(dispatchState, 'add', key, value);
 				}}
 				saveKey={(el: string) => setKey(el)}
 			/>
@@ -199,13 +126,7 @@ export default function CreateRecord(): ReactElement {
 					setBankAccountModalStatus(false);
 				}}
 				saveChanges={(item: string) => {
-					dispatch({
-						type: 'add',
-						payload: {
-							value: item,
-							key: 'bankAccountId',
-						}
-					});
+					stateAction(dispatchState, 'add', 'bankAccountId', item);
 				}}
 				modalStatus={bankAccountModalStatus}
 			/>
