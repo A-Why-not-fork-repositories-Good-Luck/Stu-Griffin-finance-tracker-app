@@ -29,7 +29,7 @@ export default function CreateEditBankAccount({modalStatus, closeModal, cardId}:
 	}, [modalStatus]);
 
 	const createBankAccountFunc = (): void => {
-		createBankAccount(cardId, dispatch, bankAccounts, state);
+		createBankAccount(cardId, dispatch, state);
 		closeModal();
 		notification('success', (cardId === '') ? 'New bank account has been created' : 'Changes were saved');
 	};

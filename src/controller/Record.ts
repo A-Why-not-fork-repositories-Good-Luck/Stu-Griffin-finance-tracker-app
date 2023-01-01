@@ -1,8 +1,9 @@
 import { ActionI } from '../types/reusable';
-import { addRecord } from '../redux/records';
 import { AppDispatch } from '../types/redux';
 import { RecordI, RecordStoreI } from '../types/Record';
+import { addRecord, putRecord } from '../redux/records';
 import { changeBankAccount } from '../redux/bankAccount';
+import { changeBankAccountBackUp } from '../redux/bankAccountBackUp';
 
 export const getRecordAmmountStyle = (recordType: string): object => {
 	return(
@@ -43,11 +44,38 @@ export const constructStyleObjForTextButton = (el: string, state: RecordI): obje
 };
 
 export const createRecord = (dispatch: AppDispatch, state: RecordI, key: string): void => {
-	dispatch(addRecord({state, key}));
-
 	dispatch(changeBankAccount({
+		status: 'create-record',
 		recordType: state.recordType,
 		recordAmmount: state.ammount,
+		bankAccountId: state.bankAccountId,
+	}));
+	dispatch(addRecord({state, key}));
+	dispatch(changeBankAccountBackUp({
+		ammount: state.ammount,
+		id: state.bankAccountId,
+		recordType: state.recordType,
+		date: JSON.parse(JSON.stringify(new Date())).split('T')[0],
+	}));
+};
+
+export const updateRecord = (dispatch: AppDispatch, state: RecordI, key: string, ammountBackUp: string): void => {
+	dispatch(putRecord({state, key}));
+	let newAmmount;
+	switch(state.recordType) {
+	case 'income':
+		newAmmount = +ammountBackUp + +state.ammount;
+		break;
+	case 'outcome':
+		newAmmount = +ammountBackUp - +state.ammount;
+		break;
+	default:
+		break;
+	}
+	dispatch(changeBankAccount({
+		status: 'update-record',
+		recordAmmount: newAmmount,
+		recordType: state.recordType,
 		bankAccountId: state.bankAccountId,
 	}));
 };

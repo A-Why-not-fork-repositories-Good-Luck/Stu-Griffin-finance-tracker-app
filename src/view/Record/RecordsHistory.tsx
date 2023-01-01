@@ -4,6 +4,8 @@ import { TypeI } from '../../types/Chart';
 import { types } from '../../model/record';
 import { RootState } from '../../types/redux';
 import { BankAccountI } from '../../types/BankAccount';
+import { navigationType } from '../../types/Navigation';
+import { useNavigation } from '@react-navigation/native';
 import { RecordStoreI, RecordI } from '../../types/Record';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import GrayCircleIcon from '../../../assets/icons/GrayCircleIcon';
@@ -12,6 +14,7 @@ import { ScrollView, StyleSheet, Text, View, Dimensions, TouchableOpacity } from
 import { constructListData, getRecordAmmountStyle, getRecordAmmountSymbol } from '../../controller/Record';
 
 export default function RecordsHistory(): ReactElement {
+	const navigation: navigationType = useNavigation();
 	const [listData, setListData] = useState<Array<RecordI>>([]);
 	const records: RecordStoreI = useSelector((state: RootState) => state.records);
 	const bankAccounts: Array<BankAccountI> = useSelector((state: RootState) => state.bankAccounts);
@@ -25,7 +28,7 @@ export default function RecordsHistory(): ReactElement {
 		const res = bankAccounts.filter((el: BankAccountI) => el.id === item.bankAccountId);
 
 		return(
-			<TouchableOpacity style={styles.card} key={item.id}>
+			<TouchableOpacity onPress={() => navigation.navigate('create-record-page', {record: item})} style={styles.card} key={item.id}>
 				{getRecordTypeIcon(typeIcon[0]?.icon)}
 				<View>
 					<Text style={styles.type}>{item.type}</Text>

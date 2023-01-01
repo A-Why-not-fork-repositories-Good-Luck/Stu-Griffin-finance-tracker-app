@@ -1,6 +1,6 @@
-import { BalanceI } from '../types/Balance';
 import { DateI, RecordDataI } from '../types/Chart';
 import { RecordStoreI, RecordI } from '../types/Record';
+import { BankAccountBackUpI } from '../types/bankAccountBackUp';
 
 export const constructDate = () => {
 	const startDate: Date = new Date();
@@ -34,12 +34,12 @@ export 	const calculatePercentage = (last: number, current: number) => {
 	return (result);
 };
 
-export const createBalanceData = (arr: Array<BalanceI>, date: DateI) => {
+export const createBalanceData = (arr: Array<BankAccountBackUpI>, date: DateI) => {
 	const labels: Array<string> = [], datasets: Array<number> = [];
 	if(arr.length !== 0) {
-		arr.map((el: BalanceI) => {
+		arr.map((el: BankAccountBackUpI) => {
 			if(el.date >= date.start && el.date <= date.end) {
-				datasets.push(el.balance);
+				datasets.push(+el.ammount);
 				labels.push(el.date.split('-').reverse().slice(0, 2).join('-'));
 			}
 		});

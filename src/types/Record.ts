@@ -8,6 +8,7 @@ export interface RecordI {
 	date: string;
 	comment: string;
 	ammount: string;
+	parentType: string;
 	recordType: string;
 	color: Array<number>;
 	bankAccountId: string;

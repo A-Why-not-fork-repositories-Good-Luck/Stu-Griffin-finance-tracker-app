@@ -14,6 +14,7 @@ export default function RecordTypesList({modalStatus, closeModal, saveChanges, s
 				saveKey(el.title.parent);
 				saveChanges('type', el.title.title);
 				saveChanges('color', el.title.color);
+				saveChanges('parentType', el.title.parent);
 				closeModal();
 			}}>
 				<View style={[styles.elTypeIcon, {backgroundColor: `rgb(${el.title.color[0]}, ${el.title.color[1]}, ${el.title.color[2]})`}]}>

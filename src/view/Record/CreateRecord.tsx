@@ -12,13 +12,15 @@ import { stateAction, notification } from '../../controller/reusable';
 import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 import React, { useReducer, ReactNode, useEffect, useState, ReactElement } from 'react';
 import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
-import { createRecord, constructStyleObjForTextButton, constructStyleObjForButton, recordReducer } from '../../controller/Record';
+import { createRecord, constructStyleObjForTextButton, constructStyleObjForButton, recordReducer, updateRecord } from '../../controller/Record';
 
-export default function CreateRecord(): ReactElement {
+
+export default function CreateRecord({ route }: any): ReactElement {
 	const [key, setKey] = useState<string>('');
 	const dispatch: AppDispatch = useDispatch();
 	const [date, setDate] = useState<Date>(new Date());
 	const navigation: navigationType = useNavigation();
+	const [ammountBackUp, setAmmountBackUp] = useState<string>('');
 	const [buttonStatus, setButtonStatus] = useState<boolean>(false);
 	const [state, dispatchState] = useReducer(recordReducer, recordFormState);
 	const [datePickerShowStatus, setDatePickerShowStatus] = useState<boolean>(false);
@@ -26,17 +28,35 @@ export default function CreateRecord(): ReactElement {
 	const [bankAccountModalStatus, setBankAccountModalStatus] = useState<boolean>(false);
 
 	useEffect(() => {
-		stateAction(dispatchState, 'add', 'id', uuidv4());
-		stateAction(dispatchState, 'add', 'date', JSON.parse(JSON.stringify(new Date())).split('T')[0]);
+		stateAction(dispatchState, 'add', 'id', route.params?.record.id || uuidv4());
+		stateAction(dispatchState, 'add', 'date', route.params?.record.date || JSON.parse(JSON.stringify(new Date())).split('T')[0]);
+		if(route.params?.record) {
+			setKey(route.params?.record.parentType);
+			setAmmountBackUp((route.params?.record.ammount)?.toString());
+			stateAction(dispatchState, 'add', 'type', route.params?.record.type);
+			stateAction(dispatchState, 'add', 'color', route.params?.record.color);
+			stateAction(dispatchState, 'add', 'comment', route.params?.record.comment);
+			stateAction(dispatchState, 'add', 'ammount', route.params?.record.ammount);
+			stateAction(dispatchState, 'add', 'recordType', route.params?.record.recordType);
+			stateAction(dispatchState, 'add', 'parentType', route.params?.record.parentType);
+			stateAction(dispatchState, 'add', 'bankAccountId', route.params?.record.bankAccountId);
+		}
 	}, []);
-
+	
 	useEffect(() => {
 		setButtonStatus(Object.values(state).every((el: unknown) => !!el === true));
 	}, [state]);
 
-	const createRecordFunc = (): void => {
-		createRecord(dispatch, state, key);
-		notification('success', 'New bank record has been created');
+	const buttonAction = (): void => {
+		let message;
+		if(route.params?.record) {
+			message = 'Bank record has been updated';
+			updateRecord(dispatch, state, key, ammountBackUp);
+		} else {
+			createRecord(dispatch, state, key);
+			message = 'New bank record has been created';
+		}
+		notification('success', message);
 		navigation.navigate('main-page');
 	};
 
@@ -106,8 +126,8 @@ export default function CreateRecord(): ReactElement {
 				<Text style={styles.title}>Date</Text>
 				<Text style={styles.input}>{state?.date}</Text>
 			</TouchableOpacity>
-			<TouchableOpacity disabled={!buttonStatus} style={[styles.button, (!buttonStatus) ? {opacity: 0.5} : {opacity: 1}]} onPress={createRecordFunc}>
-				<Text style={styles.buttonText}>Save record</Text>
+			<TouchableOpacity disabled={!buttonStatus} style={[styles.button, (!buttonStatus) ? {opacity: 0.5} : {opacity: 1}]} onPress={buttonAction}>
+				<Text style={styles.buttonText}>{(route.params?.record) ? 'Update record' : 'Save record'}</Text>
 			</TouchableOpacity>
 			<RecordTypesList
 				closeModal={() => {

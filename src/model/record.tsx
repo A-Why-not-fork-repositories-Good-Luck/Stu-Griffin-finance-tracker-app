@@ -142,6 +142,7 @@ export const recordFormState: RecordI = {
 	color: [],
 	comment: '',
 	ammount: '',
+	parentType: '',
 	bankAccountId: '',
 	recordType: 'income',
 };

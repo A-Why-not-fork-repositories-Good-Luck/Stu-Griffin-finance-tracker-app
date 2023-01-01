@@ -6,8 +6,9 @@ import CrossIcon from '../../../assets/icons/CrossIcon';
 import { FlatList } from 'react-native-gesture-handler';
 import DeleteIcon from '../../../assets/icons/DeleteIcon';
 import { AppDispatch, RootState } from '../../types/redux';
-import { deleteBankAccounts } from '../../redux/bankAccount';
+import { deleteBankAccount } from '../../redux/bankAccount';
 import { RFPercentage } from 'react-native-responsive-fontsize';
+import { deleteBankAccountBackUp } from '../../redux/bankAccountBackUp';
 import { BankAccountI, CardItemI, BankAccountListPropsI } from '../../types/BankAccount';
 import { StyleSheet, View, Dimensions, Text, TouchableOpacity, Pressable } from 'react-native';
 
@@ -26,7 +27,8 @@ export default function BankAccountList({modalStatus, closeModal, saveChanges}: 
 					<Text style={styles.cardText}>{item.ammount} {item.currency}</Text>
 				</TouchableOpacity>
 				<TouchableOpacity onPress={() => {
-					dispatch(deleteBankAccounts(item.id));
+					dispatch(deleteBankAccount(item.id));
+					dispatch(deleteBankAccountBackUp(item.id));
 				}}>
 					<DeleteIcon width={30} height={30}/>
 				</TouchableOpacity>
