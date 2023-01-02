@@ -11,42 +11,24 @@ export const constructDate = () => {
 	});
 };
 
-export const getPercentageColor = (value: string) => {
-	switch(value) {
-	case '-':
-		return {color: 'red'};
-	case '+':
-		return {color: 'green'};
-	default:
-		return {color: 'black'};
-	}
-};
-
-export 	const calculatePercentage = (last: number, current: number) => {
-	const result = {
-		symbol: '',
-		percantage: 0,
-	};
-	if(last && current) {
-		result.symbol = (last > current) ? '-' : '+';
-		result.percantage = +(((last-current)*100)/last).toFixed(2);
-	}
-	return (result);
+export const getBalance = (arr: Array<BankAccountBackUpI>): number => {
+	arr = arr.filter((el: BankAccountBackUpI) => el.date === JSON.parse(JSON.stringify(new Date())).split('T')[0]);
+	return(arr.reduce((res: number, el: BankAccountBackUpI) => res += +el.ammount, 0));
 };
 
 export const createBalanceData = (arr: Array<BankAccountBackUpI>, date: DateI) => {
 	const labels: Array<string> = [], datasets: Array<number> = [];
-	if(arr.length !== 0) {
-		arr.map((el: BankAccountBackUpI) => {
-			if(el.date >= date.start && el.date <= date.end) {
-				datasets.push(+el.ammount);
-				labels.push(el.date.split('-').reverse().slice(0, 2).join('-'));
-			}
-		});
-	} else {
-		labels.push('');
-		datasets.push(0);
-	}
+	arr = arr.filter((el: BankAccountBackUpI) => el.date >= date.start && el.date <= date.end);
+	arr.sort((a, b) => (new Date(a.date) - new Date(b.date)));
+	let ammount = 0;
+	arr.map((el: BankAccountBackUpI, id: number) => {
+		ammount += +el.ammount;
+		if(el.date !== arr[id+1]?.date) {
+			labels.push(el.date.split('-').reverse().slice(0, 2).join('-'));
+			datasets.push(ammount);
+			ammount = 0;
+		}
+	});
 	return { labels, datasets };
 };
 
@@ -74,16 +56,7 @@ export const calculateFullAmmount = (arr: RecordStoreI, date: DateI): number => 
 	Object.keys(arr).map((el: string) => {
 		arr[el].map((el: RecordI) => {
 			if(el.date > date.start || el.date < date.end) {
-				switch(el.recordType) {
-				case 'income':
-					ammount -= +el.ammount;
-					break;
-				case 'outcome': 
-					ammount += +el.ammount;
-					break;
-				default: 
-					break;
-				}
+				(el.recordType === 'outcome') && (ammount += +el.ammount);
 			}
 		});
 	});

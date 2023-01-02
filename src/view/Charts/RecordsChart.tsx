@@ -8,7 +8,7 @@ import { RFPercentage } from 'react-native-responsive-fontsize';
 import React, { ReactElement, useEffect, useState } from 'react';
 import PeriodChoosingComponent from '../reusable/PeriodChoosingComponent';
 import { StyleSheet, Dimensions, View, Text, TouchableOpacity } from 'react-native';
-import { constructDate, createRecordData, getPercentageColor, calculateFullAmmount } from '../../controller/Chart';
+import { constructDate, createRecordData, calculateFullAmmount } from '../../controller/Chart';
 
 const width = Dimensions.get('window').width;
 
@@ -17,11 +17,9 @@ export default function RecordsChart(): ReactElement {
 		end: '',
 		start: '',
 	});
-	const [percentage, setPercentage] = useState<number>(0);
 	const [fullAmmount, setFullAmmount] = useState<number>(0);
 	const [modalStatus, setModalStatus] = useState<boolean>(false);
 	const [chartData, setChartData] = useState<Array<RecordDataI>>([]);
-	const [percentageSymbol, setPercentageSymbol] = useState<string>('');
 	const records: RecordStoreI = useSelector((state: RootState) => state.records);
 
 	useEffect(() => {
@@ -41,29 +39,27 @@ export default function RecordsChart(): ReactElement {
 					<SettingIcon width={20} height={20} fill={'black'}/>
 				</TouchableOpacity>
 			</View>
-			<View style={styles.area}>
-				<View>
-					<Text style={styles.infoTitle}>Last 30 days</Text>
-					<Text style={styles.infoValue}>{fullAmmount} UAH</Text>
-				</View>
-				<View>
-					<Text style={styles.infoTitle}>vs past period</Text>
-					<Text style={[styles.infoValue, getPercentageColor(percentageSymbol)]}>{percentageSymbol}{percentage}%</Text>
-				</View>
-			</View>
 			{
 				(chartData.length !== 0) ?
-					<PieChart
-						height={220}
-						width={width-25}
-						data={chartData}
-						paddingLeft={'0'}
-						accessor={'ammount'}
-						chartConfig={{
-							color: () => 'black',
-						}}
-						backgroundColor={'transparent'}
-					/> :
+					<>
+						<View style={styles.area}>
+							<View>
+								<Text style={styles.infoTitle}>Last 30 days</Text>
+								<Text style={styles.infoValue}>{fullAmmount} UAH</Text>
+							</View>
+						</View>
+						<PieChart
+							height={220}
+							width={width-25}
+							data={chartData}
+							paddingLeft={'0'}
+							accessor={'ammount'}
+							chartConfig={{
+								color: () => 'black',
+							}}
+							backgroundColor={'transparent'}
+						/>
+					</> :
 					<Text style={{fontSize: 22.5, color: 'red', fontWeight: 'bold', textAlign: 'center', marginVertical: 10}}>You have no records in this period of time or actually</Text>
 			}
 			<PeriodChoosingComponent

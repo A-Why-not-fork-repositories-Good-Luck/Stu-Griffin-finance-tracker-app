@@ -2,14 +2,13 @@ import { useSelector } from 'react-redux';
 import { DateI } from '../../types/Chart';
 import { RootState } from '../../types/redux';
 import { LineChart } from 'react-native-chart-kit';
-import { createBalanceData } from '../../controller/Chart';
 import SettingIcon from '../../../assets/icons/SettingIcon';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import React, { useState, useEffect, ReactElement } from 'react';
+import { BankAccountBackUpI } from '../../types/bankAccountBackUp';
 import PeriodChoosingComponent from '../reusable/PeriodChoosingComponent';
 import { StyleSheet, Dimensions, View, Text, TouchableOpacity } from 'react-native';
-import { getPercentageColor, constructDate, calculatePercentage } from '../../controller/Chart';
-import { BankAccountBackUpI } from '../../types/bankAccountBackUp';
+import { createBalanceData, constructDate, getBalance } from '../../controller/Chart';
 
 const width = Dimensions.get('window').width;
 
@@ -18,11 +17,9 @@ export default function BalanceChart(): ReactElement {
 		end: '',
 		start: '',
 	});
-	const [percentage, setPercentage] = useState<number>(0);
 	const [label, setLabel] = useState<Array<string>>(['']);
 	const [dataset, setDataset] = useState<Array<number>>([0]);
 	const [modalStatus, setModalStatus] = useState<boolean>(false);
-	const [percentageSymbol, setPercentageSymbol] = useState<string>('');
 	const bankAccountBackUps: Array<BankAccountBackUpI> = useSelector((state: RootState) => state.bankAccountsBackUp);
 
 	useEffect(() => {
@@ -33,11 +30,8 @@ export default function BalanceChart(): ReactElement {
 		const { labels, datasets } = createBalanceData(bankAccountBackUps, date);
 		setLabel(labels);
 		setDataset(datasets);
-		// const {symbol, percantage } = calculatePercentage(balance[balance.length-1]?.balance, balance[balance.length-2]?.balance);
-		// setPercentage(percantage);
-		// setPercentageSymbol(symbol);
 	}, [bankAccountBackUps, date]);
-
+	
 	return(
 		<View style={styles.card}>
 			<View style={styles.area}>
@@ -49,11 +43,7 @@ export default function BalanceChart(): ReactElement {
 			<View style={styles.area}>
 				<View>
 					<Text style={styles.infoTitle}>Today</Text>
-					<Text style={styles.infoValue}>{69868986} UAH</Text>
-				</View>
-				<View>
-					<Text style={styles.infoTitle}>vs past period</Text>
-					<Text style={[styles.infoValue, getPercentageColor(percentageSymbol)]}>{percentageSymbol}{percentage}%</Text>
+					<Text style={styles.infoValue}>{getBalance(bankAccountBackUps)} UAH</Text>
 				</View>
 			</View>
 			{
