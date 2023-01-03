@@ -17,7 +17,7 @@ import { useNavigation } from '@react-navigation/native';
 import { deleteBankAccounts } from '../redux/bankAccount';
 import { BankAccountBackUpI } from '../types/bankAccountBackUp';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { deleteBankAccountsBackUp } from '../redux/bankAccountBackUp';
+import { deleteBankAccountsBackUp, addBankAccountBackUp } from '../redux/bankAccountBackUp';
 import { ScrollView, StyleSheet, TouchableOpacity, View, Dimensions, AppState, Text } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
@@ -28,7 +28,22 @@ export default function MainPage(): ReactElement {
 	const records: RecordStoreI = useSelector((state: RootState) => state.records);
 	const bankAccounts: Array<BankAccountI> = useSelector((state: RootState) => state.bankAccounts);
 	const bankAccountsBackUp: Array<BankAccountBackUpI> = useSelector((state: RootState) => state.bankAccountsBackUp);
-	
+
+	useEffect(() => {
+		const arr = bankAccountsBackUp.filter((bankAccountbackUp: BankAccountBackUpI) => bankAccountbackUp.date === JSON.parse(JSON.stringify(new Date())).split('T')[0]);
+		bankAccounts.map((bankAccount: BankAccountI) => {
+			arr.map((bankAccountbackUp: BankAccountBackUpI) => {
+				if(bankAccount.id !== bankAccountbackUp.id) {
+					dispatch(addBankAccountBackUp({
+						id: bankAccount.id,
+						ammount: bankAccount.ammount,
+						date: JSON.parse(JSON.stringify(new Date())).split('T')[0],
+					}));
+				}
+			});
+		});
+	}, []);
+
 	useEffect(() => {
 		const subscription = AppState.addEventListener('change', nextAppState => {
 			getSaveData(nextAppState, dispatch, {records, bankAccounts, bankAccountsBackUp});
@@ -39,7 +54,7 @@ export default function MainPage(): ReactElement {
 		};
 	}, [bankAccounts, records, bankAccountsBackUp]);
 
-	const deleteAllData = async () => {
+	const deleteAllData = async (): Promise<void> => {
 		try {
 			await AsyncStorage.removeItem('records');
 			await AsyncStorage.removeItem('balances');

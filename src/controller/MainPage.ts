@@ -6,7 +6,7 @@ import { showMessage } from 'react-native-flash-message';
 import { setBankAccountsBackUp } from '../redux/bankAccountBackUp';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const getSaveData = (nextAppState: string, dispatch: AppDispatch, data: DataI) => {
+export const getSaveData = (nextAppState: string, dispatch: AppDispatch, data: DataI): void => {
 	switch(nextAppState) {
 	case 'active':
 		getDataFromAsyncStorage('records', dispatch);

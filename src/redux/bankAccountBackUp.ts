@@ -6,6 +6,9 @@ export const bankAccountsBackUpSlice = createSlice({
 	name: 'bank-accounts-backup',
 	initialState: bankAccountsBackUpStore,
 	reducers: {
+		deleteBankAccountsBackUp: (): Array<BankAccountBackUpI> => {
+			return [];
+		},
 		addBankAccountBackUp: (state:Array<BankAccountBackUpI>, action): Array<BankAccountBackUpI> => {
 			return [...state, action.payload];
 		},
@@ -13,8 +16,12 @@ export const bankAccountsBackUpSlice = createSlice({
 			return [...state, ...action.payload];
 		},
 		changeBankAccountBackUp: (state:Array<BankAccountBackUpI>, action): Array<BankAccountBackUpI> => {
-			const index: number = state.findIndex((el: BankAccountBackUpI) => el.id === action.payload.id && el.date === action.payload.date);
-			state[index].ammount = (action.payload.recordType === 'income') ? (+state[index].ammount + +action.payload.ammount).toString() : (+state[index].ammount - +action.payload.ammount).toString();
+			const index: number = state.findIndex((el: BankAccountBackUpI) => {
+				return el.id === action.payload.id && el.date === action.payload.date;
+			});
+			if(index) {
+				state[index].ammount = (action.payload.recordType === 'income') ? (+state[index].ammount + +action.payload.ammount).toString() : (+state[index].ammount - +action.payload.ammount).toString();
+			}
 			return state;
 		},
 		deleteBankAccountBackUp: (state:Array<BankAccountBackUpI>, action): Array<BankAccountBackUpI> => {
@@ -25,9 +32,6 @@ export const bankAccountsBackUpSlice = createSlice({
 			const index: number = state.findIndex((el: BankAccountBackUpI) => el.date === action.payload.date && el.id === action.payload.id);
 			state[index].ammount = action.payload.ammount;
 			return state;
-		},
-		deleteBankAccountsBackUp: (): Array<BankAccountBackUpI> => {
-			return [];
 		},
 	},
 });

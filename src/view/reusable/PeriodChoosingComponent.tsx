@@ -3,9 +3,8 @@ import 'react-native-get-random-values';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import React, { useState, ReactElement, useEffect } from 'react';
 import { PeriodChoosingComponentPropsI } from '../../types/Times';
-import RNDateTimePicker from '@react-native-community/datetimepicker';
-import { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { StyleSheet, TouchableOpacity, View, Dimensions, Text } from 'react-native';
+import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
 export default function PeriodChoosingComponent({modalStatus, closeModal, saveChanges}: PeriodChoosingComponentPropsI): ReactElement {
 	const [type, setType] = useState<string>('');

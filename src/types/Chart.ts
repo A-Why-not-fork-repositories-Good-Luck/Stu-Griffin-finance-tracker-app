@@ -26,3 +26,13 @@ export interface RecordDataI {
 	legendFontSize: number;
 	legendFontColor: string;
 }
+
+export interface ConstructDateI {
+	end: string;
+	start: string;
+}
+
+export interface CreateBalanceDataI {
+	labels: Array<string>;
+	datasets: Array<number>;
+}
