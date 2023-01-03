@@ -18,7 +18,7 @@ export default function RecordsHistory(): ReactElement {
 	const [listData, setListData] = useState<Array<RecordI>>([]);
 	const records: RecordStoreI = useSelector((state: RootState) => state.records);
 	const bankAccounts: Array<BankAccountI> = useSelector((state: RootState) => state.bankAccounts);
-	
+
 	useEffect(() => {
 		setListData(constructListData(records));
 	}, [records]);

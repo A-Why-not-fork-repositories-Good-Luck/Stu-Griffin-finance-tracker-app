@@ -17,19 +17,16 @@ export const bankAccountReducer = (state: BankAccountI, {type, payload}: ActionI
 };
 
 export const createBankAccount = (cardId: string, dispatch: AppDispatch, state: BankAccountI): void => {
+	const bankAccountBackUpPayload = {
+		id: state.id,
+		ammount: state.ammount,
+		date: state.date
+	};
 	if(cardId === '') {
 		dispatch(addBankAccount(state));
-		dispatch(addBankAccountBackUp({
-			id: state.id,
-			ammount: state.ammount,
-			date: JSON.parse(JSON.stringify(new Date())).split('T')[0],
-		}));
+		dispatch(addBankAccountBackUp(bankAccountBackUpPayload));
 	} else {
-		dispatch(rewriteBankAccountBackUp({
-			id: state.id,
-			ammount: state.ammount,
-			date: JSON.parse(JSON.stringify(new Date())).split('T')[0],
-		}));
+		dispatch(rewriteBankAccountBackUp(bankAccountBackUpPayload));
 		dispatch(rewriteBankAccounts(state));
 	}
 };
@@ -40,4 +37,5 @@ export 	const getInitialData = (dispatchState: DispatchStateI, bankAccounts: Arr
 	stateAction(dispatchState, 'add', 'id', foundBankAccount?.id || uuidv4());
 	stateAction(dispatchState, 'add', 'ammount', foundBankAccount?.ammount || '');
 	stateAction(dispatchState, 'add', 'currency', foundBankAccount?.currency || currency[0]);
+	stateAction(dispatchState, 'add', 'date', foundBankAccount?.date ||JSON.parse(JSON.stringify(new Date())).split('T')[0]);
 };

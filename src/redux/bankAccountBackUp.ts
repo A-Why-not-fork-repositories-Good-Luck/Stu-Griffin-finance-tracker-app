@@ -19,7 +19,7 @@ export const bankAccountsBackUpSlice = createSlice({
 			const index: number = state.findIndex((el: BankAccountBackUpI) => {
 				return el.id === action.payload.id && el.date === action.payload.date;
 			});
-			if(index) {
+			if(index >= 0) {
 				state[index].ammount = (action.payload.recordType === 'income') ? (+state[index].ammount + +action.payload.ammount).toString() : (+state[index].ammount - +action.payload.ammount).toString();
 			}
 			return state;

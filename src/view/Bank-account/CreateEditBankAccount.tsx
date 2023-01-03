@@ -13,13 +13,16 @@ import { CreateEditBankAccountPropsI, BankAccountI } from '../../types/BankAccou
 import { StyleSheet, TouchableOpacity, View, Dimensions, Text } from 'react-native';
 import React, { useReducer, ReactNode, useEffect, ReactElement, useState } from 'react';
 import { bankAccountReducer, getInitialData, createBankAccount } from '../../controller/BankAccount';
+import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
 export default function CreateEditBankAccount({modalStatus, closeModal, cardId}: CreateEditBankAccountPropsI): ReactElement {
 	const dispatch: AppDispatch = useDispatch();
+	const [date, setDate] = useState<Date>(new Date());
 	const [buttonStatus, setButtonStatus] = useState<boolean>(false);
+	const [datePickerShowStatus, setDatePickerShowStatus] = useState<boolean>(false);
 	const [state, dispatchState] = useReducer(bankAccountReducer, bankAccountFormState);
 	const bankAccounts: Array<BankAccountI> = useSelector((state: RootState) => state.bankAccounts);
-	
+
 	useEffect(() => {
 		(state.ammount !== '' && state.title !== '') ? setButtonStatus(true) : setButtonStatus(false);
 	}, [state]);
@@ -34,9 +37,24 @@ export default function CreateEditBankAccount({modalStatus, closeModal, cardId}:
 		notification('success', (cardId === '') ? 'New bank account has been created' : 'Changes were saved');
 	};
 
+	const setDateFunc = (event: DateTimePickerEvent, date: Date|undefined): void => {
+		if(date) {
+			switch(event.type) {
+			case 'set':
+				setDate(date);
+				stateAction(dispatchState, 'add', 'date', JSON.parse(JSON.stringify(date)).split('T')[0]);
+				break;
+			case 'dismissed':
+				break;
+			default:
+			}
+		}
+		setDatePickerShowStatus(false);
+	};
+
 	return(
 		<Modal isVisible={modalStatus} style={styles.modalArea} onBackdropPress={closeModal}>
-			<View style={styles.modal}>
+			<View style={[styles.modal, (cardId === '') ? { height: 450 } : { height: 375 }]}>
 				<TouchableOpacity style={styles.crossIcon} onPress={closeModal}>
 					<CrossIcon/>
 				</TouchableOpacity>
@@ -56,6 +74,22 @@ export default function CreateEditBankAccount({modalStatus, closeModal, cardId}:
 						stateAction(dispatchState, 'add', 'ammount', value);
 					}}
 				/>
+				{
+					(cardId === '') && 
+					<TouchableOpacity onPress={() => setDatePickerShowStatus(true)}>
+						<Text style={styles.title}>Date</Text>
+						<Text style={styles.input}>{state?.date}</Text>
+					</TouchableOpacity>
+				}
+				{
+					(datePickerShowStatus) &&
+					<RNDateTimePicker
+						value={date}
+						display="default"
+						onChange={setDateFunc}
+						maximumDate={new Date()}
+					/>
+				}
 				<Picker
 					selectedValue={state?.currency}
 					onValueChange={(value: string) => {
@@ -81,7 +115,6 @@ export default function CreateEditBankAccount({modalStatus, closeModal, cardId}:
 
 const styles = StyleSheet.create({
 	modal: {
-		height: 350,
 		paddingTop: 30,
 		borderRadius: 15,
 		paddingVertical: 15,
@@ -89,6 +122,17 @@ const styles = StyleSheet.create({
 		backgroundColor: 'white',
 		justifyContent: 'space-between',
 		width: Dimensions.get('window').width - 50,
+	},
+	title: {
+		color: 'gray',
+		fontSize: RFPercentage(2),
+	},
+	input: {
+		marginTop: 5,
+		color: 'black',
+		borderColor: 'gray',
+		borderBottomWidth: 1,
+		fontSize: RFPercentage(2.2),
 	},
 	button: {
 		padding: 10,

@@ -2,6 +2,7 @@ import { BankAccountI } from '../types/BankAccount';
 
 export const bankAccountFormState: BankAccountI = {
 	id: '',
+	date: '',
 	title: '',
 	ammount: '',
 	currency: '',

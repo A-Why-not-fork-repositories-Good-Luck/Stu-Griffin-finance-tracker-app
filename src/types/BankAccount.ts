@@ -6,6 +6,7 @@ export interface CardItemI {
 
 export interface BankAccountI {
 	id: string;
+	date: string;
 	title: string;
 	ammount: string;
 	currency: string;

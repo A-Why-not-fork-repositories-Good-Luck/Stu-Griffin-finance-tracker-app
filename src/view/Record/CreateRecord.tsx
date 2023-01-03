@@ -1,9 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import RecordTypesList from './RecordTypesList';
-import { AppDispatch } from '../../types/redux';
-import InputComponent from '../reusable/InputComponent';
+import { BankAccountI } from '../../types/BankAccount';
+import { AppDispatch, RootState } from '../../types/redux';
 import { navigationType } from '../../types/Navigation';
+import InputComponent from '../reusable/InputComponent';
 import { useNavigation } from '@react-navigation/native';
 import BankAccountList from '../Bank-account/BankAccountList';
 import { RFPercentage } from 'react-native-responsive-fontsize';
@@ -13,7 +14,6 @@ import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 import React, { useReducer, ReactNode, useEffect, useState, ReactElement } from 'react';
 import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { createRecord, constructStyleObjForTextButton, constructStyleObjForButton, recordReducer, updateRecord } from '../../controller/Record';
-
 
 export default function CreateRecord({ route }: any): ReactElement {
 	const [key, setKey] = useState<string>('');
@@ -26,6 +26,7 @@ export default function CreateRecord({ route }: any): ReactElement {
 	const [datePickerShowStatus, setDatePickerShowStatus] = useState<boolean>(false);
 	const [recordTypeModalStatus, setRecordTypeModalStatus] = useState<boolean>(false);
 	const [bankAccountModalStatus, setBankAccountModalStatus] = useState<boolean>(false);
+	const bankAccounts: Array<BankAccountI> = useSelector((state: RootState) => state.bankAccounts);
 
 	useEffect(() => {
 		stateAction(dispatchState, 'add', 'id', route.params?.record.id || uuidv4());
@@ -48,16 +49,21 @@ export default function CreateRecord({ route }: any): ReactElement {
 	}, [state]);
 
 	const buttonAction = (): void => {
-		let message;
-		if(route.params?.record) {
-			message = 'Bank record has been updated';
-			updateRecord(dispatch, state, key, ammountBackUp);
+		const id = bankAccounts.findIndex((el: BankAccountI) => el.id === state.bankAccountId);
+		if((new Date(state.date) >= new Date(bankAccounts[id].date))) {
+			let message;
+			if(route.params?.record) {
+				message = 'Bank record has been updated';
+				updateRecord(dispatch, state, key, ammountBackUp);
+			} else {
+				createRecord(dispatch, state, key);
+				message = 'New bank record has been created';
+			}
+			notification('success', message);
+			navigation.navigate('main-page');
 		} else {
-			createRecord(dispatch, state, key);
-			message = 'New bank record has been created';
+			notification('danger', 'Bank account is younger than your record');
 		}
-		notification('success', message);
-		navigation.navigate('main-page');
 	};
 
 	const setDateFunc = (event: DateTimePickerEvent, date: Date|undefined): void => {
