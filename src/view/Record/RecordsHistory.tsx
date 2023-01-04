@@ -24,12 +24,11 @@ export default function RecordsHistory(): ReactElement {
 	}, [records]);
 
 	const renderItem = (item: RecordI): ReactElement => {
-		const typeIcon = types.filter((el: TypeI) => el.title === item.type);
+		const typeIcon = types.filter((el: TypeI) => el.title === item.parentType);
 		const res = bankAccounts.filter((el: BankAccountI) => el.id === item.bankAccountId);
-
 		return(
 			<TouchableOpacity onPress={() => navigation.navigate('create-record-page', {record: item})} style={styles.card} key={item.id}>
-				{getRecordTypeIcon(typeIcon[0]?.icon)}
+				{getRecordTypeIcon(typeIcon[0]?.icon, typeIcon[0]?.color)}
 				<View>
 					<Text style={styles.type}>{item.type}</Text>
 					{getRecordComment(item.comment)}
@@ -47,10 +46,11 @@ export default function RecordsHistory(): ReactElement {
 		);
 	};
 
-	const getRecordTypeIcon = (icon: ReactNode|undefined): ReactElement => {
+	const getRecordTypeIcon = (icon: ReactNode|undefined, color: Array<number>): ReactElement => {
+		const rgbColor = `rgba(${color[0]},${color[1]},${color[2]}, 1)`;
 		return(
 			(icon !== undefined) ?
-				<View style={styles.iconCircle}>
+				<View style={[styles.iconCircle, {backgroundColor: rgbColor, borderColor: rgbColor}]}>
 					{icon}
 				</View>
 				:

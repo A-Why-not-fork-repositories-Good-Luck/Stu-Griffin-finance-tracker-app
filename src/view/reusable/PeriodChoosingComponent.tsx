@@ -29,6 +29,15 @@ export default function PeriodChoosingComponent({modalStatus, closeModal, saveCh
 		saveChanges(startDate, endDate);
 	};
 
+	const buttonActiveFunc = (): object => {
+		return (!buttonStatus) ? {opacity: 0.5} : {opacity: 1};
+	};
+
+	const dateOpenClose = (type: string): void => {
+		setType(type);
+		setDatePickerShowStatus(true);
+	};
+
 	const setDateFunc = (event: DateTimePickerEvent, date: Date|undefined): void => {
 		setDatePickerShowStatus(false);
 		if(date) {
@@ -58,33 +67,19 @@ export default function PeriodChoosingComponent({modalStatus, closeModal, saveCh
 			style={styles.modalArea}
 		>
 			<View style={styles.modal}>
-				<TouchableOpacity onPress={() => {
-					setType('start');
-					setDatePickerShowStatus(true);
-				}}>
+				<TouchableOpacity onPress={() => dateOpenClose('start')}>
 					<Text style={styles.title}>Start date</Text>
 					<Text style={styles.input}>{startDate}</Text>
 				</TouchableOpacity>
-				<TouchableOpacity onPress={() => {
-					setType('end');
-					setDatePickerShowStatus(true);
-				}}>
+				<TouchableOpacity onPress={() => dateOpenClose('end')}>
 					<Text style={styles.title}>End date</Text>
 					<Text style={styles.input}>{endDate}</Text>
 				</TouchableOpacity>
-				<TouchableOpacity disabled={!buttonStatus} style={[styles.button, (!buttonStatus) ? {opacity: 0.5} : {opacity: 1}]} onPress={createRecordFunc}>
+				<TouchableOpacity disabled={!buttonStatus} onPress={createRecordFunc} style={[styles.button, buttonActiveFunc()]}>
 					<Text style={styles.buttonText}>Save record</Text>
 				</TouchableOpacity>
 			</View>
-			{
-				(datePickerShowStatus) &&
-				<RNDateTimePicker
-					value={date}
-					display="default"
-					onChange={setDateFunc}
-					maximumDate={new Date()}
-				/>
-			}
+			{(datePickerShowStatus) && <RNDateTimePicker value={date} display="default" onChange={setDateFunc} maximumDate={new Date()}/>}
 		</Modal>
 	);
 }

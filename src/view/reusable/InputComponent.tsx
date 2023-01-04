@@ -7,12 +7,7 @@ export default function InputComponent({value, title, changeValueFunc, keyboardT
 	return (
 		<View>
 			<Text style={styles.title}>{title}</Text>
-			<TextInput
-				value={value}
-				style={styles.input}
-				keyboardType={keyboardType}
-				onChangeText={changeValueFunc}
-			/>
+			<TextInput value={value} style={styles.input} keyboardType={keyboardType} onChangeText={changeValueFunc}/>
 		</View>
 	);
 }

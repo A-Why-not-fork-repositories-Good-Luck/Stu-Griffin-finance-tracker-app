@@ -37,11 +37,7 @@ export default function RecordTypesList({modalStatus, closeModal, saveChanges, s
 	};
 
 	return(
-		<Modal
-			isVisible={modalStatus}
-			style={styles.modalArea}
-			onBackdropPress={() => closeModal()}
-		>
+		<Modal isVisible={modalStatus} style={styles.modalArea} onBackdropPress={() => closeModal()}>
 			<View style={styles.modal}>
 				<TouchableOpacity style={styles.crossIcon} onPress={closeModal}>
 					<CrossIcon/>
