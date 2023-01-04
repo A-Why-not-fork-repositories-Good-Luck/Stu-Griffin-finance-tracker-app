@@ -1,9 +1,9 @@
 import { ActionI } from '../types/reusable';
 import { AppDispatch } from '../types/redux';
 import { RecordI, RecordStoreI } from '../types/Record';
-import { addRecord, putRecord } from '../redux/records';
 import { changeBankAccount } from '../redux/bankAccount';
 import { changeBankAccountBackUp } from '../redux/bankAccountBackUp';
+import { addRecord, putRecord, deleteRecord } from '../redux/records';
 
 export const getRecordAmmountStyle = (recordType: string): object => {
 	return(
@@ -26,6 +26,23 @@ export const constructListData = (records: RecordStoreI): Array<RecordI> => {
 	return arr;
 };
 
+export const deleteAction = (dispatch: AppDispatch, record: RecordI): void => {
+	dispatch(changeBankAccount({
+		status: 'update',
+		recordAmmount: record.ammount,
+		recordType: record.recordType,
+		bankAccountId: record.bankAccountId,
+	}));
+	dispatch(deleteRecord(record));
+	dispatch(changeBankAccountBackUp({
+		status: 'update',
+		date: record.date,
+		ammount: record.ammount,
+		id: record.bankAccountId,
+		recordType: record.recordType,
+	}));
+};
+
 export 	const constructStyleObjForButton = (el: string, state: RecordI): object => {
 	return (el.toLowerCase() === state.recordType) ? {backgroundColor: '#236F57'} : {borderColor: '#236F57', borderWidth: 2};
 };
@@ -45,17 +62,18 @@ export const constructStyleObjForTextButton = (el: string, state: RecordI): obje
 
 export const createRecord = (dispatch: AppDispatch, state: RecordI, key: string): void => {
 	dispatch(changeBankAccount({
-		status: 'create-record',
+		status: 'create',
 		recordType: state.recordType,
 		recordAmmount: state.ammount,
 		bankAccountId: state.bankAccountId,
 	}));
 	dispatch(addRecord({state, key}));
 	dispatch(changeBankAccountBackUp({
+		status: 'create',
+		date: state.date,
 		ammount: state.ammount,
 		id: state.bankAccountId,
 		recordType: state.recordType,
-		date: JSON.parse(JSON.stringify(new Date())).split('T')[0],
 	}));
 };
 
@@ -72,8 +90,15 @@ export const updateRecord = (dispatch: AppDispatch, state: RecordI, key: string,
 	default:
 		break;
 	}
+	dispatch(changeBankAccountBackUp({
+		status: 'update',
+		date: state.date,
+		ammount: state.ammount,
+		id: state.bankAccountId,
+		recordType: state.recordType,
+	}));
 	dispatch(changeBankAccount({
-		status: 'update-record',
+		status: 'update',
 		recordAmmount: newAmmount,
 		recordType: state.recordType,
 		bankAccountId: state.bankAccountId,

@@ -17,7 +17,7 @@ export const bankAccountsSlice = createSlice({
 		},
 		changeBankAccount: (state:Array<BankAccountI>, action): Array<BankAccountI> => {
 			const index: number = state.findIndex((el: BankAccountI) => el.id === action.payload.bankAccountId);
-			if(action.payload.status === 'create-record') {
+			if(action.payload.status === 'create') {
 				state[index].ammount = (action.payload.recordType === 'income') ? (+state[index].ammount + +action.payload.recordAmmount).toString() : (+state[index].ammount - +action.payload.recordAmmount).toString();
 			} else {
 				state[index].ammount = (+state[index].ammount + +action.payload.recordAmmount).toString();

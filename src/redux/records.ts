@@ -6,8 +6,12 @@ export const recordsSlice = createSlice({
 	name: 'records',
 	initialState: recordStore,
 	reducers: {
-		deleteRecords: (): RecordStoreI => {
-			return recordStore;
+		deleteRecord: (state: RecordStoreI, action): RecordStoreI => {
+			state[action.payload.parentType] = state[action.payload.parentType].filter((el: RecordI) => el.id !== action.payload.id);
+			return state;
+		},
+		deleteRecords: (state: RecordStoreI): RecordStoreI => {
+			return state;
 		},
 		addRecord: (state: RecordStoreI, action): RecordStoreI => {
 			const key: string = action.payload.key;
@@ -27,4 +31,4 @@ export const recordsSlice = createSlice({
 });
 
 export default recordsSlice.reducer;
-export const { addRecord, setRecords, putRecord, deleteRecords } = recordsSlice.actions;
+export const { addRecord, setRecords, putRecord, deleteRecords, deleteRecord } = recordsSlice.actions;

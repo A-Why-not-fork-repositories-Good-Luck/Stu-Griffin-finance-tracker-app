@@ -1,11 +1,13 @@
 import { v4 as uuidv4 } from 'uuid';
-import { useDispatch, useSelector } from 'react-redux';
 import RecordTypesList from './RecordTypesList';
+import { deleteAction } from '../../controller/Record';
 import { BankAccountI } from '../../types/BankAccount';
-import { AppDispatch, RootState } from '../../types/redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { navigationType } from '../../types/Navigation';
 import InputComponent from '../reusable/InputComponent';
 import { useNavigation } from '@react-navigation/native';
+import DeleteIcon from '../../../assets/icons/DeleteIcon';
+import { AppDispatch, RootState } from '../../types/redux';
 import BankAccountList from '../Bank-account/BankAccountList';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { recordFormState, recordTypes } from '../../model/record';
@@ -83,7 +85,16 @@ export default function CreateRecord({ route }: any): ReactElement {
 
 	return(
 		<View style={styles.container}>
-			<View style={styles.recordTypeList}>
+			{
+				(route.params) &&
+				<TouchableOpacity onPress={() => {
+					deleteAction(dispatch, route.params.record);
+					notification('success', 'Bank account has been removed');
+				}} style={styles.deleteIcon}>
+					<DeleteIcon width={30} height={30}/>
+				</TouchableOpacity>
+			}
+			<View style={[styles.recordTypeList, (route.params) && {marginTop: 20}]}>
 				{
 					recordTypes.map((el: string, index: number): ReactNode => {
 						return(
@@ -206,6 +217,11 @@ const styles = StyleSheet.create({
 		flex: 1,
 		padding: 30,
 		justifyContent: 'space-around'
+	},
+	deleteIcon: {
+		top: '2.5%',
+		left: '100%',
+		position: 'absolute',
 	},
 	recordType: {
 		width: 125,

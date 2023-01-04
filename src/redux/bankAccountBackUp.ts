@@ -16,11 +16,21 @@ export const bankAccountsBackUpSlice = createSlice({
 			return [...state, ...action.payload];
 		},
 		changeBankAccountBackUp: (state:Array<BankAccountBackUpI>, action): Array<BankAccountBackUpI> => {
-			const index: number = state.findIndex((el: BankAccountBackUpI) => {
-				return el.id === action.payload.id && el.date === action.payload.date;
-			});
+			const index: number = state.findIndex((el: BankAccountBackUpI) => el.id === action.payload.id && el.date === action.payload.date);
 			if(index >= 0) {
-				state[index].ammount = (action.payload.recordType === 'income') ? (+state[index].ammount + +action.payload.ammount).toString() : (+state[index].ammount - +action.payload.ammount).toString();
+				if(action.payload.status === 'create') {
+					state[index].ammount = (action.payload.recordType === 'income') ?
+						(+state[index].ammount + +action.payload.ammount).toString() :
+						(+state[index].ammount - +action.payload.ammount).toString();
+				} else {
+					state[index].ammount = (+state[index].ammount + +action.payload.ammount).toString();
+				}
+			} else {
+				state.push({
+					id: action.payload.id,
+					date: action.payload.date,
+					ammount: action.payload.ammount,
+				});
 			}
 			return state;
 		},
