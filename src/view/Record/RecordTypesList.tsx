@@ -2,6 +2,7 @@ import Modal from 'react-native-modal';
 import 'react-native-get-random-values';
 import { types } from '../../model/record';
 import React, { ReactElement } from 'react';
+import { getIconColor } from '../../controller/Record';
 import CrossIcon from '../../../assets/icons/CrossIcon';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { StyleSheet, TouchableOpacity, View, Dimensions, Text, SectionList } from 'react-native';
@@ -17,7 +18,7 @@ export default function RecordTypesList({modalStatus, closeModal, saveChanges, s
 				saveChanges('parentType', el.title.parent);
 				closeModal();
 			}}>
-				<View style={[styles.elTypeIcon, {backgroundColor: `rgb(${el.title.color[0]}, ${el.title.color[1]}, ${el.title.color[2]})`}]}>
+				<View style={[styles.elTypeIcon, {backgroundColor: getIconColor(el.title.color)}]}>
 					{el.title.icon}
 				</View>
 				<Text style={styles.elTypeTitle}>{el.title.title}</Text>
@@ -28,7 +29,7 @@ export default function RecordTypesList({modalStatus, closeModal, saveChanges, s
 	const sectionHeader = (el: RecordTypeSectionHeaderI): ReactElement => {
 		return(
 			<View style={styles.typeCard}>
-				<View style={[styles.typeIcon, {backgroundColor: `rgb(${el.section.color[0]}, ${el.section.color[1]}, ${el.section.color[2]})`}]}>
+				<View style={[styles.typeIcon, {backgroundColor: getIconColor(el.section.color)}]}>
 					{el.section.icon}
 				</View>
 				<Text style={styles.typeTitle}>{el.section.title}</Text>

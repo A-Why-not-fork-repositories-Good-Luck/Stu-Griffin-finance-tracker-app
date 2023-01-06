@@ -1,14 +1,14 @@
 import { useSelector } from 'react-redux';
-import { DateI } from '../../types/Chart';
 import { RootState } from '../../types/redux';
 import { LineChart } from 'react-native-chart-kit';
 import SettingIcon from '../../../assets/icons/SettingIcon';
+import { DateI, BalanceChartDataI } from '../../types/Chart';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import React, { useState, useEffect, ReactElement } from 'react';
 import { BankAccountBackUpI } from '../../types/bankAccountBackUp';
 import PeriodChoosingComponent from '../reusable/PeriodChoosingComponent';
 import { StyleSheet, Dimensions, View, Text, TouchableOpacity } from 'react-native';
-import { createBalanceData, constructDate, getBalance } from '../../controller/Chart';
+import { createBalanceData, constructDate, getBalance, errorMsg } from '../../controller/Chart';
 
 const width = Dimensions.get('window').width;
 
@@ -27,7 +27,7 @@ export default function BalanceChart(): ReactElement {
 	}, []);
 
 	useEffect(() => {
-		const { labels, datasets } = createBalanceData(bankAccountBackUps, date);
+		const { labels, datasets }: BalanceChartDataI = createBalanceData(bankAccountBackUps, date);
 		setLabel(labels);
 		setDataset(datasets);
 	}, [bankAccountBackUps, date]);
@@ -60,11 +60,7 @@ export default function BalanceChart(): ReactElement {
 								}
 							],
 						}}
-						style={{
-							padding: 10,
-							borderRadius: 10,
-							backgroundColor: 'white',
-						}}
+						style={styles.lineChart}
 						height={256}
 						chartConfig={{
 							strokeWidth: 2,
@@ -79,7 +75,7 @@ export default function BalanceChart(): ReactElement {
 						withVerticalLines={false}
 						verticalLabelRotation={30}
 					/> :
-					<Text style={{fontSize: 22.5, color: 'red', fontWeight: 'bold', textAlign: 'center', marginVertical: 10}}>You have no data in balances</Text>
+					<Text style={errorMsg}>You have no data in balances</Text>
 			}
 			<PeriodChoosingComponent
 				closeModal={() => {
@@ -117,6 +113,11 @@ const styles = StyleSheet.create({
 	title: {
 		fontWeight: 'bold',
 		fontSize: RFPercentage(3.5),
+	},
+	lineChart: {
+		padding: 10,
+		borderRadius: 10,
+		backgroundColor: 'white',
 	},
 	infoTitle: {
 		color: 'gray',

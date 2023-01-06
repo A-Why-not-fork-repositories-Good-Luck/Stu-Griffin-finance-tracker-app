@@ -7,10 +7,10 @@ import CrossIcon from '../../../assets/icons/CrossIcon';
 import InputComponent from '../reusable/InputComponent';
 import { AppDispatch, RootState } from '../../types/redux';
 import { RFPercentage } from 'react-native-responsive-fontsize';
-import { notification, stateAction } from '../../controller/reusable';
 import { currency, bankAccountFormState } from '../../model/bankAccount';
 import { CreateEditBankAccountPropsI, BankAccountI } from '../../types/BankAccount';
 import { StyleSheet, TouchableOpacity, View, Dimensions, Text } from 'react-native';
+import { notification, stateAction, convertedDate } from '../../controller/reusable';
 import React, { useReducer, ReactNode, useEffect, ReactElement, useState } from 'react';
 import { bankAccountReducer, getInitialData, createBankAccount } from '../../controller/BankAccount';
 import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
@@ -43,7 +43,7 @@ export default function CreateEditBankAccount({modalStatus, closeModal, cardId}:
 			switch(event.type) {
 			case 'set':
 				setDate(date);
-				stateAction(dispatchState, 'add', 'date', JSON.parse(JSON.stringify(date)).split('T')[0]);
+				stateAction(dispatchState, 'add', 'date', convertedDate(date));
 				break;
 			case 'dismissed':
 				break;

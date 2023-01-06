@@ -18,7 +18,7 @@ export default function BankAccountList({modalStatus, closeModal, saveChanges}: 
 	
 	const renderItem = ({ item }: CardItemI): ReactElement => {
 		return(
-			<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: Dimensions.get('window').width - 120}}>
+			<View style={styles.bankAccountCard}>
 				<TouchableOpacity style={styles.card} onPress={() => {
 					saveChanges(item.id);
 					closeModal();
@@ -54,8 +54,8 @@ export default function BankAccountList({modalStatus, closeModal, saveChanges}: 
 							keyExtractor={item => item.id}
 						/> 
 						:
-						<Pressable style={{justifyContent: 'center', alignItems: 'center', flex: 1}} onPress={closeModal}>
-							<Text style={{fontSize: 25, color: 'red', fontWeight: 'bold', textAlign: 'center'}}>You have no bank accounts !!</Text>
+						<Pressable style={styles.errorArea} onPress={closeModal}>
+							<Text style={styles.errorMsg}>You have no bank accounts !!</Text>
 						</Pressable>
 				}
 			</View>
@@ -99,6 +99,12 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		marginHorizontal: 10,
 	},
+	errorMsg: {
+		fontSize: 25, 
+		color: 'red', 
+		fontWeight: 'bold', 
+		textAlign: 'center',
+	},
 	cardText: {
 		color: 'black',
 		fontWeight: 'bold',
@@ -117,9 +123,20 @@ const styles = StyleSheet.create({
 		marginLeft: 10,
 		fontSize: RFPercentage(2),
 	},
+	errorArea: {
+		flex: 1,
+		alignItems: 'center', 
+		justifyContent: 'center',
+	},
 	crossIcon: {
 		top: '-2.5%',
 		left: '42.5%',
 		position: 'relative',
+	},
+	bankAccountCard: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		width: Dimensions.get('window').width - 120,
 	},
 });

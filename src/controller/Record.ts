@@ -5,6 +5,10 @@ import { changeBankAccount } from '../redux/bankAccount';
 import { changeBankAccountBackUp } from '../redux/bankAccountBackUp';
 import { addRecord, putRecord, deleteRecord } from '../redux/records';
 
+export const getIconColor = (color: Array<number>): string => {
+	return `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
+};
+
 export const getRecordAmmountStyle = (recordType: string): object => {
 	return(
 		(recordType === 'income') ? {color: 'green'} : {color: 'red'}

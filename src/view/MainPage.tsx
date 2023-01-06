@@ -12,8 +12,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../types/redux';
 import { useNavigation } from '@react-navigation/native';
 import { BankAccountBackUpI } from '../types/bankAccountBackUp';
-import { getSaveData, createFirstBankAccountBackUpByDate, deleteAllData } from '../controller/MainPage';
-import { ScrollView, StyleSheet, TouchableOpacity, View, Dimensions, AppState, Text } from 'react-native';
+import { getSaveData, createFirstBankAccountBackUpByDate } from '../controller/MainPage';
+import { ScrollView, StyleSheet, TouchableOpacity, View, Dimensions, AppState } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
@@ -40,9 +40,6 @@ export default function MainPage(): ReactElement {
 
 	return (
 		<View style={styles.container}>
-			<TouchableOpacity style={{borderWidth: 1, borderRadius: 10, padding: 5, marginTop: 30}} onPress={() => deleteAllData(dispatch)}>
-				<Text>Delete</Text>
-			</TouchableOpacity>
 			<ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContainer}>
 				<BankAccounts/>
 				<BalanceChart/>

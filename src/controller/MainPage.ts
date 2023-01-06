@@ -75,10 +75,10 @@ export const getDataFromAsyncStorage = async(key: string, dispatch: AppDispatch)
 };
 
 export const createFirstBankAccountBackUpByDate = (dispatch: AppDispatch, bankAccountsBackUp: Array<BankAccountBackUpI>, bankAccounts: Array<BankAccountI>): void => {
-	const arr = bankAccountsBackUp.filter((bankAccountbackUp: BankAccountBackUpI) => bankAccountbackUp.date === JSON.parse(JSON.stringify(new Date())).split('T')[0]);
+	const arr = bankAccountsBackUp.filter((bankAccountbackUp: BankAccountBackUpI) => bankAccountbackUp.date !== JSON.parse(JSON.stringify(new Date())).split('T')[0]);
 	bankAccounts.map((bankAccount: BankAccountI) => {
 		arr.map((bankAccountbackUp: BankAccountBackUpI) => {
-			if(bankAccount.id !== bankAccountbackUp.id) {
+			if(bankAccount.id === bankAccountbackUp.id) {
 				dispatch(addBankAccountBackUp({
 					id: bankAccount.id,
 					ammount: bankAccount.ammount,

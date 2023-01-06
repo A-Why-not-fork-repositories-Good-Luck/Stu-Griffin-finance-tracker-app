@@ -1,5 +1,6 @@
 import Modal from 'react-native-modal';
 import 'react-native-get-random-values';
+import { convertedDate } from '../../controller/reusable';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import React, { useState, ReactElement, useEffect } from 'react';
 import { PeriodChoosingComponentPropsI } from '../../types/Times';
@@ -46,10 +47,10 @@ export default function PeriodChoosingComponent({modalStatus, closeModal, saveCh
 				setDate(date);
 				switch(type) {
 				case 'start':
-					setStartDate(JSON.parse(JSON.stringify(date)).split('T')[0]);
+					setStartDate(convertedDate(date));
 					break;
 				case 'end':
-					setEndDate(JSON.parse(JSON.stringify(date)).split('T')[0]);
+					setEndDate(convertedDate(date));
 					break;
 				default:
 					break;
@@ -62,10 +63,7 @@ export default function PeriodChoosingComponent({modalStatus, closeModal, saveCh
 	};
 
 	return(
-		<Modal
-			isVisible={modalStatus}
-			style={styles.modalArea}
-		>
+		<Modal isVisible={modalStatus} style={styles.modalArea}>
 			<View style={styles.modal}>
 				<TouchableOpacity onPress={() => dateOpenClose('start')}>
 					<Text style={styles.title}>Start date</Text>

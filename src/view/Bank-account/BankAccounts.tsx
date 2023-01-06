@@ -42,12 +42,7 @@ export default function BankAccounts(): ReactElement {
 					<TouchableOpacity onPress={() => setModalCreateBankAccountStatus(true)}>
 						<View style={[styles.card, styles.createCard]}>
 							<Text style={[styles.cardTitle, styles.createCardTitle]}>Add bank account</Text>
-							<AddIcon
-								width={50}
-								height={50}
-								fillCross={'white'}
-								fillRound={'#236F57'}
-							/>
+							<AddIcon width={50} height={50} fillCross={'white'} fillRound={'#236F57'}/>
 						</View>
 					</TouchableOpacity>
 				}

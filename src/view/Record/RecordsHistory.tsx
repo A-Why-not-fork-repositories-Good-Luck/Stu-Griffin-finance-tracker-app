@@ -11,7 +11,7 @@ import { RFPercentage } from 'react-native-responsive-fontsize';
 import GrayCircleIcon from '../../../assets/icons/GrayCircleIcon';
 import React, { ReactElement, ReactNode, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
-import { constructListData, getRecordAmmountStyle, getRecordAmmountSymbol } from '../../controller/Record';
+import { constructListData, getRecordAmmountStyle, getRecordAmmountSymbol, getIconColor } from '../../controller/Record';
 
 export default function RecordsHistory(): ReactElement {
 	const navigation: navigationType = useNavigation();
@@ -24,8 +24,8 @@ export default function RecordsHistory(): ReactElement {
 	}, [records]);
 
 	const renderItem = (item: RecordI): ReactElement => {
-		const typeIcon = types.filter((el: TypeI) => el.title === item.parentType);
-		const res = bankAccounts.filter((el: BankAccountI) => el.id === item.bankAccountId);
+		const typeIcon: Array<TypeI> = types.filter((el: TypeI) => el.title === item.parentType);
+		const res: Array<BankAccountI> = bankAccounts.filter((el: BankAccountI) => el.id === item.bankAccountId);
 		return(
 			<TouchableOpacity onPress={() => navigation.navigate('create-record-page', {record: item})} style={styles.card} key={item.id}>
 				{getRecordTypeIcon(typeIcon[0]?.icon, typeIcon[0]?.color)}
@@ -40,14 +40,8 @@ export default function RecordsHistory(): ReactElement {
 		);
 	};
 
-	const getRecordComment = (comment: string): ReactNode => {
-		return(
-			(comment !== '') && <Text>{comment}</Text>
-		);
-	};
-
 	const getRecordTypeIcon = (icon: ReactNode|undefined, color: Array<number>): ReactElement => {
-		const rgbColor = `rgba(${color[0]},${color[1]},${color[2]}, 1)`;
+		const rgbColor = getIconColor(color);
 		return(
 			(icon !== undefined) ?
 				<View style={[styles.iconCircle, {backgroundColor: rgbColor, borderColor: rgbColor}]}>
@@ -57,6 +51,8 @@ export default function RecordsHistory(): ReactElement {
 				<GrayCircleIcon width={50} height={50} fill={'gray'}/>
 		);
 	};
+
+	const getRecordComment = (comment: string): ReactNode => (comment !== '') && <Text>{comment}</Text>;
 
 	return (
 		<View style={styles.container}>

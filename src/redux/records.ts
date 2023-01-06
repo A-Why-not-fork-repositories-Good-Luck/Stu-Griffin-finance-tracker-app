@@ -9,10 +9,6 @@ export const recordsSlice = createSlice({
 		deleteRecords: (): RecordStoreI => {
 			return {};
 		},
-		deleteRecord: (state: RecordStoreI, action): RecordStoreI => {
-			state[action.payload.parentType] = state[action.payload.parentType].filter((el: RecordI) => el.id !== action.payload.id);
-			return state;
-		},
 		addRecord: (state: RecordStoreI, action): RecordStoreI => {
 			const key: string = action.payload.key;
 			state[key] = [...state[key], action.payload.state];
@@ -20,12 +16,16 @@ export const recordsSlice = createSlice({
 		},
 		putRecord: (state: RecordStoreI, action): RecordStoreI => {
 			const key: string = action.payload.key;
-			const index = state[key].findIndex((el: RecordI) => el.id === action.payload.state.id);
+			const index: number = state[key].findIndex((el: RecordI) => el.id === action.payload.state.id);
 			state[key][index] = action.payload.state;
 			return state;
 		},
 		setRecords: (state: RecordStoreI, action): RecordStoreI => {
 			return {...state, ...action.payload};
+		},
+		deleteRecord: (state: RecordStoreI, action): RecordStoreI => {
+			state[action.payload.parentType] = state[action.payload.parentType].filter((el: RecordI) => el.id !== action.payload.id);
+			return state;
 		},
 	},
 });

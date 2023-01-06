@@ -1,6 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
 import RecordTypesList from './RecordTypesList';
-import { deleteAction } from '../../controller/Record';
 import { BankAccountI } from '../../types/BankAccount';
 import { useDispatch, useSelector } from 'react-redux';
 import { navigationType } from '../../types/Navigation';
@@ -11,11 +10,11 @@ import { AppDispatch, RootState } from '../../types/redux';
 import BankAccountList from '../Bank-account/BankAccountList';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { recordFormState, recordTypes } from '../../model/record';
-import { stateAction, notification } from '../../controller/reusable';
 import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
+import { stateAction, notification, convertedDate } from '../../controller/reusable';
 import React, { useReducer, ReactNode, useEffect, useState, ReactElement } from 'react';
 import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
-import { createRecord, constructStyleObjForTextButton, constructStyleObjForButton, recordReducer, updateRecord } from '../../controller/Record';
+import { createRecord, constructStyleObjForTextButton, constructStyleObjForButton, recordReducer, updateRecord, deleteAction } from '../../controller/Record';
 
 export default function CreateRecord({ route }: any): ReactElement {
 	const [key, setKey] = useState<string>('');
@@ -32,7 +31,7 @@ export default function CreateRecord({ route }: any): ReactElement {
 
 	useEffect(() => {
 		stateAction(dispatchState, 'add', 'id', route.params?.record.id || uuidv4());
-		stateAction(dispatchState, 'add', 'date', route.params?.record.date || JSON.parse(JSON.stringify(new Date())).split('T')[0]);
+		stateAction(dispatchState, 'add', 'date', route.params?.record.date || convertedDate(new Date()));
 		if(route.params?.record) {
 			setKey(route.params?.record.parentType);
 			setAmmountBackUp((route.params?.record.ammount)?.toString());
@@ -51,9 +50,9 @@ export default function CreateRecord({ route }: any): ReactElement {
 	}, [state]);
 
 	const buttonAction = (): void => {
-		const id = bankAccounts.findIndex((el: BankAccountI) => el.id === state.bankAccountId);
+		const id: number = bankAccounts.findIndex((el: BankAccountI) => el.id === state.bankAccountId);
 		if((new Date(state.date) >= new Date(bankAccounts[id].date))) {
-			let message;
+			let message: string;
 			if(route.params?.record) {
 				message = 'Bank record has been updated';
 				updateRecord(dispatch, state, key, ammountBackUp);
@@ -73,7 +72,7 @@ export default function CreateRecord({ route }: any): ReactElement {
 			switch(event.type) {
 			case 'set':
 				setDate(date);
-				stateAction(dispatchState, 'add', 'date', JSON.parse(JSON.stringify(date)).split('T')[0]);
+				stateAction(dispatchState, 'add', 'date', convertedDate(date));
 				break;
 			case 'dismissed':
 				break;

@@ -2,6 +2,14 @@ import { RecordStoreI, RecordI } from '../types/Record';
 import { BankAccountBackUpI } from '../types/bankAccountBackUp';
 import { DateI, RecordDataI, ConstructDateI, CreateBalanceDataI } from '../types/Chart';
 
+export const errorMsg: object = {
+	color: 'red',
+	fontSize: 22.5,
+	marginVertical: 10,
+	fontWeight: 'bold',
+	textAlign: 'center',
+};
+
 export const constructDate = (): ConstructDateI => {
 	const startDate: Date = new Date();
 	startDate.setDate((new Date()).getDate()-7);

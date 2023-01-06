@@ -32,6 +32,11 @@ export interface ConstructDateI {
 	start: string;
 }
 
+export interface BalanceChartDataI {
+	labels: Array<string>;
+	datasets: Array<number>;
+}
+
 export interface CreateBalanceDataI {
 	labels: Array<string>;
 	datasets: Array<number>;

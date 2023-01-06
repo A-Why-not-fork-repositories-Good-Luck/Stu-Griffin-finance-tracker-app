@@ -8,7 +8,7 @@ import { RFPercentage } from 'react-native-responsive-fontsize';
 import React, { ReactElement, useEffect, useState } from 'react';
 import PeriodChoosingComponent from '../reusable/PeriodChoosingComponent';
 import { StyleSheet, Dimensions, View, Text, TouchableOpacity } from 'react-native';
-import { constructDate, createRecordData, calculateFullAmmount } from '../../controller/Chart';
+import { constructDate, createRecordData, calculateFullAmmount, errorMsg } from '../../controller/Chart';
 
 const width = Dimensions.get('window').width;
 
@@ -60,7 +60,7 @@ export default function RecordsChart(): ReactElement {
 							backgroundColor={'transparent'}
 						/>
 					</> :
-					<Text style={{fontSize: 22.5, color: 'red', fontWeight: 'bold', textAlign: 'center', marginVertical: 10}}>You have no records in this period of time or actually</Text>
+					<Text style={errorMsg}>You have no records in this period of time or actually</Text>
 			}
 			<PeriodChoosingComponent
 				closeModal={() => {
