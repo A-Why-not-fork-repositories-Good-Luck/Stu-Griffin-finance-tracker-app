@@ -1,21 +1,21 @@
-import { StatusBar } from 'expo-status-bar';
-import { RecordStoreI } from '../types/Record';
-import BalanceChart from './Charts/BalanceChart';
-import RecordsChart from './Charts/RecordsChart';
-import AddIcon from '../../assets/icons/AddIcon';
-import { BankAccountI } from '../types/BankAccount';
-import { navigationType } from '../types/Navigation';
-import RecordsHistory from './Record/RecordsHistory';
-import React, { ReactElement, useEffect } from 'react';
-import BankAccounts from './Bank-account/BankAccounts';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../types/redux';
-import { useNavigation } from '@react-navigation/native';
-import { BankAccountBackUpI } from '../types/bankAccountBackUp';
-import { getSaveData, createFirstBankAccountBackUpByDate } from '../controller/MainPage';
-import { ScrollView, StyleSheet, TouchableOpacity, View, Dimensions, AppState } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { RecordStoreI } from "../types/Record";
+import BalanceChart from "./Charts/BalanceChart";
+import RecordsChart from "./Charts/RecordsChart";
+import AddIcon from "../../assets/icons/AddIcon";
+import { BankAccountI } from "../types/BankAccount";
+import { navigationType } from "../types/Navigation";
+import RecordsHistory from "./Record/RecordsHistory";
+import React, { ReactElement, useEffect } from "react";
+import BankAccounts from "./Bank-account/BankAccounts";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../types/redux";
+import { useNavigation } from "@react-navigation/native";
+import { BankAccountBackUpI } from "../types/bankAccountBackUp";
+import { getSaveData, createFirstBankAccountBackUpByDate } from "../controller/MainPage";
+import { ScrollView, StyleSheet, TouchableOpacity, View, Dimensions, AppState } from "react-native";
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 
 export default function MainPage(): ReactElement {
 	const dispatch: AppDispatch = useDispatch();
@@ -29,7 +29,7 @@ export default function MainPage(): ReactElement {
 	}, []);
 
 	useEffect(() => {
-		const subscription = AppState.addEventListener('change', nextAppState => {
+		const subscription = AppState.addEventListener("change", nextAppState => {
 			getSaveData(nextAppState, dispatch, {records, bankAccounts, bankAccountsBackUp});
 		});
 		
@@ -46,8 +46,8 @@ export default function MainPage(): ReactElement {
 				<RecordsChart/>
 				<RecordsHistory/>
 			</ScrollView>
-			<TouchableOpacity style={styles.addIcon} onPress={() => navigation.navigate('create-record-page')}>
-				<AddIcon width={60} height={60} fillCross={'white'} fillRound={'#236F57'}/>
+			<TouchableOpacity style={styles.addIcon} onPress={() => navigation.navigate("create-record-page")}>
+				<AddIcon width={60} height={60} fillCross={"white"} fillRound={"#236F57"}/>
 			</TouchableOpacity>
 			<StatusBar style="auto" />
 		</View>
@@ -57,14 +57,14 @@ export default function MainPage(): ReactElement {
 const styles = StyleSheet.create({
 	addIcon: {
 		zIndex: 100,
-		top: height - 75,
+		top: height - 10,
 		left: width - 75,
-		position: 'absolute',
+		position: "absolute",
 	},
 	container: {
 		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
+		alignItems: "center",
+		justifyContent: "center",
 	},
 	scrollView: {
 		zIndex: 1,
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
 		height: height,
 	},
 	scrollViewContainer: {
-		alignItems: 'center',
-		justifyContent: 'center',
+		alignItems: "center",
+		justifyContent: "center",
 	}
 });

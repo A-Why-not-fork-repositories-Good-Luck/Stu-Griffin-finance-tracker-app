@@ -1,9 +1,9 @@
-import { BankAccountBackUpI } from '../types/bankAccountBackUp';
+import { BankAccountBackUpI } from "../types/bankAccountBackUp";
 
 export const bankAccountBackUp: BankAccountBackUpI = {
-	id: '',
-	date: '',
-	ammount: '',
+	id: "",
+	date: "",
+	ammount: "",
 };
 
 export const bankAccountsBackUpStore: Array<BankAccountBackUpI> = [];

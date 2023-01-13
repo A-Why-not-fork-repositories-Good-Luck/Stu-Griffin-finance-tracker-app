@@ -1,9 +1,9 @@
-import MainPage from './MainPage';
-import React, { ReactElement } from 'react';
-import CreateRecord from './Record/CreateRecord';
-import FlashMessage from 'react-native-flash-message';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import MainPage from "./MainPage";
+import React, { ReactElement } from "react";
+import CreateRecord from "./Record/CreateRecord";
+import FlashMessage from "react-native-flash-message";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const Stack = createNativeStackNavigator();
 
@@ -23,7 +23,7 @@ function Navigation(): ReactElement {
 				<Stack.Screen
 					options={
 						{
-							title: 'Add record',
+							title: "Add record",
 						}
 					}
 					component={CreateRecord}

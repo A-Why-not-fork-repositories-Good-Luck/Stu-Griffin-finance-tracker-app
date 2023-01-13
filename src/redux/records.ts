@@ -1,9 +1,9 @@
-import { recordStore } from '../model/record';
-import { createSlice } from '@reduxjs/toolkit';
-import { RecordI, RecordStoreI } from '../types/Record';
+import { recordStore } from "../model/record";
+import { createSlice } from "@reduxjs/toolkit";
+import { RecordI, RecordStoreI } from "../types/Record";
 
 export const recordsSlice = createSlice({
-	name: 'records',
+	name: "records",
 	initialState: recordStore,
 	reducers: {
 		deleteRecords: (): RecordStoreI => {

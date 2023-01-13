@@ -1,4 +1,4 @@
-import { PropsI } from './reusable';
+import { PropsI } from "./reusable";
 
 export interface CardItemI {
 	item: BankAccountI;

@@ -1,4 +1,4 @@
-import { KeyboardType } from 'react-native';
+import { KeyboardType } from "react-native";
 
 export interface InputComponentPropsI {
 	value: string;

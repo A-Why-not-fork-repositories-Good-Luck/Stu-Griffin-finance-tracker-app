@@ -1,16 +1,16 @@
-import Modal from 'react-native-modal';
-import 'react-native-get-random-values';
-import React, { ReactElement } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import CrossIcon from '../../../assets/icons/CrossIcon';
-import { FlatList } from 'react-native-gesture-handler';
-import DeleteIcon from '../../../assets/icons/DeleteIcon';
-import { AppDispatch, RootState } from '../../types/redux';
-import { deleteBankAccount } from '../../redux/bankAccount';
-import { RFPercentage } from 'react-native-responsive-fontsize';
-import { deleteBankAccountBackUp } from '../../redux/bankAccountBackUp';
-import { BankAccountI, CardItemI, BankAccountListPropsI } from '../../types/BankAccount';
-import { StyleSheet, View, Dimensions, Text, TouchableOpacity, Pressable } from 'react-native';
+import Modal from "react-native-modal";
+import "react-native-get-random-values";
+import React, { ReactElement } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import CrossIcon from "../../../assets/icons/CrossIcon";
+import { FlatList } from "react-native-gesture-handler";
+import DeleteIcon from "../../../assets/icons/DeleteIcon";
+import { AppDispatch, RootState } from "../../types/redux";
+import { deleteBankAccount } from "../../redux/bankAccount";
+import { RFPercentage } from "react-native-responsive-fontsize";
+import { deleteBankAccountBackUp } from "../../redux/bankAccountBackUp";
+import { BankAccountI, CardItemI, BankAccountListPropsI } from "../../types/BankAccount";
+import { StyleSheet, View, Dimensions, Text, TouchableOpacity, Pressable } from "react-native";
 
 export default function BankAccountList({modalStatus, closeModal, saveChanges}: BankAccountListPropsI): ReactElement {
 	const dispatch: AppDispatch = useDispatch();
@@ -72,52 +72,52 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		marginVertical: 10,
 		marginHorizontal: 10,
-		justifyContent: 'space-around',
+		justifyContent: "space-around",
 	},
 	modal: {
 		padding: 15,
 		paddingTop: 30,
 		borderRadius: 15,
-		alignItems: 'center',
+		alignItems: "center",
 		paddingHorizontal: 15,
-		backgroundColor: 'white',
-		width: Dimensions.get('window').width - 70,
-		height: Dimensions.get('window').height - 150,
+		backgroundColor: "white",
+		width: Dimensions.get("window").width - 70,
+		height: Dimensions.get("window").height - 150,
 	},
 	typeIcon: {
 		width: 50,
 		height: 50,
 		borderWidth: 2,
 		borderRadius: 100,
-		alignItems: 'center',
-		borderColor: '#236F57',
-		justifyContent: 'center',
+		alignItems: "center",
+		borderColor: "#236F57",
+		justifyContent: "center",
 	},
 	typeCard: {
 		marginVertical: 10,
-		flexDirection: 'row',
-		alignItems: 'center',
+		flexDirection: "row",
+		alignItems: "center",
 		marginHorizontal: 10,
 	},
 	errorMsg: {
 		fontSize: 25, 
-		color: 'red', 
-		fontWeight: 'bold', 
-		textAlign: 'center',
+		color: "red", 
+		fontWeight: "bold", 
+		textAlign: "center",
 	},
 	cardText: {
-		color: 'black',
-		fontWeight: 'bold',
+		color: "black",
+		fontWeight: "bold",
 		fontSize: RFPercentage(2.5),
 	},
 	cardTitle: {
-		color: 'black',
+		color: "black",
 		fontSize: RFPercentage(2),
 	},
 	modalArea: {
 		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
+		alignItems: "center",
+		justifyContent: "center",
 	},
 	typeTitle: {
 		marginLeft: 10,
@@ -125,18 +125,18 @@ const styles = StyleSheet.create({
 	},
 	errorArea: {
 		flex: 1,
-		alignItems: 'center', 
-		justifyContent: 'center',
+		alignItems: "center", 
+		justifyContent: "center",
 	},
 	crossIcon: {
-		top: '-2.5%',
-		left: '42.5%',
-		position: 'relative',
+		top: "-2.5%",
+		left: "42.5%",
+		position: "relative",
 	},
 	bankAccountCard: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		width: Dimensions.get('window').width - 120,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between",
+		width: Dimensions.get("window").width - 120,
 	},
 });

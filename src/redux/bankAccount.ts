@@ -1,9 +1,9 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { BankAccountI } from '../types/BankAccount';
-import { bankAccountsStore } from '../model/bankAccount';
+import { createSlice } from "@reduxjs/toolkit";
+import { BankAccountI } from "../types/BankAccount";
+import { bankAccountsStore } from "../model/bankAccount";
 
 export const bankAccountsSlice = createSlice({
-	name: 'bank-accounts',
+	name: "bank-accounts",
 	initialState: bankAccountsStore,
 	reducers: {
 		deleteBankAccounts: (): Array<BankAccountI> => {
@@ -17,8 +17,8 @@ export const bankAccountsSlice = createSlice({
 		},
 		changeBankAccount: (state:Array<BankAccountI>, action): Array<BankAccountI> => {
 			const index: number = state.findIndex((el: BankAccountI) => el.id === action.payload.bankAccountId);
-			if(action.payload.status === 'create') {
-				state[index].ammount = (action.payload.recordType === 'income') ? (+state[index].ammount + +action.payload.recordAmmount).toString() : (+state[index].ammount - +action.payload.recordAmmount).toString();
+			if(action.payload.status === "create") {
+				state[index].ammount = (action.payload.recordType === "income") ? (+state[index].ammount + +action.payload.recordAmmount).toString() : (+state[index].ammount - +action.payload.recordAmmount).toString();
 			} else {
 				state[index].ammount = (+state[index].ammount + +action.payload.recordAmmount).toString();
 			}

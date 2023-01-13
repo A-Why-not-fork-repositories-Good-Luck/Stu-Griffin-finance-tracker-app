@@ -1,29 +1,29 @@
-import Modal from 'react-native-modal';
-import 'react-native-get-random-values';
-import { convertedDate } from '../../controller/reusable';
-import { RFPercentage } from 'react-native-responsive-fontsize';
-import React, { useState, ReactElement, useEffect } from 'react';
-import { PeriodChoosingComponentPropsI } from '../../types/Times';
-import { StyleSheet, TouchableOpacity, View, Dimensions, Text } from 'react-native';
-import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import Modal from "react-native-modal";
+import "react-native-get-random-values";
+import { convertedDate } from "../../controller/reusable";
+import { RFPercentage } from "react-native-responsive-fontsize";
+import React, { useState, ReactElement, useEffect } from "react";
+import { PeriodChoosingComponentPropsI } from "../../types/Times";
+import { StyleSheet, TouchableOpacity, View, Dimensions, Text } from "react-native";
+import RNDateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 
 export default function PeriodChoosingComponent({modalStatus, closeModal, saveChanges}: PeriodChoosingComponentPropsI): ReactElement {
-	const [type, setType] = useState<string>('');
-	const [endDate, setEndDate] = useState<string>('');
+	const [type, setType] = useState<string>("");
+	const [endDate, setEndDate] = useState<string>("");
 	const [date, setDate] = useState<Date>(new Date());
-	const [startDate, setStartDate] = useState<string>('');
+	const [startDate, setStartDate] = useState<string>("");
 	const [buttonStatus, setButtonStatus] = useState<boolean>(false);
 	const [datePickerShowStatus, setDatePickerShowStatus] = useState<boolean>(false);
 
 	useEffect(() => {
-		setButtonStatus(endDate !== '' && startDate !== '' && startDate <= endDate);
+		setButtonStatus(endDate !== "" && startDate !== "" && startDate <= endDate);
 	}, [endDate, startDate]);
 
 	const createRecordFunc = (): void => {
-		setType('');
+		setType("");
 		closeModal();
-		setEndDate('');
-		setStartDate('');
+		setEndDate("");
+		setStartDate("");
 		setDate(new Date());
 		setButtonStatus(false);
 		setDatePickerShowStatus(false);
@@ -43,13 +43,13 @@ export default function PeriodChoosingComponent({modalStatus, closeModal, saveCh
 		setDatePickerShowStatus(false);
 		if(date) {
 			switch(event.type) {
-			case 'set':
+			case "set":
 				setDate(date);
 				switch(type) {
-				case 'start':
+				case "start":
 					setStartDate(convertedDate(date));
 					break;
-				case 'end':
+				case "end":
 					setEndDate(convertedDate(date));
 					break;
 				default:
@@ -65,11 +65,11 @@ export default function PeriodChoosingComponent({modalStatus, closeModal, saveCh
 	return(
 		<Modal isVisible={modalStatus} style={styles.modalArea}>
 			<View style={styles.modal}>
-				<TouchableOpacity onPress={() => dateOpenClose('start')}>
+				<TouchableOpacity onPress={() => dateOpenClose("start")}>
 					<Text style={styles.title}>Start date</Text>
 					<Text style={styles.input}>{startDate}</Text>
 				</TouchableOpacity>
-				<TouchableOpacity onPress={() => dateOpenClose('end')}>
+				<TouchableOpacity onPress={() => dateOpenClose("end")}>
 					<Text style={styles.title}>End date</Text>
 					<Text style={styles.input}>{endDate}</Text>
 				</TouchableOpacity>
@@ -88,18 +88,18 @@ const styles = StyleSheet.create({
 		borderRadius: 15,
 		paddingVertical: 15,
 		paddingHorizontal: 15,
-		backgroundColor: 'white',
-		justifyContent: 'space-between',
-		width: Dimensions.get('window').width - 80,
-		height: Dimensions.get('window').height - 525,
+		backgroundColor: "white",
+		justifyContent: "space-between",
+		width: Dimensions.get("window").width - 80,
+		height: Dimensions.get("window").height - 525,
 	},
 	title: {
-		color: 'gray',
+		color: "gray",
 		fontSize: RFPercentage(2),
 	},
 	input: {
-		color: 'black',
-		borderColor: 'gray',
+		color: "black",
+		borderColor: "gray",
 		borderBottomWidth: 1,
 		fontSize: RFPercentage(2),
 	},
@@ -107,16 +107,16 @@ const styles = StyleSheet.create({
 		padding: 10,
 		marginTop: 10,
 		borderRadius: 10,
-		backgroundColor: '#236F57',
+		backgroundColor: "#236F57",
 	},
 	modalArea: {
 		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
+		alignItems: "center",
+		justifyContent: "center",
 	},
 	buttonText: {
-		color: 'white',
-		textAlign: 'center',
+		color: "white",
+		textAlign: "center",
 		fontSize: RFPercentage(2.5),
 	},
 });

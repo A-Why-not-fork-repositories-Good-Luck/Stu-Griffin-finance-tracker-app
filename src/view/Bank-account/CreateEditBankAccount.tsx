@@ -1,19 +1,19 @@
-import Modal from 'react-native-modal';
-import 'react-native-get-random-values';
-import { Picker } from '@react-native-picker/picker';
-import FlashMessage from 'react-native-flash-message';
-import { useDispatch, useSelector } from 'react-redux';
-import CrossIcon from '../../../assets/icons/CrossIcon';
-import InputComponent from '../reusable/InputComponent';
-import { AppDispatch, RootState } from '../../types/redux';
-import { RFPercentage } from 'react-native-responsive-fontsize';
-import { currency, bankAccountFormState } from '../../model/bankAccount';
-import { CreateEditBankAccountPropsI, BankAccountI } from '../../types/BankAccount';
-import { StyleSheet, TouchableOpacity, View, Dimensions, Text } from 'react-native';
-import { notification, stateAction, convertedDate } from '../../controller/reusable';
-import React, { useReducer, ReactNode, useEffect, ReactElement, useState } from 'react';
-import { bankAccountReducer, getInitialData, createBankAccount } from '../../controller/BankAccount';
-import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import Modal from "react-native-modal";
+import "react-native-get-random-values";
+import { Picker } from "@react-native-picker/picker";
+import FlashMessage from "react-native-flash-message";
+import { useDispatch, useSelector } from "react-redux";
+import CrossIcon from "../../../assets/icons/CrossIcon";
+import InputComponent from "../reusable/InputComponent";
+import { AppDispatch, RootState } from "../../types/redux";
+import { RFPercentage } from "react-native-responsive-fontsize";
+import { currency, bankAccountFormState } from "../../model/bankAccount";
+import { CreateEditBankAccountPropsI, BankAccountI } from "../../types/BankAccount";
+import { StyleSheet, TouchableOpacity, View, Dimensions, Text } from "react-native";
+import { notification, stateAction, convertedDate } from "../../controller/reusable";
+import React, { useReducer, ReactNode, useEffect, ReactElement, useState } from "react";
+import { bankAccountReducer, getInitialData, createBankAccount } from "../../controller/BankAccount";
+import RNDateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 
 export default function CreateEditBankAccount({modalStatus, closeModal, cardId}: CreateEditBankAccountPropsI): ReactElement {
 	const dispatch: AppDispatch = useDispatch();
@@ -24,7 +24,7 @@ export default function CreateEditBankAccount({modalStatus, closeModal, cardId}:
 	const bankAccounts: Array<BankAccountI> = useSelector((state: RootState) => state.bankAccounts);
 
 	useEffect(() => {
-		(state.ammount !== '' && state.title !== '') ? setButtonStatus(true) : setButtonStatus(false);
+		(state.ammount !== "" && state.title !== "") ? setButtonStatus(true) : setButtonStatus(false);
 	}, [state]);
 
 	useEffect(() => {
@@ -35,17 +35,17 @@ export default function CreateEditBankAccount({modalStatus, closeModal, cardId}:
 		createBankAccount(cardId, dispatch, state);
 		closeModal();
 		setDate(new Date());
-		notification('success', (cardId === '') ? 'New bank account has been created' : 'Changes were saved');
+		notification("success", (cardId === "") ? "New bank account has been created" : "Changes were saved");
 	};
 
 	const setDateFunc = (event: DateTimePickerEvent, date: Date|undefined): void => {
 		if(date) {
 			switch(event.type) {
-			case 'set':
+			case "set":
 				setDate(date);
-				stateAction(dispatchState, 'add', 'date', convertedDate(date));
+				stateAction(dispatchState, "add", "date", convertedDate(date));
 				break;
-			case 'dismissed':
+			case "dismissed":
 				break;
 			default:
 			}
@@ -55,7 +55,7 @@ export default function CreateEditBankAccount({modalStatus, closeModal, cardId}:
 
 	return(
 		<Modal isVisible={modalStatus} style={styles.modalArea} onBackdropPress={closeModal}>
-			<View style={[styles.modal, (cardId === '') ? { height: 450 } : { height: 375 }]}>
+			<View style={[styles.modal, (cardId === "") ? { height: 450 } : { height: 375 }]}>
 				<TouchableOpacity style={styles.crossIcon} onPress={closeModal}>
 					<CrossIcon/>
 				</TouchableOpacity>
@@ -64,7 +64,7 @@ export default function CreateEditBankAccount({modalStatus, closeModal, cardId}:
 					value={state?.title}
 					keyboardType='default'
 					changeValueFunc={(value: string) => {
-						stateAction(dispatchState, 'add', 'title', value);
+						stateAction(dispatchState, "add", "title", value);
 					}}
 				/>
 				<InputComponent
@@ -72,11 +72,11 @@ export default function CreateEditBankAccount({modalStatus, closeModal, cardId}:
 					keyboardType='numeric'
 					value={state?.ammount.toString()}
 					changeValueFunc={(value: string) => {
-						stateAction(dispatchState, 'add', 'ammount', value);
+						stateAction(dispatchState, "add", "ammount", value);
 					}}
 				/>
 				{
-					(cardId === '') && 
+					(cardId === "") && 
 					<TouchableOpacity onPress={() => setDatePickerShowStatus(true)}>
 						<Text style={styles.title}>Date</Text>
 						<Text style={styles.input}>{state?.date}</Text>
@@ -94,7 +94,7 @@ export default function CreateEditBankAccount({modalStatus, closeModal, cardId}:
 				<Picker
 					selectedValue={state?.currency}
 					onValueChange={(value: string) => {
-						stateAction(dispatchState, 'add', 'currency', value);
+						stateAction(dispatchState, "add", "currency", value);
 					}}
 				>
 					{
@@ -106,7 +106,7 @@ export default function CreateEditBankAccount({modalStatus, closeModal, cardId}:
 					}
 				</Picker>
 				<TouchableOpacity disabled={!buttonStatus} style={[styles.button, (!buttonStatus) ? {opacity: 0.5} : {opacity: 1}]} onPress={createBankAccountFunc}>
-					<Text style={styles.buttonText}>{(cardId === '') ? 'Add bank account' : 'Save changes'}</Text>
+					<Text style={styles.buttonText}>{(cardId === "") ? "Add bank account" : "Save changes"}</Text>
 				</TouchableOpacity>
 			</View>
 			<FlashMessage position="top" /> 
@@ -120,18 +120,18 @@ const styles = StyleSheet.create({
 		borderRadius: 15,
 		paddingVertical: 15,
 		paddingHorizontal: 15,
-		backgroundColor: 'white',
-		justifyContent: 'space-between',
-		width: Dimensions.get('window').width - 50,
+		backgroundColor: "white",
+		justifyContent: "space-between",
+		width: Dimensions.get("window").width - 50,
 	},
 	title: {
-		color: 'gray',
+		color: "gray",
 		fontSize: RFPercentage(2),
 	},
 	input: {
 		marginTop: 5,
-		color: 'black',
-		borderColor: 'gray',
+		color: "black",
+		borderColor: "gray",
 		borderBottomWidth: 1,
 		fontSize: RFPercentage(2.2),
 	},
@@ -139,21 +139,21 @@ const styles = StyleSheet.create({
 		padding: 10,
 		marginTop: 10,
 		borderRadius: 10,
-		backgroundColor: '#236F57',
+		backgroundColor: "#236F57",
 	},
 	modalArea: {
 		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
+		alignItems: "center",
+		justifyContent: "center",
 	},
 	crossIcon: {
-		left: '92.5%',
-		top: '-2.5%',
-		position: 'relative',
+		left: "92.5%",
+		top: "-2.5%",
+		position: "relative",
 	},
 	buttonText: {
-		color: 'white',
-		textAlign: 'center',
+		color: "white",
+		textAlign: "center",
 		fontSize: RFPercentage(2.2),
 	},
 });

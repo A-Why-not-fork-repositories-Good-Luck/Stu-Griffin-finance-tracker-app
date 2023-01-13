@@ -1,17 +1,17 @@
-import 'react-native-get-random-values';
-import { useSelector } from 'react-redux';
-import { TypeI } from '../../types/Chart';
-import { types } from '../../model/record';
-import { RootState } from '../../types/redux';
-import { BankAccountI } from '../../types/BankAccount';
-import { navigationType } from '../../types/Navigation';
-import { useNavigation } from '@react-navigation/native';
-import { RecordStoreI, RecordI } from '../../types/Record';
-import { RFPercentage } from 'react-native-responsive-fontsize';
-import GrayCircleIcon from '../../../assets/icons/GrayCircleIcon';
-import React, { ReactElement, ReactNode, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
-import { constructListData, getRecordAmmountStyle, getRecordAmmountSymbol, getIconColor } from '../../controller/Record';
+import "react-native-get-random-values";
+import { useSelector } from "react-redux";
+import { TypeI } from "../../types/Chart";
+import { types } from "../../model/record";
+import { RootState } from "../../types/redux";
+import { BankAccountI } from "../../types/BankAccount";
+import { navigationType } from "../../types/Navigation";
+import { useNavigation } from "@react-navigation/native";
+import { RecordStoreI, RecordI } from "../../types/Record";
+import { RFPercentage } from "react-native-responsive-fontsize";
+import GrayCircleIcon from "../../../assets/icons/GrayCircleIcon";
+import React, { ReactElement, ReactNode, useEffect, useState } from "react";
+import { ScrollView, StyleSheet, Text, View, Dimensions, TouchableOpacity } from "react-native";
+import { constructListData, getRecordAmmountStyle, getRecordAmmountSymbol, getIconColor } from "../../controller/Record";
 
 export default function RecordsHistory(): ReactElement {
 	const navigation: navigationType = useNavigation();
@@ -27,7 +27,7 @@ export default function RecordsHistory(): ReactElement {
 		const typeIcon: Array<TypeI> = types.filter((el: TypeI) => el.title === item.parentType);
 		const res: Array<BankAccountI> = bankAccounts.filter((el: BankAccountI) => el.id === item.bankAccountId);
 		return(
-			<TouchableOpacity onPress={() => navigation.navigate('create-record-page', {record: item})} style={styles.card} key={item.id}>
+			<TouchableOpacity onPress={() => navigation.navigate("create-record-page", {record: item})} style={styles.card} key={item.id}>
 				{getRecordTypeIcon(typeIcon[0]?.icon, typeIcon[0]?.color)}
 				<View>
 					<Text style={styles.type}>{item.type}</Text>
@@ -48,11 +48,11 @@ export default function RecordsHistory(): ReactElement {
 					{icon}
 				</View>
 				:
-				<GrayCircleIcon width={50} height={50} fill={'gray'}/>
+				<GrayCircleIcon width={50} height={50} fill={"gray"}/>
 		);
 	};
 
-	const getRecordComment = (comment: string): ReactNode => (comment !== '') && <Text>{comment}</Text>;
+	const getRecordComment = (comment: string): ReactNode => (comment !== "") && <Text>{comment}</Text>;
 
 	return (
 		<View style={styles.container}>
@@ -80,23 +80,23 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		borderRadius: 10,
 		marginVertical: 10,
-		flexDirection: 'row',
-		alignItems: 'center',
+		flexDirection: "row",
+		alignItems: "center",
 		marginHorizontal: 10,
-		backgroundColor: 'white',
-		justifyContent: 'space-between',
+		backgroundColor: "white",
+		justifyContent: "space-between",
 	},
 	type: {
 		fontSize: RFPercentage(2),
 	},
 	title: {
-		color: 'black',
+		color: "black",
 		marginVertical: 10,
-		textAlign: 'center',
+		textAlign: "center",
 		fontSize: RFPercentage(3.5),
 	},
 	ammount: {
-		fontWeight: 'bold',
+		fontWeight: "bold",
 		fontSize: RFPercentage(2),
 	},
 	container: {
@@ -104,15 +104,15 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		marginBottom: 100,
 		paddingVertical: 10,
-		alignItems: 'center',
-		backgroundColor: 'white',
-		justifyContent: 'center',
-		width: Dimensions.get('window').width-25,
+		alignItems: "center",
+		backgroundColor: "white",
+		justifyContent: "center",
+		width: Dimensions.get("window").width-25,
 	},
 	iconCircle: {
 		padding: 10,
 		borderWidth: 2,
 		borderRadius: 100,
-		borderColor: '#236F57',
+		borderColor: "#236F57",
 	},
 });

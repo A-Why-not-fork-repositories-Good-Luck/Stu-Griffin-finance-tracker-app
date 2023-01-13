@@ -1,21 +1,21 @@
-import { useSelector } from 'react-redux';
-import { RootState } from '../../types/redux';
-import { RecordStoreI } from '../../types/Record';
-import { PieChart } from 'react-native-chart-kit';
-import { RecordDataI, DateI } from '../../types/Chart';
-import SettingIcon from '../../../assets/icons/SettingIcon';
-import { RFPercentage } from 'react-native-responsive-fontsize';
-import React, { ReactElement, useEffect, useState } from 'react';
-import PeriodChoosingComponent from '../reusable/PeriodChoosingComponent';
-import { StyleSheet, Dimensions, View, Text, TouchableOpacity } from 'react-native';
-import { constructDate, createRecordData, calculateFullAmmount, errorMsg } from '../../controller/Chart';
+import { useSelector } from "react-redux";
+import { RootState } from "../../types/redux";
+import { RecordStoreI } from "../../types/Record";
+import { PieChart } from "react-native-chart-kit";
+import { RecordDataI, DateI } from "../../types/Chart";
+import SettingIcon from "../../../assets/icons/SettingIcon";
+import { RFPercentage } from "react-native-responsive-fontsize";
+import React, { ReactElement, useEffect, useState } from "react";
+import PeriodChoosingComponent from "../reusable/PeriodChoosingComponent";
+import { StyleSheet, Dimensions, View, Text, TouchableOpacity } from "react-native";
+import { constructDate, createRecordData, calculateFullAmmount, errorMsg } from "../../controller/Chart";
 
-const width = Dimensions.get('window').width;
+const width = Dimensions.get("window").width;
 
 export default function RecordsChart(): ReactElement {
 	const [date, setDate] = useState<DateI>({
-		end: '',
-		start: '',
+		end: "",
+		start: "",
 	});
 	const [fullAmmount, setFullAmmount] = useState<number>(0);
 	const [modalStatus, setModalStatus] = useState<boolean>(false);
@@ -36,7 +36,7 @@ export default function RecordsChart(): ReactElement {
 			<View style={styles.area}>
 				<Text style={styles.title}>Expenses structure</Text>
 				<TouchableOpacity onPress={() => setModalStatus(true)} style={styles.settingBox}>
-					<SettingIcon width={20} height={20} fill={'black'}/>
+					<SettingIcon width={20} height={20} fill={"black"}/>
 				</TouchableOpacity>
 			</View>
 			{
@@ -52,12 +52,12 @@ export default function RecordsChart(): ReactElement {
 							height={220}
 							width={width-25}
 							data={chartData}
-							paddingLeft={'0'}
-							accessor={'ammount'}
+							paddingLeft={"0"}
+							accessor={"ammount"}
 							chartConfig={{
-								color: () => 'black',
+								color: () => "black",
 							}}
-							backgroundColor={'transparent'}
+							backgroundColor={"transparent"}
 						/>
 					</> :
 					<Text style={errorMsg}>You have no records in this period of time or actually</Text>
@@ -82,36 +82,36 @@ const styles = StyleSheet.create({
 	area: {
 		marginTop: 20,
 		width: width-45,
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between",
 	},
 	card: {
 		padding: 10,
 		width: width-25,
 		borderRadius: 10,
 		marginVertical: 10,
-		alignItems: 'center', 
-		justifyContent: 'center', 
-		backgroundColor: 'white',	
+		alignItems: "center", 
+		justifyContent: "center", 
+		backgroundColor: "white",	
 	},
 	title: {
-		fontWeight: 'bold',
+		fontWeight: "bold",
 		fontSize: RFPercentage(3.5),
 	},
 	infoTitle: {
-		color: 'gray',
+		color: "gray",
 		fontSize: RFPercentage(2),
 	},
 	infoValue: {
-		fontWeight: 'bold',
+		fontWeight: "bold",
 		fontSize: RFPercentage(2.5),
 	},
 	settingBox: {
 		padding: 5,
 		borderWidth: 1,
 		borderRadius: 10,
-		alignItems: 'center',
-		justifyContent: 'center',
+		alignItems: "center",
+		justifyContent: "center",
 	},
 });

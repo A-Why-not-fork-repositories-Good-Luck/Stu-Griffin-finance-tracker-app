@@ -1,27 +1,27 @@
-import { v4 as uuidv4 } from 'uuid';
-import RecordTypesList from './RecordTypesList';
-import { BankAccountI } from '../../types/BankAccount';
-import { useDispatch, useSelector } from 'react-redux';
-import { navigationType } from '../../types/Navigation';
-import InputComponent from '../reusable/InputComponent';
-import { useNavigation } from '@react-navigation/native';
-import DeleteIcon from '../../../assets/icons/DeleteIcon';
-import { AppDispatch, RootState } from '../../types/redux';
-import BankAccountList from '../Bank-account/BankAccountList';
-import { RFPercentage } from 'react-native-responsive-fontsize';
-import { recordFormState, recordTypes } from '../../model/record';
-import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
-import { stateAction, notification, convertedDate } from '../../controller/reusable';
-import React, { useReducer, ReactNode, useEffect, useState, ReactElement } from 'react';
-import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
-import { createRecord, constructStyleObjForTextButton, constructStyleObjForButton, recordReducer, updateRecord, deleteAction } from '../../controller/Record';
+import { v4 as uuidv4 } from "uuid";
+import RecordTypesList from "./RecordTypesList";
+import { BankAccountI } from "../../types/BankAccount";
+import { useDispatch, useSelector } from "react-redux";
+import { navigationType } from "../../types/Navigation";
+import InputComponent from "../reusable/InputComponent";
+import { useNavigation } from "@react-navigation/native";
+import DeleteIcon from "../../../assets/icons/DeleteIcon";
+import { AppDispatch, RootState } from "../../types/redux";
+import BankAccountList from "../Bank-account/BankAccountList";
+import { RFPercentage } from "react-native-responsive-fontsize";
+import { recordFormState, recordTypes } from "../../model/record";
+import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
+import { stateAction, notification, convertedDate } from "../../controller/reusable";
+import React, { useReducer, ReactNode, useEffect, useState, ReactElement } from "react";
+import RNDateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
+import { createRecord, constructStyleObjForTextButton, constructStyleObjForButton, recordReducer, updateRecord, deleteAction } from "../../controller/Record";
 
 export default function CreateRecord({ route }: any): ReactElement {
-	const [key, setKey] = useState<string>('');
+	const [key, setKey] = useState<string>("");
 	const dispatch: AppDispatch = useDispatch();
 	const [date, setDate] = useState<Date>(new Date());
 	const navigation: navigationType = useNavigation();
-	const [ammountBackUp, setAmmountBackUp] = useState<string>('');
+	const [ammountBackUp, setAmmountBackUp] = useState<string>("");
 	const [buttonStatus, setButtonStatus] = useState<boolean>(false);
 	const [state, dispatchState] = useReducer(recordReducer, recordFormState);
 	const [datePickerShowStatus, setDatePickerShowStatus] = useState<boolean>(false);
@@ -30,18 +30,18 @@ export default function CreateRecord({ route }: any): ReactElement {
 	const bankAccounts: Array<BankAccountI> = useSelector((state: RootState) => state.bankAccounts);
 
 	useEffect(() => {
-		stateAction(dispatchState, 'add', 'id', route.params?.record.id || uuidv4());
-		stateAction(dispatchState, 'add', 'date', route.params?.record.date || convertedDate(new Date()));
+		stateAction(dispatchState, "add", "id", route.params?.record.id || uuidv4());
+		stateAction(dispatchState, "add", "date", route.params?.record.date || convertedDate(new Date()));
 		if(route.params?.record) {
 			setKey(route.params?.record.parentType);
 			setAmmountBackUp((route.params?.record.ammount)?.toString());
-			stateAction(dispatchState, 'add', 'type', route.params?.record.type);
-			stateAction(dispatchState, 'add', 'color', route.params?.record.color);
-			stateAction(dispatchState, 'add', 'comment', route.params?.record.comment);
-			stateAction(dispatchState, 'add', 'ammount', route.params?.record.ammount);
-			stateAction(dispatchState, 'add', 'recordType', route.params?.record.recordType);
-			stateAction(dispatchState, 'add', 'parentType', route.params?.record.parentType);
-			stateAction(dispatchState, 'add', 'bankAccountId', route.params?.record.bankAccountId);
+			stateAction(dispatchState, "add", "type", route.params?.record.type);
+			stateAction(dispatchState, "add", "color", route.params?.record.color);
+			stateAction(dispatchState, "add", "comment", route.params?.record.comment);
+			stateAction(dispatchState, "add", "ammount", route.params?.record.ammount);
+			stateAction(dispatchState, "add", "recordType", route.params?.record.recordType);
+			stateAction(dispatchState, "add", "parentType", route.params?.record.parentType);
+			stateAction(dispatchState, "add", "bankAccountId", route.params?.record.bankAccountId);
 		}
 	}, []);
 	
@@ -54,27 +54,27 @@ export default function CreateRecord({ route }: any): ReactElement {
 		if((new Date(state.date) >= new Date(bankAccounts[id].date))) {
 			let message: string;
 			if(route.params?.record) {
-				message = 'Bank record has been updated';
+				message = "Bank record has been updated";
 				updateRecord(dispatch, state, key, ammountBackUp);
 			} else {
 				createRecord(dispatch, state, key);
-				message = 'New bank record has been created';
+				message = "New bank record has been created";
 			}
-			notification('success', message);
-			navigation.navigate('main-page');
+			notification("success", message);
+			navigation.navigate("main-page");
 		} else {
-			notification('danger', 'Bank account is younger than your record');
+			notification("danger", "Bank account is younger than your record");
 		}
 	};
 
 	const setDateFunc = (event: DateTimePickerEvent, date: Date|undefined): void => {
 		if(date) {
 			switch(event.type) {
-			case 'set':
+			case "set":
 				setDate(date);
-				stateAction(dispatchState, 'add', 'date', convertedDate(date));
+				stateAction(dispatchState, "add", "date", convertedDate(date));
 				break;
-			case 'dismissed':
+			case "dismissed":
 				break;
 			default:
 			}
@@ -88,7 +88,7 @@ export default function CreateRecord({ route }: any): ReactElement {
 				(route.params) &&
 				<TouchableOpacity onPress={() => {
 					deleteAction(dispatch, route.params.record);
-					notification('success', 'Bank account has been removed');
+					notification("success", "Bank account has been removed");
 				}} style={styles.deleteIcon}>
 					<DeleteIcon width={30} height={30}/>
 				</TouchableOpacity>
@@ -101,7 +101,7 @@ export default function CreateRecord({ route }: any): ReactElement {
 								key={index}
 								style={[styles.recordType, constructStyleObjForButton(el, state)]}
 								onPress={() => {
-									stateAction(dispatchState, 'add', 'recordType', el.toLowerCase());
+									stateAction(dispatchState, "add", "recordType", el.toLowerCase());
 								}} 
 							>
 								<Text style={[styles.recordTypeText, constructStyleObjForTextButton(el, state)]}>{el}</Text>
@@ -115,7 +115,7 @@ export default function CreateRecord({ route }: any): ReactElement {
 				value={state?.ammount}
 				keyboardType='numeric'
 				changeValueFunc={(value: string) => {
-					stateAction(dispatchState, 'add', 'ammount', value);
+					stateAction(dispatchState, "add", "ammount", value);
 				}}
 			/>
 			<InputComponent
@@ -123,10 +123,10 @@ export default function CreateRecord({ route }: any): ReactElement {
 				value={state?.comment}
 				keyboardType='default'
 				changeValueFunc={(value: string) => {
-					stateAction(dispatchState, 'add', 'comment', value);
+					stateAction(dispatchState, "add", "comment", value);
 				}}
 			/>
-			<View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
+			<View style={{flexDirection: "row", justifyContent: "space-around", alignItems: "center"}}>
 				<TouchableOpacity style={[styles.button, {width: 150}]} onPress={() => {
 					setRecordTypeModalStatus(true);
 				}}>
@@ -143,7 +143,7 @@ export default function CreateRecord({ route }: any): ReactElement {
 				<Text style={styles.input}>{state?.date}</Text>
 			</TouchableOpacity>
 			<TouchableOpacity disabled={!buttonStatus} style={[styles.button, (!buttonStatus) ? {opacity: 0.5} : {opacity: 1}]} onPress={buttonAction}>
-				<Text style={styles.buttonText}>{(route.params?.record) ? 'Update record' : 'Save record'}</Text>
+				<Text style={styles.buttonText}>{(route.params?.record) ? "Update record" : "Save record"}</Text>
 			</TouchableOpacity>
 			<RecordTypesList
 				closeModal={() => {
@@ -151,7 +151,7 @@ export default function CreateRecord({ route }: any): ReactElement {
 				}}
 				modalStatus={recordTypeModalStatus}
 				saveChanges={(key: string, value: string|Array<number>) => {
-					stateAction(dispatchState, 'add', key, value);
+					stateAction(dispatchState, "add", key, value);
 				}}
 				saveKey={(el: string) => setKey(el)}
 			/>
@@ -160,7 +160,7 @@ export default function CreateRecord({ route }: any): ReactElement {
 					setBankAccountModalStatus(false);
 				}}
 				saveChanges={(item: string) => {
-					stateAction(dispatchState, 'add', 'bankAccountId', item);
+					stateAction(dispatchState, "add", "bankAccountId", item);
 				}}
 				modalStatus={bankAccountModalStatus}
 			/>
@@ -179,12 +179,12 @@ export default function CreateRecord({ route }: any): ReactElement {
 
 const styles = StyleSheet.create({
 	title: {
-		color: 'gray',
+		color: "gray",
 		fontSize: RFPercentage(2),
 	},
 	input: {
-		color: 'black',
-		borderColor: 'gray',
+		color: "black",
+		borderColor: "gray",
 		borderBottomWidth: 1,
 		fontSize: RFPercentage(2.2),
 	},
@@ -192,11 +192,11 @@ const styles = StyleSheet.create({
 		padding: 10,
 		marginTop: 10,
 		borderRadius: 10,
-		backgroundColor: '#236F57',
+		backgroundColor: "#236F57",
 	},
 	typeCard: {
-		flexDirection: 'row',
-		alignItems: 'center',
+		flexDirection: "row",
+		alignItems: "center",
 		marginHorizontal: 10,
 	},
 	typeIcon: {
@@ -204,9 +204,9 @@ const styles = StyleSheet.create({
 		height: 50,
 		borderWidth: 2,
 		borderRadius: 100,
-		alignItems: 'center',
-		borderColor: '#236F57',
-		justifyContent: 'center',
+		alignItems: "center",
+		borderColor: "#236F57",
+		justifyContent: "center",
 	},
 	typeTitle: {
 		marginLeft: 10,
@@ -215,12 +215,12 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		padding: 30,
-		justifyContent: 'space-around'
+		justifyContent: "space-around"
 	},
 	deleteIcon: {
-		top: '2.5%',
-		left: '100%',
-		position: 'absolute',
+		top: "2.5%",
+		left: "100%",
+		position: "absolute",
 	},
 	recordType: {
 		width: 125,
@@ -228,16 +228,16 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 	},
 	buttonText: {
-		color: 'white',
-		textAlign: 'center',
+		color: "white",
+		textAlign: "center",
 		fontSize: RFPercentage(2.2),
 	},
 	recordTypeText: {
-		textAlign: 'center',
+		textAlign: "center",
 		fontSize: RFPercentage(2),
 	},
 	recordTypeList: {
-		flexDirection: 'row',
-		justifyContent: 'space-around'
+		flexDirection: "row",
+		justifyContent: "space-around"
 	},
 });
